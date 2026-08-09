@@ -1,0 +1,20 @@
+{
+  "task": "Spring Boot actuator enumeration",
+  "steps": [
+    {
+      "action": "ffuf actuator paths",
+      "observation": "401 confirm endpoint existence",
+      "tool": "ffuf",
+      "timestamp": "2026-07-06T19:10:31.865731",
+      "metadata": {}
+    }
+  ],
+  "score": 7.0,
+  "skill_version": "0",
+  "timestamp": "2026-07-06T19:10:31.865713",
+  "metadata": {
+    "vuln_count": 1,
+    "poc_quality": 0.7,
+    "vuln_type": "Actuator"
+  }
+}

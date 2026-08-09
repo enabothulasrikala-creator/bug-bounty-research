@@ -1,0 +1,20 @@
+{
+  "task": "Crewex OTP rate limit bypass analysis",
+  "steps": [
+    {
+      "action": "Rapid OTP requests",
+      "observation": "20+ sends before 15min cooldown",
+      "tool": "curl",
+      "timestamp": "2026-07-06T19:10:31.852438",
+      "metadata": {}
+    }
+  ],
+  "score": 6.5,
+  "skill_version": "0",
+  "timestamp": "2026-07-06T19:10:31.852420",
+  "metadata": {
+    "vuln_count": 1,
+    "poc_quality": 0.7,
+    "vuln_type": "Rate Limit"
+  }
+}

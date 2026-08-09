@@ -1,0 +1,20 @@
+{
+  "task": "Laravel debug mode testretailer boat",
+  "steps": [
+    {
+      "action": "curl testretailer.boat-lifestyle.com",
+      "observation": "Full stack trace server paths",
+      "tool": "curl",
+      "timestamp": "2026-07-06T19:10:31.861408",
+      "metadata": {}
+    }
+  ],
+  "score": 8.5,
+  "skill_version": "0",
+  "timestamp": "2026-07-06T19:10:31.861377",
+  "metadata": {
+    "vuln_count": 1,
+    "poc_quality": 0.9,
+    "vuln_type": "Debug Mode"
+  }
+}

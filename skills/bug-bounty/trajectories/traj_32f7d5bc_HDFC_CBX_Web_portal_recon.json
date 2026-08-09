@@ -1,0 +1,27 @@
+{
+  "task": "HDFC CBX Web portal recon",
+  "steps": [
+    {
+      "action": "curl -sk -v https://cbxuat.hdfcbank.com:444/cbx 2>&1 | head -30",
+      "observation": "302 redirect to CBX login",
+      "tool": "curl",
+      "timestamp": "2026-07-06T19:17:29.941063",
+      "metadata": {}
+    },
+    {
+      "action": "curl -sk https://cbxuat.hdfcbank.com:444/cbx/login",
+      "observation": "Login page accessible",
+      "tool": "bash",
+      "timestamp": "2026-07-06T19:17:29.941069",
+      "metadata": {}
+    }
+  ],
+  "score": 6.0,
+  "skill_version": "1",
+  "timestamp": "2026-07-06T19:17:29.941041",
+  "metadata": {
+    "vuln_type": "Auth",
+    "poc_quality": 0.5,
+    "vuln_count": 0
+  }
+}

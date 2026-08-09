@@ -1,0 +1,20 @@
+{
+  "task": "Grafana dashboard grafana-gcp boat",
+  "steps": [
+    {
+      "action": "httpx title scan",
+      "observation": "Grafana 12.3.1 login exposed",
+      "tool": "httpx",
+      "timestamp": "2026-07-06T19:10:31.863438",
+      "metadata": {}
+    }
+  ],
+  "score": 5.0,
+  "skill_version": "0",
+  "timestamp": "2026-07-06T19:10:31.863417",
+  "metadata": {
+    "vuln_count": 0,
+    "poc_quality": 0.5,
+    "vuln_type": "Exposed"
+  }
+}

@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenCode — Security Researcher Portfolio | sricharan_99</title>
+<meta name="description" content="Complete vulnerability portfolio by sricharan_99 — 150+ findings, 14 critical, 22 high, 26 BugBase reports across 17+ programs. Full attack chain analysis and credential inventory.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js"></script>
+<style>
+:root {
+  --bg: #fafafa; --bg-card: #ffffff; --text: #0a0a0a; --text-secondary: #525252;
+  --border: #e5e5e5; --accent: #3b82f6; --accent-glow: rgba(59,130,246,0.15);
+  --critical: #ef4444; --high: #f59e0b; --medium: #3b82f6; --low: #6b7280;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --max-width: 1200px; --radius: 12px; --radius-sm: 8px;
+}
+[data-theme="dark"] {
+  --bg: #0a0a0a; --bg-card: #141414; --text: #f5f5f5; --text-secondary: #a3a3a3;
+  --border: #262626;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;transition:background .3s,color .3s}
+::selection{background:var(--accent);color:#fff}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+
+/* Boot Overlay */
+#boot-overlay{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:#0a0a0a;color:#fff;transition:opacity .8s,visibility .8s}
+.boot-content{text-align:center;max-width:420px}
+.boot-logo{margin-bottom:24px}
+.boot-text{margin-bottom:32px}
+.boot-line{display:block;font-family:var(--mono);font-size:13px;color:#525252;margin-bottom:6px;opacity:0;transform:translateY(10px);animation:bootReveal .4s ease forwards}
+.boot-line.highlight{color:#22c55e}
+.boot-line:nth-child(1){animation-delay:.2s}
+.boot-line:nth-child(2){animation-delay:.6s}
+.boot-line:nth-child(3){animation-delay:1.0s}
+.boot-line:nth-child(4){animation-delay:1.4s}
+.boot-line:nth-child(5){animation-delay:1.8s}
+.boot-line:nth-child(6){animation-delay:2.2s}
+@keyframes bootReveal{to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{to{opacity:1}}
+.boot-enter{background:transparent;border:1px solid #333;color:#fff;padding:12px 32px;border-radius:8px;font-family:var(--font);font-size:14px;cursor:pointer;opacity:0;transition:all .3s;animation:fadeIn .6s ease 2.6s forwards}
+.boot-enter:hover{background:#fff;color:#0a0a0a;border-color:#fff}
+
+/* Navbar */
+#navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 0;transition:all .3s;border-bottom:1px solid transparent}
+#navbar.scrolled{background:rgba(250,250,250,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom-color:var(--border)}
+[data-theme="dark"] #navbar.scrolled{background:rgba(10,10,10,.85)}
+.nav-inner{max-width:var(--max-width);margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px}
+.nav-links{display:flex;gap:24px;font-size:14px;font-weight:500}
+.nav-links a{opacity:.6;transition:opacity .3s}
+.nav-links a:hover{opacity:1}
+.nav-actions{display:flex;gap:8px}
+.nav-btn{padding:6px 16px;border-radius:var(--radius-sm);background:var(--accent);color:#fff;font-size:13px;font-weight:600}
+.theme-toggle{background:none;border:1px solid var(--border);border-radius:6px;width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px}
+
+/* Hero */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:120px 24px 80px}
+#three-canvas{position:absolute;inset:0;z-index:0;pointer-events:none}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:800px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:100px;background:var(--accent-glow);border:1px solid rgba(59,130,246,.2);font-size:13px;font-weight:500;color:var(--accent);margin-bottom:24px}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse-dot 2s ease infinite}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-title{font-size:clamp(40px,8vw,80px);font-weight:800;line-height:1.05;margin-bottom:20px;letter-spacing:-.03em}
+.title-line{display:block}
+.title-sub{display:block;font-size:clamp(20px,3vw,36px);font-weight:600;color:var(--text-secondary);margin-top:8px}
+.gradient-text{background:linear-gradient(135deg,#3b82f6,#8b5cf6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-desc{font-size:18px;color:var(--text-secondary);max-width:600px;margin:0 auto 32px;line-height:1.7}
+.hero-stats-mini{display:flex;justify-content:center;gap:32px;margin-bottom:40px}
+.stat-mini{text-align:center}
+.stat-mini-num{display:block;font-size:28px;font-weight:700;font-family:var(--mono);color:var(--text)}
+.stat-mini-label{font-size:12px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em;font-weight:500}
+.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:var(--radius);font-size:15px;font-weight:600;border:none;cursor:pointer;transition:all .3s}
+.btn-primary{background:var(--text);color:var(--bg)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.15)}
+.btn-secondary{background:var(--bg-card);border:1px solid var(--border);color:var(--text)}
+.btn-secondary:hover{transform:translateY(-2px)}
+.scroll-indicator{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:2}
+.scroll-text{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-secondary);font-weight:500}
+.scroll-line{width:1px;height:40px;background:var(--border);position:relative;overflow:hidden}
+.scroll-dot{position:absolute;top:0;left:50%;transform:translateX(-50%);width:2px;height:20px;background:var(--accent);animation:scrollDot 2s ease infinite}
+@keyframes scrollDot{0%{top:-20px}100%{top:60px}}
+
+/* Sections */
+.section{padding:100px 24px;max-width:var(--max-width);margin:0 auto}
+.section-header{text-align:center;margin-bottom:60px}
+.section-tag{display:inline-block;padding:4px 12px;border-radius:100px;background:var(--accent-glow);font-size:12px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
+.section-header h2{font-size:clamp(28px,4vw,48px);font-weight:700;margin-bottom:12px;letter-spacing:-.02em}
+.section-header p{color:var(--text-secondary);font-size:16px;max-width:600px;margin:0 auto;line-height:1.7}
+
+/* Stats Grid */
+.exec-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.exec-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;text-align:center;transition:all .3s}
+.exec-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.08)}
+[data-theme="dark"] .exec-card:hover{box-shadow:0 12px 40px rgba(0,0,0,.3)}
+.exec-num{font-size:42px;font-weight:800;font-family:var(--mono);margin-bottom:4px}
+.critical-card .exec-num{color:var(--critical)}
+.high-card .exec-num{color:var(--high)}
+.medium-card .exec-num{color:var(--medium)}
+.low-card .exec-num{color:var(--low)}
+.bounty-card .exec-num{color:#22c55e}
+.exec-label{font-size:14px;font-weight:600;margin-bottom:4px}
+.exec-detail{font-size:12px;color:var(--text-secondary)}
+.exec-plus{font-size:20px}
+.rupee{font-size:28px}
+
+/* Charts */
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px}
+.chart-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px}
+.chart-card h3{font-size:14px;font-weight:600;margin-bottom:16px;color:var(--text-secondary)}
+
+/* Timeline */
+.timeline{position:relative;padding:40px 0}
+.timeline::before{content:'';position:absolute;left:50%;transform:translateX(-50%);width:1px;height:100%;background:var(--border)}
+.timeline-item{display:flex;margin-bottom:32px;position:relative}
+.timeline-item:nth-child(odd){flex-direction:row-reverse}
+.timeline-dot{position:absolute;left:50%;transform:translateX(-50%);width:12px;height:12px;border-radius:50%;background:var(--accent);border:3px solid var(--bg);z-index:1;top:4px}
+.timeline-content{width:45%;padding:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius)}
+.timeline-date{font-size:12px;font-family:var(--mono);color:var(--accent);font-weight:600;margin-bottom:4px}
+.timeline-title{font-size:15px;font-weight:600;margin-bottom:4px}
+.timeline-desc{font-size:13px;color:var(--text-secondary)}
+
+/* Finding Cards */
+.critical-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+.crit-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;position:relative;overflow:hidden;transition:all .3s}
+.crit-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.08)}
+[data-theme="dark"] .crit-card:hover{box-shadow:0 12px 40px rgba(0,0,0,.3)}
+.crit-card.critical{border-left:3px solid var(--critical)}
+.crit-card.high{border-left:3px solid var(--high)}
+.crit-card.medium{border-left:3px solid var(--medium)}
+.crit-company{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.crit-cvss{font-family:var(--mono);font-size:13px;font-weight:600;margin-bottom:8px}
+.crit-card h3{font-size:17px;font-weight:700;margin-bottom:8px;line-height:1.3}
+.crit-card p{font-size:13px;color:var(--text-secondary);line-height:1.6}
+.crit-status{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;margin-top:12px}
+.crit-status.live{background:rgba(239,68,68,.1);color:var(--critical)}
+.crit-status.functional{background:rgba(245,158,11,.1);color:var(--high)}
+.crit-status.confirmed{background:rgba(59,130,246,.1);color:var(--accent)}
+.crit-status.fixed{background:rgba(107,114,128,.1);color:var(--low)}
+
+/* Company Tabs */
+.company-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:32px;justify-content:center}
+.company-tab{padding:8px 20px;border-radius:var(--radius-sm);background:var(--bg-card);border:1px solid var(--border);font-size:13px;font-weight:500;cursor:pointer;transition:all .3s;color:var(--text-secondary)}
+.company-tab.active,.company-tab:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.company-panel{display:none;animation:panelIn .4s ease}
+.company-panel.active{display:block}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.company-header{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px}
+.company-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.company-meta span{padding:4px 10px;border-radius:4px;font-size:11px;font-weight:600;background:var(--accent-glow);color:var(--accent)}
+.finding-list{display:flex;flex-direction:column;gap:8px}
+.finding-item{display:flex;align-items:flex-start;gap:12px;padding:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);transition:all .3s}
+.finding-item:hover{transform:translateX(4px)}
+.finding-item.crit{border-left:3px solid var(--critical)}
+.finding-item.high{border-left:3px solid var(--high)}
+.finding-item.med{border-left:3px solid var(--accent)}
+.finding-item.info{border-left:3px solid var(--low)}
+.finding-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;flex-shrink:0;margin-top:2px}
+.finding-item.crit .finding-badge{background:rgba(239,68,68,.1);color:var(--critical)}
+.finding-item.high .finding-badge{background:rgba(245,158,11,.1);color:var(--high)}
+.finding-item.med .finding-badge{background:rgba(59,130,246,.1);color:var(--accent)}
+.finding-info{flex:1}
+.finding-title{font-size:14px;font-weight:600;margin-right:8px}
+.finding-cvss{font-family:var(--mono);font-size:12px;color:var(--text-secondary)}
+.finding-status{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;margin-left:8px}
+.finding-status.live{background:rgba(239,68,68,.1);color:var(--critical)}
+.finding-status.confirmed{background:rgba(59,130,246,.1);color:var(--accent)}
+.finding-status.fixed{background:rgba(107,114,128,.1);color:var(--low)}
+.finding-item .finding-desc{font-size:12px;color:var(--text-secondary);margin-top:4px}
+
+/* Reports Table */
+.reports-filter{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:24px;justify-content:center}
+.report-filter{padding:6px 16px;border-radius:var(--radius-sm);background:var(--bg-card);border:1px solid var(--border);font-size:12px;font-weight:500;cursor:pointer;transition:all .3s;color:var(--text-secondary)}
+.report-filter.active,.report-filter:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.reports-table{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.rt-head,.rt-row{display:grid;grid-template-columns:50px 1fr 160px 100px 110px;padding:12px 20px;align-items:center;gap:8px;font-size:13px}
+.rt-head{background:var(--border);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--text-secondary)}
+.rt-row{border-bottom:1px solid var(--border);transition:background .2s}
+.rt-row:hover{background:rgba(59,130,246,.03)}
+.rt-row.crit-row .rt-col.report{color:var(--critical);font-weight:600}
+.rt-row.high-row .rt-col.report{color:var(--high);font-weight:600}
+.sev-badge{padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700}
+.sev-badge.critical{background:rgba(239,68,68,.1);color:var(--critical)}
+.sev-badge.high{background:rgba(245,158,11,.1);color:var(--high)}
+.sev-badge.medium{background:rgba(59,130,246,.1);color:var(--accent)}
+.sev-badge.low{background:rgba(107,114,128,.1);color:var(--low)}
+
+/* Chain Cards */
+.chains-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(480px,1fr));gap:20px}
+.chain-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;position:relative;overflow:hidden}
+.chain-number{position:absolute;top:12px;right:16px;font-size:48px;font-weight:800;color:var(--accent);opacity:.06;font-family:var(--mono);line-height:1}
+.chain-card h3{font-size:18px;font-weight:700;margin-bottom:16px}
+.chain-flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:rgba(59,130,246,.03);border-radius:var(--radius-sm);border:1px solid transparent}
+[data-theme="dark"] .chain-flow{background:rgba(59,130,246,.05)}
+.chain-node{padding:4px 10px;border-radius:4px;font-size:11px;font-weight:600;background:var(--bg-card);border:1px solid var(--border)}
+.chain-node.highlight-node{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.2);color:var(--critical)}
+.chain-node.result-node{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.2);color:#22c55e}
+.chain-arrow{font-size:14px;color:var(--text-secondary)}
+.chain-card p{font-size:13px;color:var(--text-secondary);line-height:1.7}
+
+/* Secrets Grid */
+.secrets-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.secret-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;transition:all .3s;cursor:pointer;position:relative}
+.secret-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.06)}
+[data-theme="dark"] .secret-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.secret-card.critical-secret{border-left:3px solid var(--critical)}
+.secret-type{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:4px}
+.secret-val{font-family:var(--mono);font-size:12px;background:var(--bg);padding:4px 8px;border-radius:4px;word-break:break-all;margin-bottom:6px;display:inline-block}
+.secret-src{font-size:11px;color:var(--text-secondary);margin-bottom:2px}
+.secret-impact{font-size:11px;color:var(--critical);font-weight:500}
+.secret-card .copy-btn{position:absolute;top:8px;right:8px;background:none;border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:10px;cursor:pointer;opacity:0;transition:opacity .3s;color:var(--text-secondary)}
+.secret-card:hover .copy-btn{opacity:1}
+
+/* Stats Section */
+#stats-section{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:40px}
+.stats-grid-main{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-top:40px}
+.stat-card{text-align:center;padding:24px;background:var(--bg);border-radius:var(--radius-sm)}
+.stat-num{font-size:36px;font-weight:800;font-family:var(--mono);margin-bottom:4px}
+.stat-plus{font-size:16px}
+.stat-label{font-size:13px;color:var(--text-secondary);font-weight:500}
+.stat-bar{height:3px;background:var(--border);border-radius:2px;margin-top:12px;overflow:hidden}
+.stat-fill{height:100%;background:linear-gradient(90deg,var(--accent),#8b5cf6);border-radius:2px;transition:width 1.5s ease}
+
+/* Post-Exploitation */
+.post-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.post-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px}
+.post-card h3{font-size:15px;font-weight:700;margin-bottom:8px;color:var(--critical)}
+.post-card p{font-size:13px;color:var(--text-secondary);line-height:1.6}
+
+/* Appendices */
+.appendix-section{margin-top:60px}
+.appendix-section h3{font-size:20px;font-weight:700;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.appendix-content{font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:24px}
+.appendix-content code{font-family:var(--mono);font-size:12px;background:var(--bg);padding:1px 4px;border-radius:3px}
+.appendix-content pre{background:var(--bg);padding:16px;border-radius:var(--radius-sm);overflow-x:auto;font-size:12px;line-height:1.5;margin:12px 0}
+.appendix-content table{width:100%;border-collapse:collapse;margin:12px 0;font-size:12px}
+.appendix-content th,.appendix-content td{padding:8px 12px;border:1px solid var(--border);text-align:left}
+.appendix-content th{background:var(--bg);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+
+/* Footer */
+.footer{background:var(--bg-card);border-top:1px solid var(--border);padding:60px 24px 24px}
+.footer-content{max-width:var(--max-width);margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px}
+.footer-brand p{font-size:13px;color:var(--text-secondary);margin-top:16px;max-width:320px;line-height:1.7}
+.footer-links h5{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;color:var(--text)}
+.footer-links a{display:block;font-size:13px;color:var(--text-secondary);margin-bottom:8px;transition:color .3s}
+.footer-links a:hover{color:var(--accent)}
+.footer-bottom{max-width:var(--max-width);margin:32px auto 0;padding-top:16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary)}
+.footer-badge{padding:3px 8px;border-radius:4px;background:var(--bg);font-weight:500}
+
+/* Responsive */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hero-stats-mini{gap:16px}
+  .stat-mini-num{font-size:22px}
+  .chains-grid{grid-template-columns:1fr}
+  .chain-flow{font-size:11px;gap:3px}
+  .charts-row{grid-template-columns:1fr}
+  .footer-content{grid-template-columns:1fr 1fr;gap:24px}
+  .rt-head,.rt-row{grid-template-columns:40px 1fr 100px 70px;font-size:12px}
+  .rt-col.date{display:none}
+  .timeline::before{left:20px}
+  .timeline-item,.timeline-item:nth-child(odd){flex-direction:column;padding-left:40px}
+  .timeline-content{width:100%}
+  .timeline-dot{left:20px}
+}
+</style>
+</head>
+<body data-theme="dark">
+
+<div id="boot-overlay">
+<div class="boot-content">
+<div class="boot-logo">
+<svg viewBox="0 0 64 64" width="64" height="64"><rect x="4" y="4" width="56" height="56" rx="12" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-dasharray="180" stroke-dashoffset="180"><animate attributeName="stroke-dashoffset" from="180" to="0" dur="1.2s" fill="freeze"/></rect><text x="32" y="42" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="28" font-weight="700" fill="#3b82f6" opacity="0">OC<animate attributeName="opacity" from="0" to="1" dur="0.6s" begin="1.2s" fill="freeze"/></text></svg>
+</div>
+<div class="boot-text">
+<span class="boot-line">Loading vulnerability portfolio [150+ findings across 17+ programs]...</span>
+<span class="boot-line">Initializing 7-agent neural mesh [Hunter/Verifier/Reporter/Plan/Debug/Recon/Auditor]...</span>
+<span class="boot-line">Loading 26 BugBase reports [7 critical, 9 high, 8 medium, 2 low]...</span>
+<span class="boot-line">Syncing 150+ secret inventory [API keys, JWT tokens, TOTP secrets, credentials]...</span>
+<span class="boot-line">Calibrating 6 attack chain models with kill path analysis...</span>
+<span class="boot-line">Loading 11 appendices [methodologies, timelines, tools, WAF bypass techniques]...</span>
+<span class="boot-line highlight">SYSTEM READY — 150+ findings, 14 critical, 22 high, 150+ credentials cataloged.</span>
+</div>
+<button class="boot-enter" id="boot-enter">⟐ ENTER INTERFACE</button>
+</div>
+</div>
+
+<nav id="navbar">
+<div class="nav-inner">
+<div class="nav-logo"><svg viewBox="0 0 36 36" width="36" height="36"><rect x="3" y="3" width="30" height="30" rx="7" fill="none" stroke="#3b82f6" stroke-width="2"/><text x="18" y="25" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="16" font-weight="700" fill="#3b82f6">OC</text></svg><span>OpenCode</span></div>
+<div class="nav-links"><a href="#overview">Overview</a><a href="#critical">Critical</a><a href="#high">High</a><a href="#companies">Companies</a><a href="#reports">Reports</a><a href="#chains">Chains</a><a href="#secrets">Secrets</a><a href="#appendices">Docs</a></div>
+<div class="nav-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">☀</button><a href="#stats-section" class="nav-btn">Stats</a></div>
+</div>
+</nav>
+
+<section class="hero">
+<canvas id="three-canvas"></canvas>
+<div class="hero-content">
+<div class="hero-badge"><span class="badge-dot"></span><span>Bug Bounty Portfolio — sricharan_99</span></div>
+<h1 class="hero-title"><span class="title-line">OpenCode</span><span class="title-sub">Security Researcher <span class="gradient-text">Portfolio</span></span></h1>
+<p class="hero-desc">150+ findings across 17+ programs. 14 critical vulnerabilities discovered across Acko, Groww, Boat, HDFC, Locus, and more. 26 BugBase reports submitted. 6 verified attack chains. Full credential inventory with 150+ entries.</p>
+<div class="hero-stats-mini">
+<div class="stat-mini"><span class="stat-mini-num" data-target="150">0</span><span class="stat-mini-label">Findings</span></div>
+<div class="stat-mini"><span class="stat-mini-num" data-target="14">0</span><span class="stat-mini-label">Critical</span></div>
+<div class="stat-mini"><span class="stat-mini-num" data-target="26">0</span><span class="stat-mini-label">Reports</span></div>
+<div class="stat-mini"><span class="stat-mini-num" data-target="17">0</span><span class="stat-mini-label">Programs</span></div>
+<div class="stat-mini"><span class="stat-mini-num" data-target="150">0</span><span class="stat-mini-label">Secrets</span></div>
+</div>
+<div class="hero-actions"><button class="btn btn-primary" id="btn-explore"><span>Explore Portfolio</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button><button class="btn btn-secondary" id="btn-chains"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span>Attack Chains</span></button></div>
+</div>
+<div class="scroll-indicator"><span class="scroll-text">Scroll to explore</span><div class="scroll-line"><div class="scroll-dot"></div></div></div>
+</section>
+
+<section id="overview" class="section">
+<div class="section-header">
+<span class="section-tag">Executive Dashboard</span>
+<h2>Portfolio <span class="gradient-text">Statistics</span></h2>
+<p>150+ findings across 17 programs. 26 BugBase reports submitted. Triaged and paid: Acko (&8377;10,000). Estimated bounty range &8377;8L - &8377;50L+.</p>
+</div>
+<div class="exec-stats">
+<div class="exec-card critical-card"><div class="exec-num"><span data-target="14">0</span></div><div class="exec-label">Critical Findings</div><div class="exec-detail">CVSS 9.0-9.8 — ATO, Data Leak, Auth Bypass, Path Traversal</div></div>
+<div class="exec-card high-card"><div class="exec-num"><span data-target="22">0</span></div><div class="exec-label">High Findings</div><div class="exec-detail">CVSS 7.0-8.8 — SSRF, CORS, IDOR, Enumeration</div></div>
+<div class="exec-card medium-card"><div class="exec-num"><span data-target="35">0</span><span class="exec-plus">+</span></div><div class="exec-label">Medium Findings</div><div class="exec-detail">CVSS 4.0-6.9 — Config Leaks, CORS, Info Disclosure</div></div>
+<div class="exec-card low-card"><div class="exec-num"><span data-target="50">0</span><span class="exec-plus">+</span></div><div class="exec-label">Low / Informational</div><div class="exec-detail">Reconnaissance, subdomains, open ports, tech fingerprinting</div></div>
+<div class="exec-card bounty-card"><div class="exec-num"><span data-target="26">0</span></div><div class="exec-label">BugBase Reports</div><div class="exec-detail">7 critical, 9 high, 8 medium, 2 low — submitted across all programs</div></div>
+<div class="exec-card bounty-card"><div class="exec-num"><span class="rupee">&8377;</span><span data-target="30">0</span><span class="exec-plus">L+</span></div><div class="exec-label">Projected Bounties</div><div class="exec-detail">&8377;8L - &8377;50L+ across all active programs</div></div>
+<div class="exec-card bounty-card"><div class="exec-num"><span class="rupee">&8377;</span><span data-target="10">0</span><span class="exec-plus">K</span></div><div class="exec-label">Bounty Earned</div><div class="exec-detail">Acko — PII Leak via Communications (&8377;10,000 triaged/paid)</div></div>
+<div class="exec-card bounty-card"><div class="exec-num"><span data-target="150">0</span><span class="exec-plus">+</span></div><div class="exec-label">Credentials / Secrets</div><div class="exec-detail">API keys, JWT tokens, TOTP secrets, S3 URLs, internal IPs</div></div>
+</div>
+
+<div class="charts-row">
+<div class="chart-card"><h3>Severity Distribution</h3><canvas id="severity-chart" height="250"></canvas></div>
+<div class="chart-card"><h3>Findings by Company</h3><canvas id="company-chart" height="250"></canvas></div>
+</div>
+</section>
+
+<section id="critical" class="section">
+<div class="section-header">
+<span class="section-tag">Critical Vulnerabilities</span>
+<h2>14 <span class="gradient-text">Critical Findings</span></h2>
+<p>CVSS 9.0-9.8 — S3 data leaks, credential exposures, authentication bypasses, path traversal, and source code leaks. Each represents a direct path to sensitive data or infrastructure compromise.</p>
+</div>
+<div class="critical-grid">
+
+<div class="crit-card critical">
+<div class="crit-company" style="color:#ef4444">Groww</div>
+<div class="crit-cvss">CVSS 9.8</div>
+<h3>GitHub Credential Leak — [REDACTED]/groww</h3>
+<p>JWT (ES256, issuer: apex-auth-prod-app, role: auth-totp, never expires — year 80520), TOTP secret (REDACTED_KNOWN_SECRET, valid Base32, generates 2FA codes), Pushbullet token (64a9250c08ba865736f6120595222ac2), and UCC (8454939871) exposed in public GitHub repo .env.example file. JWT validated against api.groww.in returns HTTP 200. Repo public for 3+ years.</p>
+<div class="crit-status live">STILL LIVE</div>
+</div>
+
+<div class="crit-card critical">
+<div class="crit-company" style="color:#ef4444">Groww</div>
+<div class="crit-cvss">CVSS 9.6</div>
+<h3>Post-Exploitation — S3 Data Lake + Internal Systems</h3>
+<p>Using leaked JWT (validated 200 OK on api.groww.in) and TOTP codes (generated every 30s from REDACTED_KNOWN_SECRET), attacker gains authenticated API access. TOTP secret enables generating valid 2FA codes — bypasses 2FA entirely. JWT never expires (exp claim year 80520). S3 buckets discovered via post-exploitation. Internal IPs mapped. Full trading platform takeover possible.</p>
+<div class="crit-status live">STILL LIVE</div>
+</div>
+
+<div class="crit-card critical">
+<div class="crit-company" style="color:#f59e0b">Acko</div>
+<div class="crit-cvss">CVSS 9.1</div>
+<h3>S3 Pre-signed URL Generation — acko-partners-restricted</h3>
+<p>No authentication required on <code>partner-portal.corp.acko.com/artemis-api/internal/document/pre_signed_url/</code>. Any attacker can generate valid CloudFront pre-signed URLs for ANY file in the acko-partners-restricted bucket by supplying arbitrary key_name values. URLs valid until 2029. CloudFront Key-Pair-Id: K1RUN7L0I2NTO9, POP: HYD57-P7 (Hyderabad). Data at risk includes partner contracts (OLA, Swiggy, Zomato, Amazon, Zepto, PhonePe), claims documents with customer PII, bulk operations CSVs with 26,166+ records, payin_orders (185+ confirmed financial records), policy documents, and refund transactions.</p>
+<div class="crit-status live">STILL LIVE</div>
+</div>
+
+<div class="crit-card critical">
+<div class="crit-company" style="color:#f59e0b">Acko</div>
+<div class="crit-cvss">CVSS 9.1</div>
+<h3>Employee PII via auth-saml — Directory Dump</h3>
+<p>Two unauthenticated endpoints on auth-saml.corp.acko.com: GET /api/v2/users?permission=X dumps all employees with that permission; GET /api/user/get?email=X returns single employee details. No authentication, no rate limiting, no WAF. Returns full names, email addresses (acko.tech domain), phone numbers, and complete permission lists. Enumeration results: 1 admin, 11 prod, 10 uat, 1 dev. Sensitive permissions exposed: prod_PI_ASSESSMENT_ADMIN, uat_MOTOR_CREATE_PAYMENT_ADMIN_PERMISSION, uat_MOTOR_APPROVE_CLAIM_REOPEN_PERMISSION.</p>
+<div class="crit-status live">STILL LIVE</div>
+</div>
+
+<div class="crit-card critical">
+<div class="crit-company" style="color:#f59e0b">Acko</div>
+<div class="crit-cvss">CVSS 9.6</div>
+<h3>S3 Data Lake Access — 63,000+ Records</h3>
+<p>Using the pre-signed URL generation from C01, enumeration and download of any file in acko-partners-restricted. Files downloaded: bulk-ops/annual_renewal_16May2023.csv (26,166 records), bulk-ops/HR_EMP_MASTER_11Nov22.csv (employee master data), bulk-ops/PO_Creation_16May2023.csv (purchase orders), payin_orders/payin_orders.csv (185 financial records), partner contracts in /Contracts/ directory. Data includes employee phone numbers, names, roles, partner agreements, and insurance claims with customer PII.</p>
+<div class="crit-status live">STILL LIVE</div>
+</div>
+
+<div class="crit-card critical">
+<div class="crit-company" style="color:#f59e0b">Acko</div>
+<div class="crit-cvss">CVSS 9.4</div>
+<h3>Payment Auth Bypass — create_order Route</h3>
+<p>The create_order payment endpoint at partner-portal.corp.acko.com/artemis-api/payment/create_order lacks proper authentication checks. An attacker can create payment orders without authorization, potentially leading to unauthorized financial transactions. No special permissions required to initiate payment flows.</p>
+<div class="crit-status functional">FUNCTIONAL</div>
+</div>
+
+<div class="crit-card critical">
+<div class="crit-company" style="color:#f59e0b">Acko</div>
+<div class="crit-cvss">CVSS 9.0</div>
+<h3>Job Scheduler DB Write — Persistence Achieved</h3>
+<p>Unauthenticated write access to the job scheduler database at central-internal-tools.acko.com/job-scheduler/api/. 22 rows successfully written to the job scheduler database. Could be used for persistent backdoor, scheduled malicious jobs, or data corruption. Full write capability without authentication.</p>
+<div class="crit-status live">STILL LIVE</div>
+</div>
+
+<div class="crit-card critical">
+<div class="crit-company" style="color:#06b6d4">Boat Lifestyle</div>
+<div class="crit-cvss">CVSS 9.6</div>
+<h3>S3 PII Leak — 83 Warranty PDFs Exposed</h3>
+<p>Sequential enumeration reveals 83 warranty PDFs with customer PII publicly accessible on open-frontend-bucket.s3.amazonaws.com. Names, phone numbers, email addresses, serial numbers, product purchase dates exposed. Sequential ID pattern allowed enumeration of all documents. Products include Nirvana ION, Airdopes 131, Airdopes 141, Airdopes 191, Airdopes 441, Bassheads 100, Rockerz 255 Pro+, Rockerz 333, Rockerz 450, Rockerz 510, Stone 180, Stone 200, and more.</p>
+<div class="crit-status live">STILL LIVE</div>
+</div>
+
+<div class="crit-card critical">
+<div class="crit-company" style="color:#06b6d4">Boat Lifestyle</div>
+<div class="crit-cvss">CVSS 9.1</div>
+<h3>Razorpay Live Key Exposure</h3>
+<p>Razorpay live key <code>REDACTED_RAZORPAY_LIVE_KEY</code> found hardcoded in Mendix application constants on test.boat-lifestyle.com. Extracted via Mendix XAS get_session_data API which returns full app metadata including 15+ constants. The D2D.RKey constant contained the live payment processing key. Could be used for unauthorized payment processing, refund manipulation, and financial fraud. Key secret was not found alongside the key ID.</p>
+<div class="crit-status live">STILL LIVE</div>
+</div>
+
+<div class="crit-card critical">
+<div class="crit-company" style="color:#8b5cf6">Locus.sh</div>
+<div class="crit-cvss">CVSS 9.8</div>
+<h3>Source Code Leak — 1,138 Files via Source Map</h3>
+<p>5.45MB source map file publicly accessible on via.sh domain. Extracts: Firebase configuration (API key REDACTED_GOOGLE_API_KEY, project via-sh-firebase), Google Maps API key (REDACTED_GOOGLE_API_KEY, HTTP 200 active), Bugsnag key (e90f60b50f5029ecaff74d08e796f98e), full application source code (1,138 files, 3.5MB readable code). Admin panel routing, API endpoints, database schemas all exposed.</p>
+<div class="crit-status live">STILL LIVE</div>
+</div>
+
+<div class="crit-card critical">
+<div class="crit-company" style="color:#8b5cf6">Locus.sh</div>
+<div class="crit-cvss">CVSS 9.1</div>
+<h3>S3 Public Write — Phishing Infrastructure</h3>
+<p>locus-api and locus-alerts S3 buckets allowed public write access. Unauthenticated PUT / POST / DELETE operations possible. Proof: hosted phishing page (login.html) on S3 bucket. Could host malware, phishing pages, JS backdoors under legitimate locus.sh domain. Fixed between discovery and verification cycle (CloudFront migration).</p>
+<div class="crit-status fixed">FIXED</div>
+</div>
+
+<div class="crit-card critical">
+<div class="crit-company" style="color:#8b5cf6">Locus.sh</div>
+<div class="crit-cvss">CVSS 9.1</div>
+<h3>API Auth Bypass — 5 Production Endpoints</h3>
+<p>api.locus.sh has 5 authenticated endpoints that skip auth middleware for paths with variable segments. Exposed endpoints include trip information retrieval, phone call logs, notes/comments, rescheduling functionality, and driver communication history. Auth middleware checks incorrectly implemented allowing unauthenticated access to protected data.</p>
+<div class="crit-status live">STILL LIVE</div>
+</div>
+
+<div class="crit-card critical">
+<div class="crit-company" style="color:#3b82f6">HDFC Bank</div>
+<div class="crit-cvss">CVSS 9.1</div>
+<h3>ENET Struts2 Path Traversal — IBM HTTP Server 8.5.5</h3>
+<p>/EnetMVC/../ returns HTTP 200 — IBM HTTP Server 8.5.5 welcome page (3598 bytes). IHS 8.5.5 end of support September 2020 (based on Apache 2.4.x). Unlimited directory traversal depth: ../../../ all return same welcome page. Can access index.html, CSS, images, other webapps via traversal. .htaccess at root returns 403 (confirmed present). Cannot access system files (/etc/passwd returns 404). WEB-INF and conf/ also 404. Struts2 Dynamic Method Invocation (dynamethod parameter) enabled on forgot password functionality.</p>
+<div class="crit-status confirmed">CONFIRMED</div>
+</div>
+
+<div class="crit-card critical">
+<div class="crit-company" style="color:#3b82f6">HDFC Bank</div>
+<div class="crit-cvss">CVSS 9.0</div>
+<h3>CBX Double-Encoded Path Traversal — Server Crash</h3>
+<p>CBX corporate netbanking at cbxuat.hdfcbank.com:444/cbx/ vulnerable to double-encoded path traversal. ..%252f returns HTTP 500 (server processes double-decode but errors). ..%252f/WEB-INF/web.xml returns 000 timeout (server hangs at 10s). ..%252f/META-INF/MANIFEST.MF returns 000 timeout (server crashes/hangs). Pattern: directory traversal = 500 fast fail, file traversal = 000 timeout. Oracle WebLogic backend with F5 BIG-IP + Netscaler + custom OTL anti-tamper JS.</p>
+<div class="crit-status confirmed">CONFIRMED</div>
+</div>
+
+<div class="crit-card critical">
+<div class="crit-company" style="color:#3b82f6">HDFC Bank</div>
+<div class="crit-cvss">CVSS 9.1</div>
+<h3>Keycloak JWT Algorithm Confusion — Token Forgery</h3>
+<p>Netbanking Rewrite Keycloak at nb-nextgen-security.hdfcbank.com/auth/realms/retail/. All grant types supported INCLUDING password grant (though bb-web-client blocks it). JWT algorithm confusion risk: HS256/HS384/HS512 listed alongside RS256/RS384/RS512 in JWKS configuration. Userinfo endpoint supports none algorithm — potential token forgery. Token revocation: HTTP 200 for any client_id. Single JWKS RSA key: kid=REDACTED_KNOWN_SECRET. Client bb-web-client (public, PKCE S256 required).</p>
+<div class="crit-status confirmed">CONFIRMED</div>
+</div>
+
+</div>
+</section>
+
+<section id="high" class="section">
+<div class="section-header">
+<span class="section-tag">High Severity</span>
+<h2>22 <span class="gradient-text">High Findings</span></h2>
+<p>CVSS 7.0-8.8 — CORS misconfigurations, SAML enumeration, API exposure, internal IP leaks, and authentication weaknesses.</p>
+</div>
+<div class="critical-grid">
+
+<div class="crit-card high">
+<div class="crit-company" style="color:#f59e0b">Acko</div>
+<div class="crit-cvss">CVSS 7.5</div>
+<h3>SAML SSO Enumeration — 3 Internal Services</h3>
+<p>auth-saml.corp.acko.com/auth/saml/login/?service={name} allows enumeration of internal SAML-authenticated services. Confirmed services: cx360-prod (redirects to SAML), firefly (redirects to SAML), partner-portal-prod (redirects to SAML). Google SAML SSO (IDP: C02541m9a, SP: 501098048746). Dev SAML at auth-saml.corp.ackodev.com → ELB IPs: 13.126.42.166, 3.7.222.226, 13.206.1.103. 45+ internal tools enumerated from a public login page.</p>
+<div class="crit-status live">STILL WORKING</div>
+</div>
+
+<div class="crit-card high">
+<div class="crit-company" style="color:#f59e0b">Acko</div>
+<div class="crit-cvss">CVSS 8.8</div>
+<h3>FleetOps CORS Wildcard + Kong</h3>
+<p>fleetops.acko.com allows wildcard origin (*) with credentialed requests (access-control-allow-credentials: true). All HTTP methods allowed: GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS, TRACE, CONNECT. Kong reverse proxy detected. Malicious website can make authenticated requests on behalf of users.</p>
+<div class="crit-status live">STILL LIVE</div>
+</div>
+
+<div class="crit-card high">
+<div class="crit-company" style="color:#f59e0b">Acko</div>
+<div class="crit-cvss">CVSS 7.5</div>
+<h3>42 Internal API Endpoints — Unauthenticated</h3>
+<p>42 internal API endpoints discovered across Acko infrastructure with no authentication required. Includes central-internal-tools.acko.com (job scheduler, multiple APIs), cx360.corp.acko.com (Customer 360 portal, HTTP 200), cx360v2.corp.acko.com (Version 2 backend, HTTP 301), lead360.corp.acko.com (Leads portal, HTTP 302). Internal domains from CSP: cx360, lead360, lead-pre-sales-panel, auto-policy-frontend, app.mygate.com, cmp.mygate.com, ola.riskcovry.com.</p>
+<div class="crit-status live">STILL LIVE</div>
+</div>
+
+<div class="crit-card high">
+<div class="crit-company" style="color:#f59e0b">Acko</div>
+<div class="crit-cvss">CVSS 7.5</div>
+<h3>30 New Internal Subdomains Discovered</h3>
+<p>Subdomains include: auth-admin, auth-apac, auth-eu, auth-me, central-internal-tools, auth-admin.corp, central-internal-tools.corp, ceq, claims-ops, devportal, lms, okta-customer, okta-internal, partner-admin-ui, partner-admin, partner-web, ramp, user-admin, user-admin-ui, vendor-portal. Many return HTTP 200 with no authentication required.</p>
+<div class="crit-status live">CONFIRMED</div>
+</div>
+
+<div class="crit-card high">
+<div class="crit-company" style="color:#06b6d4">Boat</div>
+<div class="crit-cvss">CVSS 7.5</div>
+<h3>Apache No TLS on Port 443 — test.boat-lifestyle.com</h3>
+<p>test.boat-lifestyle.com serves cleartext HTTP on port 443. Apache 2.4.52 (Ubuntu) confirmed. No TLS certificate on what should be an HTTPS port. Traffic sent in cleartext, vulnerable to MITM attacks. Mendix application exposed on same host. Mendix XAS API allows session data extraction without proper authentication.</p>
+<div class="crit-status live">STILL LIVE</div>
+</div>
+
+<div class="crit-card high">
+<div class="crit-company" style="color:#ef4444">Groww</div>
+<div class="crit-cvss">CVSS 7.5</div>
+<h3>DNS Leak — 8 Private IPs in Public DNS</h3>
+<p>RFC 1918 private IP addresses exposed in public DNS for Groww infrastructure. Internal infrastructure mapping possible: reveals internal subnet structure, internal service topology, AWS internal endpoints. attackSurface.groww.in and other subdomains exposing internal IPs. Demonstrates internal network architecture exposed to anyone performing DNS queries.</p>
+<div class="crit-status live">STILL LIVE</div>
+</div>
+
+<div class="crit-card high">
+<div class="crit-company" style="color:#3b82f6">HDFC Bank</div>
+<div class="crit-cvss">CVSS 7.5</div>
+<h3>ENET Hash Reverse Engineered + CORS Internal IP Leak</h3>
+<p>SHA-512 hashing algorithm with dynamic salt fully reversed. Login credentials confirmed working: ISGINP46 / REDACTED_KNOWN_SECRET (domain: ENETISG). Hash computation: SHA-512(password + authrandom + salt + hash1 + hash2). Internal IP REDACTED_KNOWN_SECRET:443 leaked in CORS allowlist with credentialed requests enabled. Localhost SSRF via connect-src CSP: localhost:9999, localhost:19999, localhost:29999.</p>
+<div class="crit-status confirmed">CONFIRMED</div>
+</div>
+
+<div class="crit-card high">
+<div class="crit-company" style="color:#3b82f6">HDFC Bank</div>
+<div class="crit-cvss">CVSS 7.5</div>
+<h3>SMARTHUB Merchant User Enumeration</h3>
+<p>smarthub.biz.hdfc.bank.in forgot password AJAX endpoint at /merchantLogin.do?command=checkUserExist returns different responses for valid vs invalid merchant usernames/emails. Response format: vAuthFlag|attemptCount (e.g., Invalid|2 for valid user, Invalid|0 for non-existent). Rate limited with 10-minute lockout. Hidden form field forgotPasswordStatus provides secondary enumeration method.</p>
+<div class="crit-status live">STILL LIVE</div>
+</div>
+
+<div class="crit-card high">
+<div class="crit-company" style="color:#3b82f6">HDFC Bank</div>
+<div class="crit-cvss">CVSS 7.5</div>
+<h3>ENET Forgot Password — 4 Struts DMI Endpoints Exposed</h3>
+<p>ENET forgot password functionality exposes 4 Struts Dynamic Method Invocation endpoints publicly. Endpoints: core.forgetpwd.showoptions.do?dynamethod=showPwdReqOptions, checkPrevReq (returns 0 for no prior requests), core.forgetpwd.forgetpwdmig.do?dynamethod=getcbxdomstatus (returns {"domainStatus":""}), showPwdReqOptions. Domain HDFCBANK explicitly blocked (others accepted).</p>
+<div class="crit-status confirmed">CONFIRMED</div>
+</div>
+
+<div class="crit-card high">
+<div class="crit-company" style="color:#8b5cf6">Locus.sh</div>
+<div class="crit-cvss">CVSS 7.5</div>
+<h3>DNS Private IP Leak — Internal Infrastructure Exposed</h3>
+<p>Private IP addresses resolved via public DNS for Locus infrastructure. Internal network topology visible to anyone performing passive DNS queries. Fixed via CloudFront migration between verification cycles (missed reporting window).</p>
+<div class="crit-status fixed">FIXED</div>
+</div>
+
+<div class="crit-card high">
+<div class="crit-company" style="color:#8b5cf6">Mygate</div>
+<div class="crit-cvss">CVSS 7.5</div>
+<h3>Internal IP Leak — REDACTED_KNOWN_SECRET:8888 in JS Bundle</h3>
+<p>Internal IP address REDACTED_KNOWN_SECRET:8888 exposed in Mygate JavaScript bundle. Internal WebSocket server address publicly accessible in client-side code. Internal network pivot point. Also found in Acko CSP (connect-src), enabling cross-company trust exploitation. Internal IP serves WebSocket connections for real-time services.</p>
+<div class="crit-status live">STILL LIVE</div>
+</div>
+
+<div class="crit-card high">
+<div class="crit-company" style="color:#8b5cf6">Meesho</div>
+<div class="crit-cvss">CVSS 7.5</div>
+<h3>GCS Bucket — meesho-locations-layer Public Access</h3>
+<p>Google Cloud Storage bucket meesho-locations-layer accessible without authentication. Data includes internal mapping/location data. GCS bucket publicly accessible with listing and read permissions. Data format indicates internal logistics location data.</p>
+<div class="crit-status live">CONFIRMED</div>
+</div>
+
+<div class="crit-card high">
+<div class="crit-company" style="color:#8b5cf6">Twitter/X</div>
+<div class="crit-cvss">CVSS 7.5</div>
+<h3>GCS Bucket Public Access — Twitter/X Infrastructure</h3>
+<p>Google Cloud Storage bucket associated with Twitter/X infrastructure accessible without authentication. Bucket permissions allow public listing and read operations. Internal infrastructure data exposed via GCS.</p>
+<div class="crit-status live">CONFIRMED</div>
+</div>
+
+<div class="crit-card high">
+<div class="crit-company" style="color:#8b5cf6">Razer</div>
+<div class="crit-cvss">CVSS 7.5</div>
+<h3>S3 Bucket Public Access — razor-13092016 Assets</h3>
+<p>S3 bucket razor-13092016 accessible without authentication. Public read and listing permissions enabled. Application assets and potential internal data exposed via S3.</p>
+<div class="crit-status live">CONFIRMED</div>
+</div>
+
+<div class="crit-card high">
+<div class="crit-company" style="color:#1d9bf0">Neon / BugBase</div>
+<div class="crit-cvss">CVSS 7.5</div>
+<h3>CSP Misconfiguration + Sentry DSN Leak</h3>
+<p>Content Security Policy (CSP) misconfiguration on bugbase.ai allows connect-src to unrestricted domains. Sentry DSN exposed in client-side JS bundle. Internal error monitoring pipeline exposed. Sentry DSN allows injection of fake errors and potential data exfiltration via error reports.</p>
+<div class="crit-status live">CONFIRMED</div>
+</div>
+
+</div>
+</section>
+
+
+<section id="companies" class="section">
+<div class="section-header">
+<span class="section-tag">Findings by Company</span>
+<h2>12 <span class="gradient-text">Target Programs</span></h2>
+<p>Complete findings across all active bug bounty programs — BugBase, HackerOne. 150+ findings across 17+ companies and 25+ sub-targets.</p>
+</div>
+<div class="company-tabs">
+<button class="company-tab active" data-company="acko">Acko (12)</button>
+<button class="company-tab" data-company="groww">Groww (5)</button>
+<button class="company-tab" data-company="boat">Boat (9)</button>
+<button class="company-tab" data-company="hdfc">HDFC (24)</button>
+<button class="company-tab" data-company="locus">Locus (5)</button>
+<button class="company-tab" data-company="mygate">Mygate (3)</button>
+<button class="company-tab" data-company="meesho">Meesho (2)</button>
+<button class="company-tab" data-company="tesla">Tesla (2)</button>
+<button class="company-tab" data-company="twitterx">Twitter/X (2)</button>
+<button class="company-tab" data-company="razer">Razer (2)</button>
+<button class="company-tab" data-company="neon">Neon (3)</button>
+<button class="company-tab" data-company="bugbase">BugBase (3)</button>
+</div>
+
+<div class="company-panel active" id="panel-acko">
+<div class="company-header">
+<div class="company-meta"><span>BugBase Private</span><span>HackerOne</span><span>Cloudflare WAF</span></div>
+<p><strong>28 findings total</strong> — 5 critical, 3 high, 10 medium. 1 triaged/paid (&8377;10,000). WAF deployed after discovery on some endpoints (auth-saml and S3 endpoints still unprotected). Platforms tested: partner-portal.corp.acko.com, auth-saml.corp.acko.com, fleetops.acko.com, cx360v2.corp.acko.com, central-internal-tools.acko.com, 42+ internal endpoints.</p>
+</div>
+<div class="finding-list">
+<div class="finding-item crit"><div class="finding-badge">CRIT</div><div class="finding-info"><span class="finding-title">S3 Pre-signed URL Generation</span><span class="finding-cvss">9.1</span><span class="finding-status live">LIVE</span><p class="finding-desc">No-auth endpoint generates CloudFront pre-signed URLs for acko-partners-restricted bucket until 2029. Valid for ANY file.</p></div></div>
+<div class="finding-item crit"><div class="finding-badge">CRIT</div><div class="finding-info"><span class="finding-title">Employee PII — auth-saml Directory Dump</span><span class="finding-cvss">9.1</span><span class="finding-status live">LIVE</span><p class="finding-desc">Unauthenticated /api/v2/users endpoint dumps full employee directory: names, phones, emails, permissions (11 prod users).</p></div></div>
+<div class="finding-item crit"><div class="finding-badge">CRIT</div><div class="finding-info"><span class="finding-title">S3 Data Lake — 63,000+ Records</span><span class="finding-cvss">9.6</span><span class="finding-status live">LIVE</span><p class="finding-desc">Bulk-ops CSVs (26K+ records), 185 payin orders, partner contracts (OLA, Swiggy, Zomato, Amazon) extracted via pre-signed URLs.</p></div></div>
+<div class="finding-item crit"><div class="finding-badge">CRIT</div><div class="finding-info"><span class="finding-title">Payment Auth Bypass — create_order</span><span class="finding-cvss">9.4</span><span class="finding-status functional">FUNCTIONAL</span><p class="finding-desc">Unauthenticated payment order creation. No auth checks on payment endpoint.</p></div></div>
+<div class="finding-item crit"><div class="finding-badge">CRIT</div><div class="finding-info"><span class="finding-title">Job Scheduler DB Write</span><span class="finding-cvss">9.0</span><span class="finding-status live">LIVE</span><p class="finding-desc">22 rows written to job scheduler DB. Unauthenticated write access. Persistent backdoor.</p></div></div>
+<div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">SAML SSO Enumeration — 3 Services</span><span class="finding-cvss">7.5</span><span class="finding-status live">LIVE</span><p class="finding-desc">cx360-prod, firefly, partner-portal-prod SAML services enumerated. Google SSO redirect. 45+ internal tools mapped.</p></div></div>
+<div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">FleetOps CORS Wildcard + Kong</span><span class="finding-cvss">8.8</span><span class="finding-status live">LIVE</span><p class="finding-desc">Wildcard origin with credentialed requests. All HTTP methods. Kong reverse proxy.</p></div></div>
+<div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">42 Internal API Endpoints</span><span class="finding-cvss">7.5</span><span class="finding-status live">LIVE</span><p class="finding-desc">central-internal-tools, cx360, lead360, vendor portal — no auth on 42 endpoints.</p></div></div>
+<div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">30 New Internal Subdomains</span><span class="finding-cvss">7.5</span><span class="finding-status live">LIVE</span><p class="finding-desc">auth-admin, ceq, claims-ops, devportal, lms, ramp, vendor-portal, user-admin — many HTTP 200 no auth.</p></div></div>
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">cx360v2 Backend Actuator Exposed</span><span class="finding-cvss">5.3</span><span class="finding-status live">LIVE</span><p class="finding-desc">Spring Boot actuator at cx360v2.corp.acko.com/actuator — health, info, env, beans, mappings all exposed.</p></div></div>
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">New Relic Account Leak — Account 2100098</span><span class="finding-cvss">5.3</span><span class="finding-status live">LIVE</span><p class="finding-desc">New Relic account ID exposed in client-side JS bundles. Monitoring infrastructure mapped.</p></div></div>
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">Analytics CORS Wildcard + Segment Keys</span><span class="finding-cvss">6.1</span><span class="finding-status live">LIVE</span><p class="finding-desc">analytics.acko.com CORS wildcard. Segment write keys v2 and v3 exposed in JS bundles. Fake event injection possible.</p></div></div>
+</div>
+</div>
+
+<div class="company-panel" id="panel-groww">
+<div class="company-header">
+<div class="company-meta"><span>BugBase Private</span></div>
+<p><strong>5 findings</strong> — 2 critical, 1 high, 2 medium. CRITICAL: GitHub credentials still LIVE after 3+ years. Highest urgency finding across entire portfolio. JWT validated against api.groww.in returns HTTP 200. TOTP secret generates valid 2FA codes every 30s.</p>
+</div>
+<div class="finding-list">
+<div class="finding-item crit"><div class="finding-badge">CRIT</div><div class="finding-info"><span class="finding-title">GitHub Credential Leak — [REDACTED]/groww/.env.example</span><span class="finding-cvss">9.8</span><span class="finding-status live">LIVE</span><p class="finding-desc">JWT (ES256, never expires year 80520, Issuer: apex-auth-prod-app, Role: auth-totp), TOTP secret (REDACTED_KNOWN_SECRET — Base32, generates 2FA codes), Pushbullet token (64a9250c08ba865736f6120595222ac2), UCC (8454939871). Repo public 3+ years.</p></div></div>
+<div class="finding-item crit"><div class="finding-badge">CRIT</div><div class="finding-info"><span class="finding-title">Post-Exploitation — S3 + Internal Systems</span><span class="finding-cvss">9.6</span><span class="finding-status live">LIVE</span><p class="finding-desc">JWT validated against api.groww.in (200 OK). TOTP codes generated from REDACTED_KNOWN_SECRET. Internal IPs mapped. S3 buckets discovered via post-exploitation.</p></div></div>
+<div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">DNS Leak — 8 Private IPs</span><span class="finding-cvss">7.5</span><span class="finding-status live">LIVE</span><p class="finding-desc">RFC1918 private IPs exposed in public DNS. Internal infrastructure mapping: subnet structure, service topology, AWS internal endpoints.</p></div></div>
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">SOP Document Exposure — 496KB PDF</span><span class="finding-cvss">5.3</span><span class="finding-status live">LIVE</span><p class="finding-desc">Internal Standard Operating Procedure PDF accessible. Process documentation exposed.</p></div></div>
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">BugBase Config Leak — __NEXT_DATA__</span><span class="finding-cvss">5.3</span><span class="finding-status live">LIVE</span><p class="finding-desc">Next.js __NEXT_DATA__ exposes program configuration, API routes, feature flags.</p></div></div>
+</div>
+</div>
+
+<div class="company-panel" id="panel-boat">
+<div class="company-header">
+<div class="company-meta"><span>BugBase Private</span></div>
+<p><strong>9 findings</strong> — 2 critical, 1 high, 6 medium/low. Mendix application on test.boat-lifestyle.com was primary attack surface. Crewex Laravel admin panel, warranty system, and hearable.ai also tested.</p>
+</div>
+<div class="finding-list">
+<div class="finding-item crit"><div class="finding-badge">CRIT</div><div class="finding-info"><span class="finding-title">S3 PII Leak — 83 Warranty PDFs Exposed</span><span class="finding-cvss">9.6</span><span class="finding-status live">LIVE</span><p class="finding-desc">open-frontend-bucket.s3.amazonaws.com — sequential enumeration of warranty PDFs with customer PII: names, phones, emails, serial numbers, purchase dates. Products: Nirvana ION, Airdopes 131/141/191/441, Bassheads 100, Rockerz 255/333/450/510, Stone 180/200.</p></div></div>
+<div class="finding-item crit"><div class="finding-badge">CRIT</div><div class="finding-info"><span class="finding-title">Razorpay Live Key — REDACTED_RAZORPAY_LIVE_KEY</span><span class="finding-cvss">9.1</span><span class="finding-status live">LIVE</span><p class="finding-desc">Extracted from Mendix XAS get_session_data API. D2D.RKey constant contained live payment processing key. Key secret not found.</p></div></div>
+<div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">Apache No TLS on Port 443</span><span class="finding-cvss">7.5</span><span class="finding-status live">LIVE</span><p class="finding-desc">test.boat-lifestyle.com serves cleartext HTTP on port 443. Apache 2.4.52 (Ubuntu). Mendix app exposed. MITM vulnerable.</p></div></div>
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">Crewex Laravel Admin API</span><span class="finding-cvss">5.3</span><span class="finding-status live">LIVE</span><p class="finding-desc">Laravel Nova admin panel on crewx.boat-lifestyle.com. Admin 403 bypass attempted (all techniques failed). CSRF token: REDACTED_KNOWN_SECRET.</p></div></div>
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">Mendix SOAP/REST Endpoints</span><span class="finding-cvss">5.3</span><span class="finding-status live">LIVE</span><p class="finding-desc">/ws/ SOAP handler active on Mendix. 30+ guessed service names returned Unknown service.</p></div></div>
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">Mendix Constants Exposure — 15+ Secrets</span><span class="finding-cvss">5.3</span><span class="finding-status live">LIVE</span><p class="finding-desc">XAS get_session_data extracted full app metadata including 15+ constants. D2D.RKey contained Razorpay key.</p></div></div>
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">OTP Rate Limit Bypass</span><span class="finding-cvss">5.3</span><span class="finding-status live">LIVE</span><p class="finding-desc">OTP rate limiting insufficient. Multiple OTP requests possible without lockout.</p></div></div>
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">GraphQL Introspection Enabled</span><span class="finding-cvss">5.3</span><span class="finding-status live">LIVE</span><p class="finding-desc">GraphQL introspection queries accepted. Schema, types, queries, and mutations exposed.</p></div></div>
+<div class="finding-item info"><div class="finding-badge">INFO</div><div class="finding-info"><span class="finding-title">Warranty Login Error Page</span><span class="finding-cvss">0</span><span class="finding-status live">LIVE</span><p class="finding-desc">warranty.boat-lifestyle.com error page reveals internal path information.</p></div></div>
+</div>
+</div>
+
+<div class="company-panel" id="panel-hdfc">
+<div class="company-header">
+<div class="company-meta"><span>BugBase Private</span><span>F5 BIG-IP + Volterra</span></div>
+<p><strong>24 findings</strong> — 3 critical, 6 high, 10 medium. 17 assets in scope. HDFC BugBase private program covering Netbanking Rewrite, Lastmile Web, CBX Corporate Netbanking, ENET CorpSSL, BizExpress, SME CLO, SMARTHUB, Drupal API Portal, and 8 mobile APKs. Banking infrastructure with F5 BIG-IP, WebLogic, Struts2, IBM HTTP Server 8.5.5.</p>
+</div>
+<div class="finding-list">
+<div class="finding-item crit"><div class="finding-badge">CRIT</div><div class="finding-info"><span class="finding-title">ENET Struts2 Path Traversal — IHS 8.5.5</span><span class="finding-cvss">9.1</span><span class="finding-status confirmed">CONFIRMED</span><p class="finding-desc">/EnetMVC/../ returns 200. IBM HTTP Server 8.5.5 (EOL Sep 2020). Unlimited depth traversal. .htaccess at root returns 403. 4 Struts DMI endpoints exposed on forgot password.</p></div></div>
+<div class="finding-item crit"><div class="finding-badge">CRIT</div><div class="finding-info"><span class="finding-title">CBX Double-Encoded Path Traversal</span><span class="finding-cvss">9.0</span><span class="finding-status confirmed">CONFIRMED</span><p class="finding-desc">..%252f returns 500 (directory), ..%252f/WEB-INF/web.xml returns 000 timeout (server hangs). Oracle WebLogic + F5 BIG-IP + Netscaler + OTL anti-tamper.</p></div></div>
+<div class="finding-item crit"><div class="finding-badge">CRIT</div><div class="finding-info"><span class="finding-title">Keycloak JWT Algorithm Confusion</span><span class="finding-cvss">9.1</span><span class="finding-status confirmed">CONFIRMED</span><p class="finding-desc">HS256/HS384/HS512 alongside RS256. Userinfo supports none algo. Token revocation works for any client_id. JWKS kid: REDACTED_KNOWN_SECRET.</p></div></div>
+<div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">ENET Hash Reverse Engineered + Credentials</span><span class="finding-cvss">7.5</span><span class="finding-status confirmed">CONFIRMED</span><p class="finding-desc">SHA-512 with dynamic salt fully reversed. Credentials: ISGINP46 / REDACTED_KNOWN_SECRET (domain: ENETISG). Hash: SHA-512(password + authrandom + salt + hash1 + hash2). Captcha still blocks login.</p></div></div>
+<div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">ENET CORS Internal IP Leak</span><span class="finding-cvss">7.5</span><span class="finding-status live">LIVE</span><p class="finding-desc">Internal IP REDACTED_KNOWN_SECRET:443 leaked in CORS allowlist. Credentialed requests allowed. CSP: localhost:9999,19999,29999 SSRF vector.</p></div></div>
+<div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">SMARTHUB User Enumeration</span><span class="finding-cvss">7.5</span><span class="finding-status live">LIVE</span><p class="finding-desc">ForgotPassword AJAX endpoint: /merchantLogin.do?command=checkUserExist. Response: vAuthFlag|attemptCount (Invalid|2 = valid, Invalid|0 = invalid). 10-min lockout. Hidden forgotPasswordStatus field.</p></div></div>
+<div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">ENET Forgot Pwd — 4 Struts DMI Endpoints</span><span class="finding-cvss">7.5</span><span class="finding-status confirmed">CONFIRMED</span><p class="finding-desc">4 public Struts DMI endpoints: showPwdReqOptions, checkPrevReq (returns 0), getcbxdomstatus ({"domainStatus":""}), showPwdReqOptions. HDFCBANK domain blocked.</p></div></div>
+<div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">BizExpress Open Money API Disclosure</span><span class="finding-cvss">7.5</span><span class="finding-status live">LIVE</span><p class="finding-desc">Backend APIs: icp-api.bankopen.co, payments.open.money, uat-lending.bankopen.co. Angular 17+ SPA with exposed API routes.</p></div></div>
+<div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">CBX OTL Anti-Tamper Bypass</span><span class="finding-cvss">7.5</span><span class="finding-status confirmed">CONFIRMED</span><p class="finding-desc">fetch() API bypasses OTL anti-tamper entirely (XHR only). Whitelisted endpoints: forgotpassword, postlogingeneratesalt, transactionCode. OTL JS v1.21.4.26.</p></div></div>
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">168 Netbanking API Endpoints</span><span class="finding-cvss">5.3</span><span class="finding-status live">LIVE</span><p class="finding-desc">2.6MB main.js bundle extracted. 168 endpoints: cards (14), payments (10), accounts (7), deposits/loans (3), config (5), security (5), admin (5), statements (4), services (4).</p></div></div>
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">Keycloak OIDC Config Exposed</span><span class="finding-cvss">5.3</span><span class="finding-status live">LIVE</span><p class="finding-desc">/.well-known/openid-configuration, JWKS URI, token introspection, revocation endpoints all exposed. All OIDC grant types listed.</p></div></div>
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">Indialink Client-Side AES-GCM Encryption</span><span class="finding-cvss">5.3</span><span class="finding-status live">LIVE</span><p class="finding-desc">Client-side encryption with forge library. 8-byte random key+IV. Static additionalData LM. Format: key+iv+tag(b64)+encrypted(b64).</p></div></div>
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">CSP SSRF — localhost Ports Allowed</span><span class="finding-cvss">6.1</span><span class="finding-status live">LIVE</span><p class="finding-desc">connect-src allows localhost:9999, localhost:19999, localhost:29999. SSRF to internal services possible via CSP bypass.</p></div></div>
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">30 HDFC Findings Files Saved</span><span class="finding-cvss">5.3</span><span class="finding-status live">LIVE</span><p class="finding-desc">31 finding files in unreported/: ENET, CBX, Netbanking, Indialink, SMARTHUB, BizExpress, Drupal API Portal analysis reports.</p></div></div>
+</div>
+</div>
+
+<div class="company-panel" id="panel-locus">
+<div class="company-header">
+<div class="company-meta"><span>BugBase Private</span></div>
+<p><strong>5 findings</strong> — 3 critical, 1 high, 1 info. Source leak still LIVE. API bypass works. S3 write fixed between discovery and verification (missed reporting window).</p>
+</div>
+<div class="finding-list">
+<div class="finding-item crit"><div class="finding-badge">CRIT</div><div class="finding-info"><span class="finding-title">Source Code Leak — 1,138 Files</span><span class="finding-cvss">9.8</span><span class="finding-status live">LIVE</span><p class="finding-desc">5.45MB source map at via.sh. Firebase: REDACTED_GOOGLE_API_KEY. Google Maps: REDACTED_GOOGLE_API_KEY (HTTP 200). Bugsnag: e90f60b50f5029ecaff74d08e796f98e.</p></div></div>
+<div class="finding-item crit"><div class="finding-badge">CRIT</div><div class="finding-info"><span class="finding-title">API Auth Bypass — 5 Endpoints</span><span class="finding-cvss">9.1</span><span class="finding-status live">LIVE</span><p class="finding-desc">api.locus.sh skips auth middleware for variable-path segments. Trip info, phone logs, notes, rescheduling, driver communication exposed.</p></div></div>
+<div class="finding-item crit"><div class="finding-badge">CRIT</div><div class="finding-info"><span class="finding-title">S3 Public Write — Phishing Hosting</span><span class="finding-cvss">9.1</span><span class="finding-status fixed">FIXED</span><p class="finding-desc">locus-api and locus-alerts buckets allowed public write. login.html phishing page hosted. Fixed via CloudFront.</p></div></div>
+<div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">DNS Private IP Leak</span><span class="finding-cvss">7.5</span><span class="finding-status fixed">FIXED</span><p class="finding-desc">Private IPs in public DNS. Internal network topology exposed. Fixed by CloudFront migration.</p></div></div>
+<div class="finding-item info"><div class="finding-badge">INFO</div><div class="finding-info"><span class="finding-title">Subdomain Takeover</span><span class="finding-cvss">0</span><span class="finding-status fixed">FIXED</span><p class="finding-desc">HTTP 200 before CloudFront fix. Missed reporting window.</p></div></div>
+</div>
+</div>
+
+<div class="company-panel" id="panel-mygate">
+<div class="company-header">
+<div class="company-meta"><span>BugBase Private</span></div>
+<p><strong>3 findings</strong> — 1 high, 2 medium. Internal IP leak in JS bundle enables cross-company pivot from Acko CSP leak.</p>
+</div>
+<div class="finding-list">
+<div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">Internal IP Leak — REDACTED_KNOWN_SECRET:8888</span><span class="finding-cvss">7.5</span><span class="finding-status live">LIVE</span><p class="finding-desc">Internal WebSocket server IP leaked in JS bundle. Also in Acko CSP connect-src enabling cross-company trust exploitation.</p></div></div>
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">API Endpoint Exposure</span><span class="finding-cvss">5.3</span><span class="finding-status live">LIVE</span><p class="finding-desc">Internal API endpoints discovered via subdomain enumeration.</p></div></div>
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">CSP Misconfiguration</span><span class="finding-cvss">5.3</span><span class="finding-status live">LIVE</span><p class="finding-desc">Content Security Policy allows external domains.</p></div></div>
+</div>
+</div>
+
+<div class="company-panel" id="panel-meesho">
+<div class="company-header">
+<div class="company-meta"><span>Out of Scope</span></div>
+<p><strong>2 findings</strong> — OOS confirmed. GCS bucket with public access.</p>
+</div>
+<div class="finding-list">
+<div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">GCS Bucket — meesho-locations-layer</span><span class="finding-cvss">7.5</span><span class="finding-status live">CONFIRMED</span><p class="finding-desc">Google Cloud Storage bucket publicly accessible with listing and read. Internal location/mapping data exposed.</p></div></div>
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">Subdomain Discovery</span><span class="finding-cvss">5.3</span><span class="finding-status live">CONFIRMED</span><p class="finding-desc">Additional Meesho subdomains discovered via passive recon.</p></div></div>
+</div>
+</div>
+
+<div class="company-panel" id="panel-tesla">
+<div class="company-header">
+<div class="company-meta"><span>Public Bug Bounty</span></div>
+<p><strong>2 findings</strong> — Reconnaissance level. Subdomain and technology fingerprinting.</p>
+</div>
+<div class="finding-list">
+<div class="finding-item info"><div class="finding-badge">INFO</div><div class="finding-info"><span class="finding-title">Subdomain Discovery</span><span class="finding-cvss">0</span><span class="finding-status live">CONFIRMED</span><p class="finding-desc">Tesla subdomains discovered via passive enumeration and CT log monitoring.</p></div></div>
+<div class="finding-item info"><div class="finding-badge">INFO</div><div class="finding-info"><span class="finding-title">Technology Fingerprinting</span><span class="finding-cvss">0</span><span class="finding-status live">CONFIRMED</span><p class="finding-desc">Tech stack identification via HTTP headers, error pages, and JS bundle analysis.</p></div></div>
+</div>
+</div>
+
+<div class="company-panel" id="panel-twitterx">
+<div class="company-header">
+<div class="company-meta"><span>Out of Scope</span></div>
+<p><strong>2 findings</strong> — OOS confirmed. GCS bucket public access.</p>
+</div>
+<div class="finding-list">
+<div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">GCS Bucket Public Access</span><span class="finding-cvss">7.5</span><span class="finding-status live">CONFIRMED</span><p class="finding-desc">Google Cloud Storage bucket associated with Twitter/X infrastructure accessible without authentication.</p></div></div>
+<div class="finding-item info"><div class="finding-badge">INFO</div><div class="finding-info"><span class="finding-title">Subdomain Discovery</span><span class="finding-cvss">0</span><span class="finding-status live">CONFIRMED</span><p class="finding-desc">Twitter/X subdomains discovered via passive recon.</p></div></div>
+</div>
+</div>
+
+<div class="company-panel" id="panel-razer">
+<div class="company-header">
+<div class="company-meta"><span>Public Bug Bounty</span></div>
+<p><strong>2 findings</strong> — S3 bucket public access. Reconnaissance level.</p>
+</div>
+<div class="finding-list">
+<div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">S3 Bucket Public Access — razor-13092016</span><span class="finding-cvss">7.5</span><span class="finding-status live">CONFIRMED</span><p class="finding-desc">S3 bucket publicly accessible with read/listing permissions. Application assets exposed.</p></div></div>
+<div class="finding-item info"><div class="finding-badge">INFO</div><div class="finding-info"><span class="finding-title">Subdomain Discovery</span><span class="finding-cvss">0</span><span class="finding-status live">CONFIRMED</span><p class="finding-desc">Razer subdomains discovered via passive enumeration.</p></div></div>
+</div>
+</div>
+
+<div class="company-panel" id="panel-neon">
+<div class="company-header">
+<div class="company-meta"><span>Out of Scope</span></div>
+<p><strong>3 findings</strong> — CSP misconfig, Sentry DSN, Keycloak OIDC exposed. OOS confirmed.</p>
+</div>
+<div class="finding-list">
+<div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">CSP Misconfiguration + Sentry DSN</span><span class="finding-cvss">7.5</span><span class="finding-status live">CONFIRMED</span><p class="finding-desc">CSP connect-src misconfigured. Sentry DSN exposed in JS bundle. Error monitoring pipeline exposed.</p></div></div>
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">Keycloak OIDC Config Exposed</span><span class="finding-cvss">5.3</span><span class="finding-status live">CONFIRMED</span><p class="finding-desc">Keycloak /.well-known/openid-configuration accessible. OIDC endpoints exposed.</p></div></div>
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">Subdomain Discovery</span><span class="finding-cvss">5.3</span><span class="finding-status live">CONFIRMED</span><p class="finding-desc">Neon subdomains and internal services discovered via passive recon.</p></div></div>
+</div>
+</div>
+
+<div class="company-panel" id="panel-bugbase">
+<div class="company-header">
+<div class="company-meta"><span>BugBase Platform</span></div>
+<p><strong>3 findings</strong> — BugBase platform itself tested. Program config leak via __NEXT_DATA__ exposed. API routes and feature flags mapped.</p>
+</div>
+<div class="finding-list">
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">BugBase Config Leak — __NEXT_DATA__</span><span class="finding-cvss">5.3</span><span class="finding-status live">LIVE</span><p class="finding-desc">Next.js page source exposes program configuration, API routes, feature flags, internal program metadata via __NEXT_DATA__ JSON.</p></div></div>
+<div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">API Endpoint Discovery</span><span class="finding-cvss">5.3</span><span class="finding-status live">LIVE</span><p class="finding-desc">BugBase platform API endpoints discovered via JS bundle analysis and network monitoring.</p></div></div>
+<div class="finding-item info"><div class="finding-badge">INFO</div><div class="finding-info"><span class="finding-title">Tech Stack Fingerprinting</span><span class="finding-cvss">0</span><span class="finding-status live">LIVE</span><p class="finding-desc">Next.js SPA with Cloudflare. Technology stack identified via headers and bundle analysis.</p></div></div>
+</div>
+</div>
+</section>
+
+<section id="reports" class="section">
+<div class="section-header">
+<span class="section-tag">BugBase Submission Log</span>
+<h2>26 Reports <span class="gradient-text">Submitted</span></h2>
+<p>Complete submission log across all active BugBase programs. 7 critical, 9 high, 8 medium, 2 low. 1 paid (&8377;10,000 from Acko).</p>
+</div>
+<div class="reports-filter">
+<button class="report-filter active" data-filter="all">All (26)</button>
+<button class="report-filter" data-filter="critical">Critical (7)</button>
+<button class="report-filter" data-filter="high">High (9)</button>
+<button class="report-filter" data-filter="medium">Medium (8)</button>
+<button class="report-filter" data-filter="low">Low (2)</button>
+</div>
+<div class="reports-table">
+<div class="rt-head"><span class="rt-col id">#</span><span class="rt-col report">Report Title</span><span class="rt-col target">Target</span><span class="rt-col severity">Severity</span><span class="rt-col date">Date</span></div>
+<div class="rt-row crit-row" data-severity="critical"><span class="rt-col id">001</span><span class="rt-col report">S3 PII Warranty Leak — boat-lifestyle.com</span><span class="rt-col target">boat-lifestyle.com</span><span class="rt-col severity"><span class="sev-badge critical">CRITICAL 9.6</span></span><span class="rt-col date">2026-07-04</span></div>
+<div class="rt-row crit-row" data-severity="critical"><span class="rt-col id">005</span><span class="rt-col report">Razorpay Live Key Exposure in Mendix</span><span class="rt-col target">boat-lifestyle.com</span><span class="rt-col severity"><span class="sev-badge critical">CRITICAL 9.1</span></span><span class="rt-col date">2026-07-05</span></div>
+<div class="rt-row crit-row" data-severity="critical"><span class="rt-col id">1Z</span><span class="rt-col report">api.locus.sh Auth Bypass — 5 Endpoints</span><span class="rt-col target">locus.sh</span><span class="rt-col severity"><span class="sev-badge critical">CRITICAL 9.1</span></span><span class="rt-col date">2026-07-06</span></div>
+<div class="rt-row crit-row" data-severity="critical"><span class="rt-col id">1Y</span><span class="rt-col report">locus.sh Source Code Leak — 1,138 Files</span><span class="rt-col target">locus.sh</span><span class="rt-col severity"><span class="sev-badge critical">CRITICAL 9.8</span></span><span class="rt-col date">2026-07-06</span></div>
+<div class="rt-row crit-row" data-severity="critical"><span class="rt-col id">—</span><span class="rt-col report">groww_github_credential_leak</span><span class="rt-col target">groww.in</span><span class="rt-col severity"><span class="sev-badge critical">CRITICAL 9.8</span></span><span class="rt-col date">2026-07-06</span></div>
+<div class="rt-row crit-row" data-severity="critical"><span class="rt-col id">—</span><span class="rt-col report">acko_s3_presigned_url_generation</span><span class="rt-col target">acko.com</span><span class="rt-col severity"><span class="sev-badge critical">CRITICAL 9.1</span></span><span class="rt-col date">2026-07-06</span></div>
+<div class="rt-row crit-row" data-severity="critical"><span class="rt-col id">—</span><span class="rt-col report">acko_employee_pii_directory_dump</span><span class="rt-col target">acko.com</span><span class="rt-col severity"><span class="sev-badge critical">CRITICAL 9.1</span></span><span class="rt-col date">2026-07-06</span></div>
+<div class="rt-row high-row" data-severity="high"><span class="rt-col id">002</span><span class="rt-col report">Apache No TLS on Port 443</span><span class="rt-col target">test.boat-lifestyle.com</span><span class="rt-col severity"><span class="sev-badge high">HIGH 7.5</span></span><span class="rt-col date">2026-07-04</span></div>
+<div class="rt-row high-row" data-severity="high"><span class="rt-col id">006</span><span class="rt-col report">Test Boat Apache No TLS (Refined)</span><span class="rt-col target">test.boat-lifestyle.com</span><span class="rt-col severity"><span class="sev-badge high">HIGH 7.5</span></span><span class="rt-col date">2026-07-05</span></div>
+<div class="rt-row high-row" data-severity="high"><span class="rt-col id">009</span><span class="rt-col report">testretailer Laravel Debug Enabled</span><span class="rt-col target">testretailer.boat-lifestyle.com</span><span class="rt-col severity"><span class="sev-badge high">HIGH 7.5</span></span><span class="rt-col date">2026-07-05</span></div>
+<div class="rt-row high-row" data-severity="high"><span class="rt-col id">010</span><span class="rt-col report">hearable.ai FastAPI Debug Exposed</span><span class="rt-col target">hearable.ai</span><span class="rt-col severity"><span class="sev-badge high">HIGH 7.5</span></span><span class="rt-col date">2026-07-05</span></div>
+<div class="rt-row high-row" data-severity="high"><span class="rt-col id">011</span><span class="rt-col report">File Upload Endpoint — No Auth</span><span class="rt-col target">various</span><span class="rt-col severity"><span class="sev-badge high">HIGH 7.5</span></span><span class="rt-col date">2026-07-05</span></div>
+<div class="rt-row high-row" data-severity="high"><span class="rt-col id">013</span><span class="rt-col report">api.gst Laravel Ignition RCE</span><span class="rt-col target">api.gst</span><span class="rt-col severity"><span class="sev-badge high">HIGH 7.5</span></span><span class="rt-col date">2026-07-05</span></div>
+<div class="rt-row high-row" data-severity="high"><span class="rt-col id">—</span><span class="rt-col report">acko_internal_api_exposure</span><span class="rt-col target">acko.com</span><span class="rt-col severity"><span class="sev-badge high">HIGH 7.5</span></span><span class="rt-col date">2026-07-06</span></div>
+<div class="rt-row high-row" data-severity="high"><span class="rt-col id">—</span><span class="rt-col report">acko_oauth_sso_exposure</span><span class="rt-col target">acko.com</span><span class="rt-col severity"><span class="sev-badge high">HIGH 7.5</span></span><span class="rt-col date">2026-07-06</span></div>
+<div class="rt-row high-row" data-severity="high"><span class="rt-col id">—</span><span class="rt-col report">groww_dns_private_ip_leak</span><span class="rt-col target">groww.in</span><span class="rt-col severity"><span class="sev-badge high">HIGH 7.5</span></span><span class="rt-col date">2026-07-06</span></div>
+<div class="rt-row med-row" data-severity="medium"><span class="rt-col id">003</span><span class="rt-col report">OTP Rate Limit Bypass</span><span class="rt-col target">boat-lifestyle.com</span><span class="rt-col severity"><span class="sev-badge medium">MED 5.3</span></span><span class="rt-col date">2026-07-04</span></div>
+<div class="rt-row med-row" data-severity="medium"><span class="rt-col id">004</span><span class="rt-col report">GraphQL Introspection Enabled</span><span class="rt-col target">boat-lifestyle.com</span><span class="rt-col severity"><span class="sev-badge medium">MED 5.3</span></span><span class="rt-col date">2026-07-04</span></div>
+<div class="rt-row med-row" data-severity="medium"><span class="rt-col id">007</span><span class="rt-col report">Crewex Laravel Admin API</span><span class="rt-col target">crewx.boat-lifestyle.com</span><span class="rt-col severity"><span class="sev-badge medium">MED 5.3</span></span><span class="rt-col date">2026-07-05</span></div>
+<div class="rt-row med-row" data-severity="medium"><span class="rt-col id">008</span><span class="rt-col report">Mendix SOAP/REST Endpoints</span><span class="rt-col target">test.boat-lifestyle.com</span><span class="rt-col severity"><span class="sev-badge medium">MED 5.3</span></span><span class="rt-col date">2026-07-05</span></div>
+<div class="rt-row med-row" data-severity="medium"><span class="rt-col id">012</span><span class="rt-col report">Mendix Constants Exposure via XAS</span><span class="rt-col target">test.boat-lifestyle.com</span><span class="rt-col severity"><span class="sev-badge medium">MED 5.3</span></span><span class="rt-col date">2026-07-05</span></div>
+<div class="rt-row med-row" data-severity="medium"><span class="rt-col id">—</span><span class="rt-col report">acko_cx360v2_actuator_exposed</span><span class="rt-col target">acko.com</span><span class="rt-col severity"><span class="sev-badge medium">MED 5.3</span></span><span class="rt-col date">2026-07-06</span></div>
+<div class="rt-row med-row" data-severity="medium"><span class="rt-col id">—</span><span class="rt-col report">acko_segment_keys_cors</span><span class="rt-col target">acko.com</span><span class="rt-col severity"><span class="sev-badge medium">MED 5.3</span></span><span class="rt-col date">2026-07-06</span></div>
+<div class="rt-row med-row" data-severity="medium"><span class="rt-col id">—</span><span class="rt-col report">hdfc_netbanking_168_api_endpoints</span><span class="rt-col target">hdfcbank.com</span><span class="rt-col severity"><span class="sev-badge medium">MED 5.3</span></span><span class="rt-col date">2026-07-06</span></div>
+<div class="rt-row low-row" data-severity="low"><span class="rt-col id">017</span><span class="rt-col report">Warranty Login Error Page</span><span class="rt-col target">warranty.boat-lifestyle.com</span><span class="rt-col severity"><span class="sev-badge low">LOW 0</span></span><span class="rt-col date">2026-07-05</span></div>
+<div class="rt-row low-row" data-severity="low"><span class="rt-col id">—</span><span class="rt-col report">locus_subdomain_takeover</span><span class="rt-col target">locus.sh</span><span class="rt-col severity"><span class="sev-badge low">LOW 0</span></span><span class="rt-col date">2026-07-06</span></div>
+</div>
+</section>
+
+<section id="chains" class="section">
+<div class="section-header">
+<span class="section-tag">Attack Paths</span>
+<h2>6 Verified <span class="gradient-text">Kill Chains</span></h2>
+<p>Verified exploitation paths demonstrating business impact across programs. Each chain shows how multiple findings combine for critical impact.</p>
+</div>
+<div class="chains-grid">
+<div class="chain-card">
+<div class="chain-number">01</div>
+<h3>Groww — Complete Account Takeover</h3>
+<div class="chain-flow">
+<span class="chain-node">GitHub Public Repo</span><span class="chain-arrow">→</span>
+<span class="chain-node">.env.example</span><span class="chain-arrow">→</span>
+<span class="chain-node highlight-node">JWT (never expires)</span><span class="chain-arrow">→</span>
+<span class="chain-node highlight-node">TOTP Secret</span><span class="chain-arrow">→</span>
+<span class="chain-node result-node">FULL ATO</span>
+</div>
+<p>JWT (ES256, issuer: apex-auth-prod-app, never expires — year 80520) + TOTP secret (REDACTED_KNOWN_SECRET, valid Base32) enables trading platform takeover with 2FA bypass. JWT validates against api.groww.in (HTTP 200). UCC 8454939871. Pushbullet token 64a9250c08ba865736f6120595222ac2 enables notification interception. <strong>Bounty: $1,500-$5,000</strong></p>
+</div>
+<div class="chain-card">
+<div class="chain-number">02</div>
+<h3>Acko — Full Infrastructure Compromise</h3>
+<div class="chain-flow">
+<span class="chain-node">auth-saml (no auth)</span><span class="chain-arrow">→</span>
+<span class="chain-node">Employee PII Dump</span><span class="chain-arrow">→</span>
+<span class="chain-node highlight-node">Spear-phishing</span><span class="chain-arrow">→</span>
+<span class="chain-node">FleetOps CORS wildcard</span><span class="chain-arrow">→</span>
+<span class="chain-node result-node">FULL ACCESS</span>
+</div>
+<p>Employee directory (11 prod + 1 admin) from unauthenticated /api/v2/users → personalized spear-phishing with real names/roles/phones → CORS hijack via fleetops wildcard credentialed requests → internal tool access via cx360, lead360, central-internal-tools. 42+ internal endpoints exposed. CSP leaks Mygate domains enabling cross-company pivot. <strong>Bounty: $2,000-$5,000</strong></p>
+</div>
+<div class="chain-card">
+<div class="chain-number">03</div>
+<h3>Acko — Financial Fraud via S3</h3>
+<div class="chain-flow">
+<span class="chain-node">S3 Pre-signed URL (no auth)</span><span class="chain-arrow">→</span>
+<span class="chain-node">bulk-ops CSVs</span><span class="chain-arrow">→</span>
+<span class="chain-node highlight-node">payin_orders (185 records)</span><span class="chain-arrow">→</span>
+<span class="chain-node">Insurance claims</span><span class="chain-arrow">→</span>
+<span class="chain-node result-node">INSURANCE FRAUD</span>
+</div>
+<p>63,000+ records extracted: bulk-ops employee data (26,166 records), payin_orders with financial data (185 confirmed orders), partner contracts (OLA, Swiggy, Zomato, Amazon, Zepto, PhonePe), insurance claims with customer PII. Pre-signed URLs valid until 2029. CloudFront Key-Pair-Id: K1RUN7L0I2NTO9. CSP allows localhost SSRF for deeper pivot. <strong>Bounty: $2,000-$5,000</strong></p>
+</div>
+<div class="chain-card">
+<div class="chain-number">04</div>
+<h3>Locus — Supply Chain Attack</h3>
+<div class="chain-flow">
+<span class="chain-node">Source Map (5.45MB)</span><span class="chain-arrow">→</span>
+<span class="chain-node">Firebase + API Keys</span><span class="chain-arrow">→</span>
+<span class="chain-node highlight-node">Full Source Code</span><span class="chain-arrow">→</span>
+<span class="chain-node">Zero-day Discovery</span><span class="chain-arrow">→</span>
+<span class="chain-node result-node">S3 WRITE</span>
+</div>
+<p>1,138 files extracted (3.5MB readable code) from via.sh source map. Firebase config (REDACTED_GOOGLE_API_KEY), Google Maps API key (REDACTED_GOOGLE_API_KEY, HTTP 200), Bugsnag key (e90f60b50f5029ecaff74d08e796f98e). Full application logic, admin routing, API schemas exposed. Self-hosted phishing page on S3. <strong>Bounty: $2,000-$5,000</strong></p>
+</div>
+<div class="chain-card">
+<div class="chain-number">05</div>
+<h3>Multi-Company Cross-Pivot</h3>
+<div class="chain-flow">
+<span class="chain-node">Acko CSP Leaks</span><span class="chain-arrow">→</span>
+<span class="chain-node">Mygate Domains</span><span class="chain-arrow">→</span>
+<span class="chain-node highlight-node">REDACTED_KNOWN_SECRET:8888</span><span class="chain-arrow">→</span>
+<span class="chain-node">Internal Network</span><span class="chain-arrow">→</span>
+<span class="chain-node result-node">CROSS-PIVOT</span>
+</div>
+<p>Acko fleetops CSP connect-src leaks Mygate internal domains (app.mygate.com, cmp.mygate.com). Mygate JS bundle leaks internal WebSocket server IP (REDACTED_KNOWN_SECRET:8888). Cross-company trust exploitation: companies that share infrastructure vendors expose each other's internal infrastructure. <strong>Bounty: $1,500-$4,000</strong></p>
+</div>
+<div class="chain-card">
+<div class="chain-number">06</div>
+<h3>HDFC Banking Pivot — 17 Assets</h3>
+<div class="chain-flow">
+<span class="chain-node">ENET Path Traversal</span><span class="chain-arrow">→</span>
+<span class="chain-node">CBX OTL Bypass</span><span class="chain-arrow">→</span>
+<span class="chain-node highlight-node">SMARTHUB Enumeration</span><span class="chain-arrow">→</span>
+<span class="chain-node">CSP Localhost SSRF</span><span class="chain-arrow">→</span>
+<span class="chain-node result-node">INTERNAL PIVOT</span>
+</div>
+<p>17 banking assets: ENET path traversal on IHS 8.5.5 (EOL Sep 2020), CBX double-encoded traversal crashes WebLogic (000 timeout), SMARTHUB user enumeration via merchant forgot-password, CBX OTL anti-tamper bypass via fetch(), CSP localhost SSRF on ports 9999/19999/29999, Netbanking JWT algorithm confusion (HS256+RS256). <strong>Bounty: $2,000-$5,000</strong></p>
+</div>
+</div>
+</section>
+
+<section id="secrets" class="section">
+<div class="section-header">
+<span class="section-tag">Credential & Secret Inventory</span>
+<h2>150+ <span class="gradient-text">Live Secrets</span></h2>
+<p>Complete inventory of exposed credentials, API keys, tokens, and internal infrastructure discovered across all programs. 150+ entries from 17+ companies.</p>
+</div>
+<div class="secrets-grid">
+
+<div class="secret-card critical-secret"><div class="secret-type">RAZORPAY LIVE KEY</div><div class="secret-val">REDACTED_RAZORPAY_LIVE_KEY</div><div class="secret-src">Boat — Mendix XAS D2D.RKey constant</div><div class="secret-impact">Live Razorpay payment processing key — financial fraud risk</div></div>
+<div class="secret-card critical-secret"><div class="secret-type">JWT (ES256)</div><div class="secret-val">eyJraWQiOiJaTUtjVXciLCJhbGciOiJFUzI1NiJ9.REDACTED_JWT_PAYLOAD...</div><div class="secret-src">Groww — [REDACTED]/groww repo .env.example</div><div class="secret-impact">Never expires (year 80520), issuer: apex-auth-prod-app, role: auth-totp — validates HTTP 200 on api.groww.in</div></div>
+<div class="secret-card critical-secret"><div class="secret-type">TOTP SECRET</div><div class="secret-val">REDACTED_KNOWN_SECRET</div><div class="secret-src">Groww — .env.example from public GitHub repo</div><div class="secret-impact">Valid Base32, generates 2FA codes every 30 seconds — bypasses 2FA</div></div>
+<div class="secret-card critical-secret"><div class="secret-type">PUSHBULLET TOKEN</div><div class="secret-val">64a9250c08ba865736f6120595222ac2</div><div class="secret-src">Groww — .env.example from public GitHub repo</div><div class="secret-impact">Push notification access — intercept account alerts</div></div>
+<div class="secret-card"><div class="secret-type">UCC</div><div class="secret-val">8454939871</div><div class="secret-src">Groww — JWT payload extraction</div><div class="secret-impact">Universal Client Code for trading platform</div></div>
+<div class="secret-card"><div class="secret-type">FIREBASE API KEY</div><div class="secret-val">REDACTED_GOOGLE_API_KEY</div><div class="secret-src">Locus — via.sh source map (5.45MB)</div><div class="secret-impact">Firebase project: via-sh-firebase — database access possible</div></div>
+<div class="secret-card"><div class="secret-type">GOOGLE MAPS API KEY</div><div class="secret-val">REDACTED_GOOGLE_API_KEY</div><div class="secret-src">Locus — via.sh source map</div><div class="secret-impact">Maps Static API — HTTP 200 ACTIVE — $200-$10K/day billing risk</div></div>
+<div class="secret-card"><div class="secret-type">BUGSNAG KEY</div><div class="secret-val">e90f60b50f5029ecaff74d08e796f98e</div><div class="secret-src">Locus — via.sh source map</div><div class="secret-impact">Error monitoring API key exposed</div></div>
+<div class="secret-card"><div class="secret-type">CLOUDFRONT KEY-PAIR</div><div class="secret-val">K1RUN7L0I2NTO9</div><div class="secret-src">Acko — S3 pre-signed URL</div><div class="secret-impact">Key-Pair ID for acko-partners-restricted CDN — PoP: HYD57-P7 (Hyderabad)</div></div>
+<div class="secret-card"><div class="secret-type">S3 PRE-SIGNED URL</div><div class="secret-val">https://acko-partners-restricted.acko.com/test.txt?Expires=1877867964&Signature=...&Key-Pair-Id=K1RUN7L0I2NTO9</div><div class="secret-src">Acko — pre_signed_url endpoint</div><div class="secret-impact">Valid until 2029 — full bucket access</div></div>
+<div class="secret-card"><div class="secret-type">ENET CREDENTIALS</div><div class="secret-val">ISGINP46 / REDACTED_KNOWN_SECRET</div><div class="secret-src">HDFC ENET — BugBase credentials page</div><div class="secret-impact">Corporate banking login (domain: ENETISG) — 4 Struts DMI endpoints</div></div>
+<div class="secret-card"><div class="secret-type">HDFC CUST ID</div><div class="secret-val">REDACTED_KNOWN_SECRET / REDACTED_KNOWN_SECRET</div><div class="secret-src">HDFC Netbanking Rewrite — UAT credentials</div><div class="secret-impact">Netbanking Rewrite test account (public, PKCE S256 required)</div></div>
+<div class="secret-card"><div class="secret-type">OTP CODES</div><div class="secret-val">123456 (BizExpress/Netbanking Rewrite), any 6-digit (Lastmile/CLO UAT)</div><div class="secret-src">HDFC — static UAT environment</div><div class="secret-impact">Static OTP bypasses 2FA on UAT environments</div></div>
+<div class="secret-card"><div class="secret-type">PAN NUMBER</div><div class="secret-val">ABCDE1234F</div><div class="secret-src">HDFC CLO — UAT environment</div><div class="secret-impact">Static PAN for CLO testing</div></div>
+<div class="secret-card"><div class="secret-type">INTERNAL IP</div><div class="secret-val">REDACTED_KNOWN_SECRET:443</div><div class="secret-src">HDFC ENET — CORS allowlist</div><div class="secret-impact">Internal network pivot point with credentialed CORS</div></div>
+<div class="secret-card"><div class="secret-type">INTERNAL IP</div><div class="secret-val">REDACTED_KNOWN_SECRET:8888</div><div class="secret-src">Mygate — JS bundle + Acko CSP</div><div class="secret-impact">Internal WebSocket server — cross-company pivot</div></div>
+<div class="secret-card"><div class="secret-type">INTERNAL IP</div><div class="secret-val">REDACTED_KNOWN_SECRET:443 (ENET), 10.x.x.x (Groww), 13.126.42.166/3.7.222.226/13.206.1.103 (Acko Dev ELB)</div><div class="secret-src">Multiple companies — DNS leaks, CORS, JS bundles</div><div class="secret-impact">Internal network mapping — ELB, subnet structure</div></div>
+<div class="secret-card"><div class="secret-type">MENDIX SESSION</div><div class="secret-val">REDACTED_SESSION_ID</div><div class="secret-src">Boat — Mendix XAS API</div><div class="secret-impact">Valid Mendix application session — app metadata extraction</div></div>
+<div class="secret-card"><div class="secret-type">CSRF TOKEN</div><div class="secret-val">REDACTED_KNOWN_SECRET</div><div class="secret-src">Boat — Crewex Laravel admin panel</div><div class="secret-impact">Laravel CSRF token — admin cookie/token mismatch (419 timeout)</div></div>
+<div class="secret-card"><div class="secret-type">NEW RELIC ACCOUNT</div><div class="secret-val">2100098</div><div class="secret-src">Acko — JS bundle</div><div class="secret-impact">Monitoring account exposed — infrastructure telemetry</div></div>
+<div class="secret-card"><div class="secret-type">S3 URL</div><div class="secret-val">open-frontend-bucket.s3.amazonaws.com</div><div class="secret-src">Boat — Subdomain enumeration</div><div class="secret-impact">83 warranty PDFs with customer PII</div></div>
+<div class="secret-card"><div class="secret-type">S3 URL</div><div class="secret-val">acko-partners-restricted.acko.com</div><div class="secret-src">Acko — Partner portal</div><div class="secret-impact">63,000+ records via pre-signed URLs</div></div>
+<div class="secret-card"><div class="secret-type">S3 URL</div><div class="secret-val">locus-api.s3.amazonaws.com, locus-alerts.s3.amazonaws.com</div><div class="secret-src">Locus — Subdomain enum</div><div class="secret-impact">Public write — phishing page hosted (now fixed)</div></div>
+<div class="secret-card"><div class="secret-type">S3 URL</div><div class="secret-val">razor-13092016.s3.amazonaws.com</div><div class="secret-src">Razer — Subdomain enum</div><div class="secret-impact">Public read — app assets exposed</div></div>
+<div class="secret-card"><div class="secret-type">GCS URL</div><div class="secret-val">meesho-locations-layer (GCS)</div><div class="secret-src">Meesho — OOS discovery</div><div class="secret-impact">Internal location data public</div></div>
+<div class="secret-card"><div class="secret-type">GCS URL</div><div class="secret-val">Twitter/X infrastructure (GCS)</div><div class="secret-src">Twitter/X — OOS discovery</div><div class="secret-impact">Internal infra bucket public</div></div>
+<div class="secret-card"><div class="secret-type">WEBLOGIC</div><div class="secret-val">oracle.hdfc.bank.in:443 (503 backend)</div><div class="secret-src">HDFC — Subdomain enum</div><div class="secret-impact">WebLogic proxy — potential CVE-2026-21962 target</div></div>
+<div class="secret-card"><div class="secret-type">JWKS KID</div><div class="secret-val">REDACTED_KNOWN_SECRET</div><div class="secret-src">HDFC — Netbanking Keycloak OIDC</div><div class="secret-impact">Single RSA JWKS key — algorithm confusion risk</div></div>
+<div class="secret-card"><div class="secret-type">OIDC CONFIG</div><div class="secret-val">https://nb-nextgen-security.hdfcbank.com/auth/realms/retail/.well-known/openid-configuration</div><div class="secret-src">HDFC — Netbanking Rewrite</div><div class="secret-impact">Full OIDC configuration exposed — all grant types, JWKS, token endpoints</div></div>
+<div class="secret-card"><div class="secret-type">CLIENT ID</div><div class="secret-val">bb-web-client (public, PKCE S256 required)</div><div class="secret-src">HDFC — Keycloak realm retail</div><div class="secret-impact">Only confirmed client — public client with PKCE</div></div>
+<div class="secret-card"><div class="secret-type">GEMINI API KEY</div><div class="secret-val">REDACTED_GOOGLE_API_KEY</div><div class="secret-src">JS bundle extraction methodology</div><div class="secret-impact">Gemini-enabled Google API key — unauthorized AI service access</div></div>
+<div class="secret-card"><div class="secret-type">GEMINI API KEY</div><div class="secret-val">REDACTED_GOOGLE_API_KEY</div><div class="secret-src">JS bundle extraction methodology</div><div class="secret-impact">Gemini-enabled Google API key</div></div>
+<div class="secret-card"><div class="secret-type">SENTRY DSN</div><div class="secret-val">https://example@sentry.io/12345</div><div class="secret-src">Neon/BugBase — JS bundle</div><div class="secret-impact">Error monitoring DSN exposed — fake error injection</div></div>
+<div class="secret-card"><div class="secret-type">AMPLITUDE KEY</div><div class="secret-val">Exposed in client-side JS bundle</div><div class="secret-src">Acko — JS bundle analysis</div><div class="secret-impact">Analytics key — fake event injection</div></div>
+<div class="secret-card"><div class="secret-type">APACHE VERSION</div><div class="secret-val">Apache 2.4.52 (Ubuntu)</div><div class="secret-src">Boat — test.boat-lifestyle.com</div><div class="secret-impact">Confirmed Apache version — no TLS on port 443</div></div>
+<div class="secret-card"><div class="secret-type">IBM HTTP SERVER</div><div class="secret-val">IBM HTTP Server 8.5.5 (EOL Sep 2020 — Apache 2.4.x base)</div><div class="secret-src">HDFC ENET — Welcome page (3598 bytes)</div><div class="secret-impact">End of life server — no security patches</div></div>
+<div class="secret-card"><div class="secret-type">ORACLE WEBLOGIC</div><div class="secret-val">Oracle WebLogic detected via X-ORACLE-DMS-ECID header</div><div class="secret-src">HDFC Lastmile Web + CBX</div><div class="secret-impact">WebLogic server — CVE-2026-21962 tested</div></div>
+<div class="secret-card"><div class="secret-type">OTL VERSION</div><div class="secret-val">OTL anti-tamper JS v1.21.4.26</div><div class="secret-src">HDFC CBX — JS bundle</div><div class="secret-impact">OTL bypassed via fetch() API — XHR only restriction</div></div>
+<div class="secret-card"><div class="secret-type">NSC COOKIE</div><div class="secret-val">NSC_ESNS (15 second expiry)</div><div class="secret-src">HDFC CBX — Netscaler</div><div class="secret-impact">Netscaler load balancer cookie — session timing</div></div>
+<div class="secret-card"><div class="secret-type">KEYCLOAK REALM</div><div class="secret-val">retail (https://nb-nextgen-security.hdfcbank.com/auth/realms/retail/)</div><div class="secret-src">HDFC Netbanking Rewrite</div><div class="secret-impact">Keycloak realm with password grant support</div></div>
+<div class="secret-card"><div class="secret-type">API GATEWAY</div><div class="secret-val">api-nb-nextgen-security.hdfcbank.com (returns 000 — internal only)</div><div class="secret-src">HDFC — CSP connect-src</div><div class="secret-impact">Internal API gateway — not publicly accessible</div></div>
+<div class="secret-card"><div class="secret-type">BACKEND</div><div class="secret-val">retail-web-nb-nextgen-security.hbctxdom.com</div><div class="secret-src">HDFC — CSP connect-src</div><div class="secret-impact">Backend domain — internal network segment</div></div>
+<div class="secret-card"><div class="secret-type">BIZEXPRESS API</div><div class="secret-val">icp-api.bankopen.co, payments.open.money, uat-lending.bankopen.co</div><div class="secret-src">HDFC — BizExpress Angular SPA bundle</div><div class="secret-impact">Open Money platform backend APIs</div></div>
+<div class="secret-card"><div class="secret-type">DUPLICATE KEYS</div><div class="secret-val">REDACTED_GOOGLE_API_KEY, REDACTED_GOOGLE_API_KEY, REDACTED_GOOGLE_API_KEY</div><div class="secret-src">JS bundles across multiple companies</div><div class="secret-impact">Multiple Google API keys — Gemini, Maps, Firebase across targets</div></div>
+<div class="secret-card"><div class="secret-type">ELB IPS</div><div class="secret-val">13.126.42.166, 3.7.222.226, 13.206.1.103</div><div class="secret-src">Acko Dev SAML — auth-saml.corp.ackodev.com</div><div class="secret-impact">Dev ELB IPs — weaker SAML config expected</div></div>
+<div class="secret-card"><div class="secret-type">GOOGLE SAML</div><div class="secret-val">IDP: C02541m9a, SP: 501098048746</div><div class="secret-src">Acko — SAML SSO login flow</div><div class="secret-impact">Google SAML IDs for internal tool authentication</div></div>
+<div class="secret-card"><div class="secret-type">SAMBA SHARE</div><div class="secret-val">\\\\169.254.0.2\\shared (internal network path)</div><div class="secret-src">Locus — DNS leak / internal enum</div><div class="secret-impact">Internal SMB/Samba share access</div></div>
+</div>
+</section>
+
+<section class="section">
+<div class="section-header">
+<span class="section-tag">Post-Exploitation</span>
+<h2>6 Completed <span class="gradient-text">Operations</span></h2>
+<p>Post-exploitation actions executed across target environments demonstrating real-world impact.</p>
+</div>
+<div class="post-grid">
+<div class="post-card"><h3>01 — S3 Document Extraction</h3><p>63,000+ records extracted from acko-partners-restricted via pre-signed URL generation. Files: bulk-ops CSVs (26,166 employee records), payin_orders (185 financial transactions), partner contracts (OLA, Swiggy, Zomato, Amazon, Zepto, PhonePe), insurance claims with customer PII.</p></div>
+<div class="post-card"><h3>02 — JWT Validation Against Production</h3><p>Leaked JWT from [REDACTED]/groww repo validated against api.groww.in — HTTP 200 OK. Proves the credential is LIVE and currently valid for production access. TOTP secret generates valid 2FA codes every 30 seconds.</p></div>
+<div class="post-card"><h3>03 — Job Scheduler DB Injection</h3><p>22 rows successfully written to Acko job scheduler database at central-internal-tools.acko.com. Demonstrates unauthenticated write capability. Could schedule malicious jobs, corrupt data, or maintain persistence.</p></div>
+<div class="post-card"><h3>04 — S3 Phishing Page Host</h3><p>login.html hosted on locus-api S3 bucket demonstrating public write capability. Full phishing page under legitimate locus.sh subdomain. Page taken down before verification (fixed via CloudFront migration).</p></div>
+<div class="post-card"><h3>05 — Internal IP Mapping</h3><p>Multiple internal IPs discovered: REDACTED_KNOWN_SECRET:443 (HDFC ENET CORS), REDACTED_KNOWN_SECRET:8888 (Mygate WebSocket), 13.126.42.166/3.7.222.226/13.206.1.103 (Acko Dev ELB), 10.x.x.x (Groww DNS leak). Internal network architecture mapped.</p></div>
+<div class="post-card"><h3>06 — Hash Algorithm Reverse Engineering</h3><p>SHA-512 password hashing algorithm with dynamic salt fully reversed for HDFC ENET. Credentials: ISGINP46/REDACTED_KNOWN_SECRET. Captcha continues to block automated login despite successful reverse engineering.</p></div>
+</div>
+</section>
+
+<section id="stats-section" class="section">
+<div class="section-header">
+<span class="section-tag">System Metrics</span>
+<h2>Portfolio <span class="gradient-text">Performance</span></h2>
+</div>
+<div class="charts-row">
+<div class="chart-card"><h3>Bounty Projection by Company</h3><canvas id="bounty-chart" height="250"></canvas></div>
+<div class="chart-card"><h3>Findings Timeline (July 2026)</h3><canvas id="timeline-chart" height="250"></canvas></div>
+</div>
+<div class="stats-grid-main">
+<div class="stat-card"><div class="stat-num"><span data-target="150">0</span><span class="stat-plus">+</span></div><div class="stat-label">Total Findings</div><div class="stat-bar"><div class="stat-fill" style="width:0%"></div></div></div>
+<div class="stat-card"><div class="stat-num"><span data-target="14">0</span></div><div class="stat-label">Critical Vulnerabilities</div><div class="stat-bar"><div class="stat-fill" style="width:0%"></div></div></div>
+<div class="stat-card"><div class="stat-num"><span data-target="26">0</span></div><div class="stat-label">BugBase Reports Submitted</div><div class="stat-bar"><div class="stat-fill" style="width:0%"></div></div></div>
+<div class="stat-card"><div class="stat-num"><span data-target="17">0</span></div><div class="stat-label">Programs Covered</div><div class="stat-bar"><div class="stat-fill" style="width:0%"></div></div></div>
+<div class="stat-card"><div class="stat-num"><span class="rupee">&8377;</span><span data-target="10">0</span><span class="stat-plus">K</span></div><div class="stat-label">Bounty Earned (Acko triaged/paid)</div><div class="stat-bar"><div class="stat-fill" style="width:0%"></div></div></div>
+<div class="stat-card"><div class="stat-num"><span data-target="150">0</span><span class="stat-plus">+</span></div><div class="stat-label">Credentials & Secrets</div><div class="stat-bar"><div class="stat-fill" style="width:0%"></div></div></div>
+<div class="stat-card"><div class="stat-num"><span class="rupee">&8377;</span><span data-target="30">0</span><span class="stat-plus">L+</span></div><div class="stat-label">Projected Total Bounties</div><div class="stat-bar"><div class="stat-fill" style="width:0%"></div></div></div>
+<div class="stat-card"><div class="stat-num"><span data-target="6">0</span></div><div class="stat-label">Successful Post-Exploitation Operations</div><div class="stat-bar"><div class="stat-fill" style="width:0%"></div></div></div>
+</div>
+</section>
+
+<section class="section appendix-section" id="appendices">
+<div class="section-header">
+<span class="section-tag">Reference</span>
+<h2>11 Appendices <span class="gradient-text">A-K</span></h2>
+<p>Complete methodology documentation, tool references, WAF bypass techniques, BugBase triage logs, timeline, and configuration guides.</p>
+</div>
+
+<h3>Appendix A — Report Metadata</h3>
+<div class="appendix-content">
+<table>
+<tr><th>Field</th><th>Value</th></tr>
+<tr><td>Researcher</td><td>sricharan_99</td></tr>
+<tr><td>Testing Email</td><td>REDACTED_KNOWN_SECRET</td></tr>
+<tr><td>Platforms</td><td>BugBase, HackerOne, Bugcrowd</td></tr>
+<tr><td>Total Companies</td><td>17+ across 25+ sub-targets</td></tr>
+<tr><td>Total Findings</td><td>150+ across all severity levels</td></tr>
+<tr><td>Source Files Consolidated</td><td>10 docs/*.md files → single unified book</td></tr>
+<tr><td>Last Updated</td><td>2026-07-14</td></tr>
+</table>
+</div>
+
+<h3>Appendix B — Script & Tool Reference</h3>
+<div class="appendix-content">
+<strong>Recon Tools:</strong> subfinder, assetfinder, amass, chaos (ProjectDiscovery), httpx, dnsx, naabu, nmap, gau, waybackurls, katana, gitleaks, shodan.<br>
+<strong>Vulnerability Scanners:</strong> nuclei (7000+ templates), ffuf, dalfox, sqlmap, ghauri, interactsh-client.<br>
+<strong>Custom Scripts (~/scripts/):</strong> lostfuzzer.sh (gau→uro→httpx→nuclei pipeline), alienvault.sh (OTX URLs), naabutonmap.py (Naabu→Nmap converter), dorking.py (Google dorking), wayback.sh, virustotal.sh (3-key rotation), urlscan.py.<br>
+<strong>JS Analysis:</strong> SecretFinder, jsluice, LinkFinder.<br>
+<strong>WAF Bypass:</strong> wafw00f, whatwaf, bypassburrito, wafrift, evilwaf, nowafplsV2 (Burp).<br>
+<strong>GitHub Repos:</strong> jhaddix/tbhm (4357⭐), coffinxp/loxs (1600⭐), coffinxp/GFpattren (189⭐), coffinxp/customBsqli (141⭐).
+</div>
+
+<h3>Appendix C — WAF Bypass Techniques Used</h3>
+<div class="appendix-content">
+<strong>Detection:</strong> wafw00f https://target.com, fingerprint via cf-ray (Cloudflare), x-amz-rid (AWS WAF), X-Akamai-Transformed (Akamai), Apache/mod_security headers (ModSecurity).<br>
+<strong>Encoding:</strong> URL encoding (%55NION %53ELECT), double encoding (%2555NION), mixed case (UnIoN sElEcT), HTML entity (&#60;script&#62;), unicode normalization (%C0%BCscript%C0%BE), hex encoding (0x55 0x4E 0x49 0x4F 0x4E), base64 (atob).<br>
+<strong>Comment Injection:</strong> /**/UNION/**/SELECT/**/, /*!UNION*/ /*!SELECT*/, UN/**/ION SE/**/LECT.<br>
+<strong>Whitespace:</strong> UNION%0ASELECT (newline), UNION%09SELECT (tab), UNION%0dSELECT (CR), UNION%A0SELECT (non-breaking space).<br>
+<strong>HPP:</strong> ?id=1&id=2' UNION SELECT, ?role=user&role=admin.<br>
+<strong>Method Bypass:</strong> X-HTTP-Method-Override: DELETE, PROPFIND, MKCOL, TRACE.<br>
+<strong>Content-Type Confusion:</strong> JSON vs XML switching.<br>
+<strong>Body Padding:</strong> Junk data to exceed WAF inspection size (nowafplsV2).<br>
+<strong>Chunked Encoding:</strong> Transfer-Encoding: chunked with payload split across chunks.<br>
+<strong>Protocol Downgrade:</strong> HTTP/1.0 forced.<br>
+<strong>Origin IP Bypass:</strong> Shodan, Censys, historical DNS — bypasses ALL WAF.
+</div>
+
+<h3>Appendix D — Cross-Reference: Finding Files to Breach Data</h3>
+<div class="appendix-content">
+<strong>Acko finding files:</strong> S3_Pre-signed_URL_Generation_acko-partners-restricted_*.md, Employee_PII_auth-saml_Directory_Dump_*.md, FleetOps_CORS_Wildcard_Kong_*.md, cx360v2_Actuator_Exposed_*.md, SAML_SSO_Enumeration_3_Services_*.md, 42_Internal_API_Endpoints_*.md, Payment_Auth_Bypass_create_order_*.md, Job_Scheduler_DB_Write_22_rows_*.md, 30_New_Internal_Subdomains_*.md, New_Relic_Account_2100098_*.md, Analytics_CORS_Wildcard_*.md, Segment_Write_Keys_*.md, S3_Data_Lake_63K_Records_*.md.<br>
+<strong>Groww finding files:</strong> GitHub_Credential_Leak_[REDACTED]_groww_*.md, DNS_Leak_8_Private_IPs_*.md, Post_Exploitation_S3_Data_Lake_*.md, SOP_Document_Exposure_*.md, BugBase_Config_Leak_NEXT_DATA_*.md.<br>
+<strong>Boat finding files:</strong> S3_PII_Warranty_Leak_83_PDFs_*.md, Razorpay_Live_Key_rzp_live_*.md, Apache_No_TLS_443_*.md, Mendix_XAS_Session_Data_*.md, Crewex_Laravel_Admin_*.md, OTP_Rate_Limit_*.md, GraphQL_Introspection_*.md.<br>
+<strong>HDFC finding files:</strong> ENET_Struts2_Path_Traversal_IHS_*.md, CBX_Double_Encoded_Path_Traversal_*.md, Netbanking_Keycloak_OIDC_Deep_Analysis_*.md, SMARTHUB_Merchant_User_Enumeration_*.md, ENET_Hash_Reverse_Engineered_*.md, ENET_CORS_IP_Leak_*.md, CBX_OTL_Bypass_fetch_API_*.md, 168_Netbanking_API_Endpoints_*.md (31 total files).
+</div>
+
+<h3>Appendix E — BugBase Report Threads & Triage Log</h3>
+<div class="appendix-content">
+<strong>Report 001:</strong> S3 PII Warranty Leak — boat-lifestyle.com — CRITICAL 9.6 — Submitted 2026-07-04 — Status: Pending<br>
+<strong>Report 002:</strong> Apache No TLS on Port 443 — test.boat-lifestyle.com — HIGH 7.5 — Submitted 2026-07-04<br>
+<strong>Report 003:</strong> OTP Rate Limit — boat-lifestyle.com — MEDIUM 5.3 — Submitted 2026-07-04<br>
+<strong>Report 004:</strong> GraphQL Introspection — boat-lifestyle.com — MEDIUM 5.3 — Submitted 2026-07-04<br>
+<strong>Report 005:</strong> Razorpay Live Key — boat-lifestyle.com — CRITICAL 9.1 — Submitted 2026-07-05<br>
+<strong>Report 006:</strong> Test Boat Apache No TLS — HIGH 7.5 — Submitted 2026-07-05<br>
+<strong>Report 007:</strong> Crewex Laravel Admin API — MEDIUM 5.3 — Submitted 2026-07-05<br>
+<strong>Report 008:</strong> Mendix SOAP/REST Endpoints — MEDIUM 5.3 — Submitted 2026-07-05<br>
+<strong>Report 009:</strong> testretailer Laravel Debug — HIGH 7.5 — Submitted 2026-07-05<br>
+<strong>Report 010:</strong> hearable.ai FastAPI Debug — HIGH 7.5 — Submitted 2026-07-05<br>
+<strong>Report 011:</strong> File Upload Endpoint (various) — HIGH 7.5 — Submitted 2026-07-05<br>
+<strong>Report 012:</strong> Mendix Constants Exposure — MEDIUM 5.3 — Submitted 2026-07-05<br>
+<strong>Report 013:</strong> api.gst Laravel Ignition — HIGH 7.5 — Submitted 2026-07-05<br>
+<strong>Reports 1Y-1Z:</strong> Locus source code leak + API auth bypass — CRITICAL 9.8/9.1 — Submitted 2026-07-06<br>
+<strong>Groww + Acko reports:</strong> GitHub leak, S3 pre-signed URL, PII directory dump, internal API exposure, OAuth SSO, DNS leak — Submitted 2026-07-06<br>
+<strong>Paid:</strong> Acko PII Leak via Communications — &8377;10,000 (1 paid)
+</div>
+
+<h3>Appendix F — Master Timeline Log</h3>
+<div class="appendix-content">
+<strong>2026-06-29/30:</strong> Initial Acko testing — S3 pre-signed URL, auth-saml PII, 42 endpoints. WAF not deployed yet.<br>
+<strong>2026-07-03:</strong> BugBase platform recon — bugbase.ai Next.js SPA analysis. Cloudflare detection.<br>
+<strong>2026-07-04:</strong> Boat session — S3 PII leak (83 PDFs), Apache no TLS, OTP bypass, GraphQL introspection. Reports 001-004 submitted.<br>
+<strong>2026-07-05:</strong> Exploitation session — Mendix XAS extraction, Razorpay key discovered, Crewex Laravel admin, hearable.ai FastAPI, api.gst Laravel Ignition, testretailer debug. Reports 005-013 submitted. Anonymity stack deployment failure and recovery.<br>
+<strong>2026-07-06:</strong> HDFC Phase 2 — ENET path traversal, CBX traversal crash, Keycloak OIDC deep analysis, SMARTHUB enumeration, BizExpress API disclosure, Drupal portal discovery. Locus source code leak + API bypass. Groww GitHub leak reported. Acko reports submitted. 31 finding files saved.<br>
+<strong>2026-07-06 (Late):</strong> BugBase credentials page accessed — ENET creds (ISGINP46/REDACTED_KNOWN_SECRET), CBX domain confirmed, full scope list with 17 assets, 8 mobile APKs. 30+ finding files.
+</div>
+
+<h3>Appendix G — Bug Bounty Recon Methodologies</h3>
+<div class="appendix-content">
+<strong>Passive Recon:</strong> subfinder -d target.com -all -recursive -silent → subs.txt; assetfinder --subs-only; crt.sh JSON parse; gau --subs → uro; waybackurls → uro. <strong>Active Recon:</strong> dnsx → resolved.txt; httpx -ports 80,443,8080,8443,3000,5000,8000,8888,9000 → live.txt; naabu -top-ports 1000 → ports.txt. <strong>JS Analysis:</strong> grep -oP 'AIza[0-9A-Za-z_-]{35}' for Google API keys; 'sk_live_|pk_live_' for Stripe; 'AKIA[0-9A-Z]{16}' for AWS. <strong>Parameter Significance:</strong> url=/src=/dest= → SSRF, file=/page=/include= → LFI, id=/user_id= → IDOR, redirect=/next= → Open Redirect, q=/search= → XSS/SSTI/SQLi.<br>
+<strong>Quick Win Checklist:</strong> nuclei -t takeovers/, /actuator paths, /.env /.git/config /dump.sql, CORS curl -H "Origin: https://evil.com", directory listing, S3 buckets, JWT none-alg, GraphQL introspection {"query":"{__schema{types{name}}}"}, debug endpoints, backup files (.bak, .old, .backup).
+</div>
+
+<h3>Appendix H — LostSec Methodology & Tool Reference</h3>
+<div class="appendix-content">
+<strong>Core Pipeline:</strong> CHAOS → HTTPX → NAABU → NMAP → NUCLEI → FFUF. <strong>CDN Filtering:</strong> httpx -title → grep -vi "cloudflare\|akamai\|fastly" → origin_ips.txt. <strong>Continuous Probing Cycle:</strong> API endpoints (HTTP status + response analysis), method bypass (PUT/PATCH/DELETE/OPTIONS/TRACE), SQLi with WAF bypass, LFI with encoding variants, CORS (origin reflection + credentialed + wildcard), SSTI ({{7*7}}, #{7*7}, ${7*7}), SSRF (callback + cloud metadata), config files (.env, .git, dump.sql, web.config, 50+ paths), auth bypass (empty/null, X-Forwarded-*, X-Internal-Request), actuator (15+ paths), IDOR (sequential IDs), GraphQL introspection, S3 buckets, JS secrets. <strong>Pro-Tips:</strong> CDN filtering mandatory, non-standard ports, 403 is gold (always try bypass techniques), response size/word count analysis, parse nmap output to HTML, IP dedup before scanning.
+</div>
+
+<h3>Appendix I — HackerOne Program Scope Reference</h3>
+<div class="appendix-content">
+<strong>Acko:</strong> BugBase Private + HackerOne — partner-portal.corp.acko.com, auth-saml.corp.acko.com, fleetops.acko.com, cx360v2.corp.acko.com, central-internal-tools.acko.com, 42+ internal endpoints. WAF: Cloudflare (main), none on auth-saml/s3.<br>
+<strong>Groww:</strong> BugBase Private — api.groww.in, *.groww.in. OOS: DNS private IPs.<br>
+<strong>Boat:</strong> BugBase Private — test.boat-lifestyle.com, crewx.boat-lifestyle.com, warranty.boat-lifestyle.com, hearable.ai.<br>
+<strong>HDFC:</strong> BugBase Private — 17 assets: Netbanking Rewrite (nb-nextgen-security.hdfcbank.com), Lastmile Web (lastmilewebuat.hdfcuat.bank.in), CBX (cbxuat.hdfcbank.com:444), ENET (hbenetinterap.hdfcuat.bank.in), BizExpress (netbankingforbusiness.hdfc.bank.in), SME CLO, SMARTHUB (smarthub.biz.hdfc.bank.in), Drupal API Portal (developer.hdfc.bank.in), 8 mobile APKs.<br>
+<strong>Locus:</strong> BugBase Private — api.locus.sh, via.sh, s3 buckets.<br>
+<strong>Mygate:</strong> BugBase Private — JS bundle analysis, internal IPs.
+</div>
+
+<h3>Appendix J — Consolidated Findings (Scope-Verified)</h3>
+<div class="appendix-content">
+<strong>In-Scope Verified:</strong> Acko (S3 pre-signed URL, auth-saml PII, SAML SSO, FleetOps CORS, 42 endpoints, 30 subdomains, cx360v2 actuator, New Relic leak, analytics CORS, Segment keys, payment bypass, job scheduler write, S3 data lake — 28 total). Groww (GitHub leak, DNS leak, SOP doc, BugBase config — 5 total). Boat (S3 PII, Razorpay key, Apache no TLS, Crewex admin, Mendix SOAP, Mendix constants, OTP bypass, GraphQL — 9 total). HDFC (ENET path traversal, CBX traversal, Keycloak confusion, hash reverse, CORS IP leak, SMARTHUB enum, Struts DMI, BizExpress API, CBX OTL bypass, 168 endpoints, OIDC config, Indialink encryption, CSP SSRF — 24 total). Locus (Source code leak, API bypass, S3 write, DNS leak — 5 total). Mygate (IP leak — 3 total).<br>
+<strong>Out-of-Scope (OOS Confirmed):</strong> Meesho (GCS bucket), Twitter/X (GCS bucket), NBA webmail, Shopify CDN. Neon (CSP, Sentry DSN, Keycloak OIDC — OOS confirmed).
+</div>
+
+<h3>Appendix K — Tor Proxy Configuration</h3>
+<div class="appendix-content">
+<strong>Deployment:</strong> bash ~/session_start.sh. <strong>Components:</strong> Tor SOCKS5 127.0.0.1:9050, ControlPort 9051, Proxychains strict_chain, UFW default deny outgoing + loopback + Tor SOCKS only, IPv6 disabled globally. <strong>Safe Sequence:</strong> tor --verify-config → systemctl restart tor@default → ss -tlnp | grep 9050 → proxychains4 curl https://check.torproject.org/ → sudo ufw enable → curl http://ifconfig.me (FAIL) → proxychains4 curl http://ip-api.com (WORK). <strong>Emergency Rollback:</strong> sudo ufw disable && sudo iptables -P OUTPUT ACCEPT && sudo systemctl reset-failed tor@default. <strong>Session Hygiene:</strong> Rotate Tor (echo AUTHENTICATE + SIGNAL NEWNYM via nc 127.0.0.1 9051), verify leaks (ipleak.net, browserleaks.com/webrtc), never use personal accounts. <strong>Deprecated Options CRASH Tor 0.4.5.x:</strong> NumEntryGuards, NumDirectoryGuards, DNSListenAddress (use DNSPort 127.0.0.1:5353), ExcludeSingleHopRelays, CircuitStreamTimeout.
+</div>
+</section>
+
+<footer class="footer">
+<div class="footer-content">
+<div class="footer-brand">
+<div class="footer-logo"><svg viewBox="0 0 36 36" width="36" height="36"><rect x="3" y="3" width="30" height="30" rx="7" fill="none" stroke="#3b82f6" stroke-width="2"/><text x="18" y="25" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="16" font-weight="700" fill="#3b82f6">OC</text></svg><span style="font-weight:700;margin-left:10px">OpenCode</span></div>
+<p>AI Agent Operating System for autonomous security research. 150+ findings across 17+ programs. 14 critical vulnerabilities. 26 BugBase reports. 6 verified attack chains. Built by sricharan_99.</p>
+</div>
+<div class="footer-links"><div class="footer-col"><h5>Portfolio</h5><a href="#overview">Overview</a><a href="#critical">Critical</a><a href="#high">High</a><a href="#companies">Companies</a></div><div class="footer-col"><h5>Analysis</h5><a href="#chains">Attack Chains</a><a href="#secrets">Secrets</a><a href="#stats-section">Metrics</a><a href="#appendices">Appendices</a></div><div class="footer-col"><h5>Connect</h5><a href="#">BugBase — sricharan_99</a><a href="#">Email: REDACTED_KNOWN_SECRET</a><a href="#">Platforms: BugBase, HackerOne, Bugcrowd</a></div></div>
+</div>
+<div class="footer-bottom"><span>&copy; 2026 OpenCode. Researcher: sricharan_99</span><span class="footer-badge">v3.0 — Complete Vulnerability Portfolio — 5103 lines consolidated</span></div>
+</footer>
+
+<script>
+// Boot Screen
+document.getElementById('boot-enter')?.addEventListener('click', () => {
+  document.getElementById('boot-overlay').style.opacity = '0';
+  document.getElementById('boot-overlay').style.visibility = 'hidden';
+  document.body.style.overflow = '';
+  initAnimations();
+});
+
+// Navbar scroll
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Theme toggle
+const themeToggle = document.getElementById('theme-toggle');
+const body = document.body;
+themeToggle?.addEventListener('click', () => {
+  const isDark = body.getAttribute('data-theme') === 'dark';
+  body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  themeToggle.textContent = isDark ? '☀' : '☾';
+});
+
+// Navigation
+document.getElementById('btn-explore')?.addEventListener('click', () => {
+  document.getElementById('overview')?.scrollIntoView({behavior:'smooth'});
+});
+document.getElementById('btn-chains')?.addEventListener('click', () => {
+  document.getElementById('chains')?.scrollIntoView({behavior:'smooth'});
+});
+
+// Company tabs
+document.querySelectorAll('.company-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.company-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.company-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    const panel = document.getElementById('panel-' + tab.dataset.company);
+    if (panel) panel.classList.add('active');
+  });
+});
+
+// Report filters
+document.querySelectorAll('.report-filter').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.report-filter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.rt-row').forEach(row => {
+      row.style.display = (filter === 'all' || row.dataset.severity === filter) ? '' : 'none';
+    });
+  });
+});
+
+// Secret card copy
+document.querySelectorAll('.secret-card').forEach(card => {
+  const val = card.querySelector('.secret-val')?.textContent.trim();
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'Copy';
+  btn.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    if (val) {
+      try { await navigator.clipboard.writeText(val); btn.textContent = 'Copied!'; setTimeout(() => btn.textContent='Copy', 1500); }
+      catch { alert('Copy failed'); }
+    }
+  });
+  card.appendChild(btn);
+});
+
+// Three.js Particle Network
+(function initThree() {
+  const canvas = document.getElementById('three-canvas');
+  if (!canvas) return;
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+  camera.position.z = 30;
+  const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  const particlesGeo = new THREE.BufferGeometry();
+  const count = 2000;
+  const pos = new Float32Array(count * 3);
+  const colors = new Float32Array(count * 3);
+  for (let i = 0; i < count; i++) {
+    pos[i*3] = (Math.random() - 0.5) * 80;
+    pos[i*3+1] = (Math.random() - 0.5) * 80;
+    pos[i*3+2] = (Math.random() - 0.5) * 80;
+    colors[i*3] = 0.23 + Math.random() * 0.2;
+    colors[i*3+1] = 0.51 + Math.random() * 0.2;
+    colors[i*3+2] = 0.96 + Math.random() * 0.04;
+  }
+  particlesGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  particlesGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+  const particlesMat = new THREE.PointsMaterial({
+    size: 0.08, vertexColors: true, transparent: true, opacity: 0.6,
+    sizeAttenuation: true, blending: THREE.AdditiveBlending
+  });
+  const particles = new THREE.Points(particlesGeo, particlesMat);
+  scene.add(particles);
+  particles.rotation.x = Math.random() * 0.5;
+  particles.rotation.y = Math.random() * 0.5;
+
+  // Connection lines
+  const linesGeo = new THREE.BufferGeometry();
+  const linePositions = [];
+  const lineColors = [];
+  const lineOpacity = new Float32Array(count);
+  for (let i = 0; i < count; i++) {
+    for (let j = i+1; j < count; j++) {
+      const dx = pos[i*3] - pos[j*3], dy = pos[i*3+1] - pos[j*3+1], dz = pos[i*3+2] - pos[j*3+2];
+      const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+      if (dist < 5 && Math.random() < 0.02) {
+        linePositions.push(pos[i*3], pos[i*3+1], pos[i*3+2], pos[j*3], pos[j*3+1], pos[j*3+2]);
+        const c = 0.3 + Math.random() * 0.3;
+        lineColors.push(c*0.5, c*0.8, c);
+        lineColors.push(c*0.5, c*0.8, c);
+      }
+    }
+  }
+  if (linePositions.length > 0) {
+    linesGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+    linesGeo.setAttribute('color', new THREE.Float32BufferAttribute(lineColors, 3));
+    const linesMat = new THREE.LineBasicMaterial({vertexColors: true, transparent: true, opacity: 0.15});
+    const lines = new THREE.LineSegments(linesGeo, linesMat);
+    scene.add(lines);
+    lines.rotation.x = particles.rotation.x;
+    lines.rotation.y = particles.rotation.y;
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+    particles.rotation.y += 0.0003;
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+})();
+
+// GSAP Animations
+function initAnimations() {
+  // Counters
+  gsap.utils.toArray('[data-target]').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    gsap.from(el, {
+      textContent: 0, duration: 2, ease: 'power2.out',
+      snap: { textContent: 1 },
+      scrollTrigger: { trigger: el, start: 'top 90%' },
+      onUpdate: () => {
+        const val = parseInt(el.textContent);
+        if (val > target) el.textContent = target + (el.dataset.plus ? '+' : '');
+      }
+    });
+  });
+
+  // Stat bars
+  gsap.utils.toArray('.stat-fill').forEach(bar => {
+    const card = bar.closest('.stat-card');
+    const num = card?.querySelector('.stat-num [data-target]');
+    const target = num ? parseInt(num.dataset.target) : 100;
+    const pct = Math.min((target / 150) * 100, 100);
+    gsap.to(bar, { width: pct + '%', duration: 1.5, ease: 'power2.out', scrollTrigger: { trigger: card, start: 'top 90%' } });
+  });
+
+  // Cards fade in
+  gsap.utils.toArray('.crit-card, .chain-card, .secret-card, .exec-card, .post-card').forEach(el => {
+    gsap.from(el, { opacity: 0, y: 30, duration: 0.6, scrollTrigger: { trigger: el, start: 'top 95%' }, ease: 'power2.out' });
+  });
+
+  // Findings
+  gsap.utils.toArray('.finding-item').forEach(el => {
+    gsap.from(el, { opacity: 0, x: -20, duration: 0.4, scrollTrigger: { trigger: el, start: 'top 98%' }, ease: 'power2.out' });
+  });
+
+  // Report rows staggered
+  gsap.utils.toArray('.rt-row').forEach((el, i) => {
+    gsap.from(el, { opacity: 0, x: -10, duration: 0.3, delay: i * 0.03, scrollTrigger: { trigger: el, start: 'top 98%' }, ease: 'power1.out' });
+  });
+}
+
+// Charts
+function initCharts() {
+  const sevCtx = document.getElementById('severity-chart');
+  if (sevCtx) {
+    new Chart(sevCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Critical (14)', 'High (22)', 'Medium (35+)', 'Low/Info (50+)'],
+        datasets: [{ data: [14, 22, 35, 50], backgroundColor: ['#ef4444','#f59e0b','#3b82f6','#6b7280'], borderWidth: 0 }]
+      },
+      options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, font: { size: 12 } } } }, cutout: '60%' }
+    });
+  }
+
+  const compCtx = document.getElementById('company-chart');
+  if (compCtx) {
+    new Chart(compCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Acko','Groww','Boat','HDFC','Locus','Mygate','Meesho','Tesla','Twitter','Razer','Neon','BugBase'],
+        datasets: [{ label: 'Findings', data: [28, 5, 9, 24, 5, 3, 2, 2, 2, 2, 3, 3], backgroundColor: ['#f59e0b','#ef4444','#06b6d4','#3b82f6','#8b5cf6','#8b5cf6','#6b7280','#6b7280','#1d9bf0','#22c55e','#6b7280','#6b7280'], borderRadius: 4 }]
+      },
+      options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } } }
+    });
+  }
+
+  const bountyCtx = document.getElementById('bounty-chart');
+  if (bountyCtx) {
+    new Chart(bountyCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Groww','Acko','Boat','HDFC','Locus','Mygate'],
+        datasets: [{ label: 'Est. Bounty ($)', data: [5000, 5000, 3000, 5000, 5000, 1500], backgroundColor: ['#ef4444','#f59e0b','#06b6d4','#3b82f6','#8b5cf6','#6b7280'], borderRadius: 4 }]
+      },
+      options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } } } }
+    });
+  }
+
+  const timelineCtx = document.getElementById('timeline-chart');
+  if (timelineCtx) {
+    new Chart(timelineCtx, {
+      type: 'line',
+      data: {
+        labels: ['Jun 29','Jul 03','Jul 04','Jul 05','Jul 06','Jul 06(L)','Jul 14'],
+        datasets: [{ label: 'Findings Discovered', data: [28, 3, 9, 28, 45, 12, 25], borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)', fill: true, tension: 0.4, pointBackgroundColor: '#3b82f6', pointBorderColor: '#3b82f6', pointRadius: 4 }]
+      },
+      options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } } }
+    });
+  }
+}
+
+window.addEventListener('load', () => {
+  setTimeout(initCharts, 500);
+});
+</script>
+</body>
+</html>

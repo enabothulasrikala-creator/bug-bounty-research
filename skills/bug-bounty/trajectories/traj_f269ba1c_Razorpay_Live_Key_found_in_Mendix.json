@@ -1,0 +1,21 @@
+{
+  "task": "Razorpay Live Key found in Mendix",
+  "steps": [
+    {
+      "action": "Mendix session data extraction",
+      "observation": "rzp_live key in constants",
+      "tool": "curl",
+      "timestamp": "2026-07-06T19:10:31.851579",
+      "metadata": {}
+    }
+  ],
+  "score": 9.1,
+  "skill_version": "0",
+  "timestamp": "2026-07-06T19:10:31.851555",
+  "metadata": {
+    "secrets_found": 1,
+    "vuln_count": 1,
+    "poc_quality": 0.9,
+    "vuln_type": "Key Leak"
+  }
+}

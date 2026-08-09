@@ -1,0 +1,44 @@
+{
+  "version": "1",
+  "validation_score": 0.4283333333333334,
+  "train_score": 0.5775000000000001,
+  "edit_history": [
+    {
+      "op": "add",
+      "section": "Phase 5: Vulnerability Discovery",
+      "content": "### 5k: S3 Bucket Testing\n- **URL formats**: bucket.s3.amazonaws.com, bucket.s3-[region].amazonaws.com\n- **Permissions**: aws s3 ls s3://bucket-name --no-sign-request\n- **Discovery**: lazys3 target.com, Google dorking 'site:s3.amazonaws.com target.com'\n- **Check**: listing, read, write, bucket ACL, bucket policy",
+      "rationale": "Trajectory found S3 buckets - this section was missing from skill",
+      "score_delta": 0.0
+    },
+    {
+      "op": "add",
+      "section": "Phase 4: JS Bundle Analysis",
+      "content": "- **All API key patterns**: Google AIza[0-9A-Za-z_-]{35}, Stripe sk_live_/pk_live_, AWS AKIA[0-9A-Z]{16}, GitHub ghp_, Slack xox[baprs]-, JWT eyJ[a-zA-Z0-9_-]+\\.eyJ\n- **Razorpay**: rzp_live_|rzp_test_ prefixes\n- **Validate keys**: curl against vendor API to check active status\n- **Referer bypass**: Add referer header to bypass key restrictions",
+      "rationale": "Trajectory found Razorpay key but validation section was missing",
+      "score_delta": 0.0
+    },
+    {
+      "op": "add",
+      "section": "Phase 8: Tech-Specific Vectors",
+      "content": "- **Laravel**: /.env, /debug, Ignition RCE (CVE-2021-3129), APP_KEY exploit for RCE via Ignition solution\n- Debug mode signs: Full stack traces with server paths, Symfony error pages, vendor paths exposed",
+      "rationale": "Laravel debug mode found - add Laravel-specific exploitation",
+      "score_delta": 0.0
+    },
+    {
+      "op": "add",
+      "section": "general",
+      "content": "- Always save findings with HASH dedup in OUTDIR\n- Verify Tor before each session\n- Use proxychains4 for all requests\n- Check FindingStorage phase for file naming convention",
+      "rationale": "General improvement from recent session patterns",
+      "score_delta": 0.0
+    },
+    {
+      "op": "replace",
+      "section": "Phase 5: Vulnerability Discovery",
+      "content": "### Phase 5: Vulnerability Discovery (Priority Order)\n1. Subdomain Takeover \u2014 nuclei -t takeovers/\n2. CORS \u2014 curl -I -H \"Origin: https://evil.com\"\n3. Spring Boot Actuator \u2014 /actuator, /actuator/env, /actuator/heapdump\n4. Config files \u2014 .env, .git/config, dump.sql\n5. SQLi \u2014 ' OR '1'='1, UNION SELECT, SLEEP()\n6. XSS \u2014 <script>, <img onerror>, <svg onload>\n7. SSRF \u2014 collaborator, 169.254.169.254, file:///\n8. IDOR \u2014 sequential IDs 1,2,100,500,1000\n9. GraphQL \u2014 {\"query\":\"{__schema{types{name}}}\"}\n10. Auth Bypass \u2014 null/empty tokens, X-Forwarded-For, X-Internal-Request\n\n**Priority**: RCE > SQLi > Auth Bypass > SSRF > IDOR > XSS > Info Disclosure",
+      "rationale": "Low scoring trajectory - add prioritized checklist for quick wins",
+      "score_delta": 0.0
+    }
+  ],
+  "parent_version": "0",
+  "timestamp": "2026-07-06T19:14:59.561823"
+}
