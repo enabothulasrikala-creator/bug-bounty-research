@@ -806,13 +806,12 @@ Every file in this repository, explained by directory. Skills appear once per di
 |------|----------|
 | `METHODOLOGIES.md` | Complete recon methodologies reference (compiled for revision + AI handoff). |
 | `METHODS.md` | Community complete methodology & tool reference (5-min workflow, recon phases, tooling). |
-| `TOR.md` | Tor anonymity stack: setup, verification, kill-switch, target list handling. |
-| `bugbounty_targets_osint.md` | Top public bug-bounty programs (scope, bounties, policy) + OSINT leaked-data sources. |
-| `recon_exe_methodology.md` | Recon.exe methodology: 403/404 handling, GoSpider, JS hunting, stored XSS, admin panels, S3. |
-
 | `SCOPE_REFERENCE.md` | Program scope research reference: in-scope assets, severity caps, rewards, invite codes per program. |
-| `moreficent_recon_case_study.md` | End-to-end recon case study (passive-only VDP): subdomain discovery, JS/GitBook analysis, vector triage. |
+| `TOR.md` | Tor anonymity stack: setup, verification, kill-switch, target list handling. |
 | `attack_plan_strategic.md` | Strategic attack-planning methodology: target tiering, attack-surface prioritization (P0–P2), tool mapping. |
+| `bugbounty_targets_osint.md` | Top public bug-bounty programs (scope, bounties, policy) + OSINT leaked-data sources. |
+| `moreficent_recon_case_study.md` | End-to-end recon case study (passive-only VDP): subdomain discovery, JS/GitBook analysis, vector triage. |
+| `recon_exe_methodology.md` | Recon.exe methodology: 403/404 handling, GoSpider, JS hunting, stored XSS, admin panels, S3. |
 ### methodology/ — technique playbooks
 | File | Purpose |
 |------|----------|
