@@ -13,9 +13,12 @@
 
 **OFFENSIVE SECURITY · RECON · METHODOLOGY · AUTOMATION**
 
+👤 **Author:** `enabothyla sricharan` · 🐙 `enabothulasrikala-creator`
+
 <br>
 
-<a href="#-repository-layout--every-file-full-structure"><img src="https://img.shields.io/badge/STATUS-ACTIVE-00FF41?style=for-the-badge&logo=activity&logoColor=white"></a>
+<a href="https://github.com/enabothulasrikala-creator"><img src="https://img.shields.io/badge/AUTHOR-enabothyla%20sricharan-00FF41?style=for-the-badge"></a>
+<a href="#-repository-layout--every-file-full-structure"><img src="https://img.shields.io/badge/STATUS-ACTIVE-00E5FF?style=for-the-badge&logo=activity&logoColor=white"></a>
 <a href="#-file-by-file-guide"><img src="https://img.shields.io/badge/METHODOLOGY-25%20PLAYBOOKS-00E5FF?style=for-the-badge"></a>
 <a href="#-file-by-file-guide"><img src="https://img.shields.io/badge/SKILLS-106%2B-9D00FF?style=for-the-badge"></a>
 <a href="#-file-by-file-guide"><img src="https://img.shields.io/badge/SCRIPTS-18-FF6D00?style=for-the-badge"></a>
@@ -730,5 +733,5 @@ bash scripts/passive_fuzzer.sh
 ---
 
 <p align="center">
-<sub><b>HUNT · DISCOVER · EXPLOIT · REPORT</b> — built with 💚 for the bug-bounty community</sub>
+<sub><b>HUNT · DISCOVER · EXPLOIT · REPORT</b><br>built with 💚 by <b>enabothyla sricharan</b></sub>
 </p>
