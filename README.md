@@ -25,12 +25,11 @@ Plus deep WAF-bypass, secret-hunting, and vulnerability-chaining playbooks.
 ## 🗂️ Repository Layout — **Every File** (full structure)
 
 ```
-(1).md
-.gitignore
-AGENTS.md
-PRIVATE.md
-README.md
-agents/
+├── .gitignore
+├── AGENTS.md
+├── PRIVATE.md
+├── README.md
+├── agents
 │   ├── auditor.md
 │   ├── debug.md
 │   ├── hunter.md
@@ -38,25 +37,11 @@ agents/
 │   ├── recon.md
 │   ├── reporter.md
 │   └── verifier.md
-docs/
-│   ├── ALL_AGENTS_COMBINED.md
-│   ├── BUGBASE_THREADS.md
-│   ├── CONSOLIDATED_FINDINGS.md
-│   ├── FULL_VULNERABILITY_PORTFOLIO
-│   ├── FULL_VULNERABILITY_PORTFOLIO.md
-│   ├── FULL_VULNERABILITY_PORTFOLIO_updated.md
-│   ├── MASTER_TIMELINE_LOG.md
-│   ├── MASTER_VULNERABILITY_PORTFOLIO.md
+├── docs
 │   ├── METHODOLOGIES.md
 │   ├── METHODS.md
-│   ├── README.md
-│   ├── SCOPE_REFERENCE.md
-│   ├── SWEEP_REPORT_20260720.md
-│   ├── TOR.md
-│   └── opencode-landing/
-│       ├── PROGRESS.md
-│       └── index.html
-methodology/
+│   └── TOR.md
+├── methodology
 │   ├── ACTUATOR.md
 │   ├── AUTH_SESSION.md
 │   ├── BLIND_XSS.md
@@ -82,7 +67,7 @@ methodology/
 │   ├── TRAINING_GUIDE.md
 │   ├── WAF_BYPASS_ADVANCED.md
 │   └── WORKFLOW.md
-scripts/
+├── scripts
 │   ├── 1.js
 │   ├── 1.py
 │   ├── 123.sh
@@ -90,26 +75,18 @@ scripts/
 │   ├── 74.py
 │   ├── CorsPoC.html
 │   ├── README.md
-│   ├── __pycache__/
-│   │   └── new1.cpython-39.pyc
 │   ├── agents_launcher.sh
 │   ├── alienvault.sh
 │   ├── client.py
 │   ├── client.spec
 │   ├── clinet.py
 │   ├── common.txt
-│   ├── continuous_probe.sh
 │   ├── dorking.py
 │   ├── forever_agent.sh
 │   ├── generate_key.py
-│   ├── hunter.sh
-│   ├── hunter_agent.sh
 │   ├── index.html
 │   ├── install
 │   ├── install.sh
-│   ├── lastmile_login.js
-│   ├── lastmile_test2.js
-│   ├── ls.txt
 │   ├── naabutonmap.py
 │   ├── new.sh
 │   ├── new1.py
@@ -126,277 +103,217 @@ scripts/
 │   ├── server.nim
 │   ├── server.py
 │   ├── server.spec
-│   ├── subdomains-200.txt
-│   ├── subs.txt
 │   ├── tv.py
-│   ├── tv_paths.txt
 │   ├── urlscan.py
 │   ├── verify_agent.sh
 │   ├── virustotal.sh
 │   ├── voice_assistant.html
-│   ├── wapiti_build/
-│   │   ├── base_check.sh
-│   │   ├── base_only.sh
-│   │   ├── check_func.sh
-│   │   ├── check_func_clean.sh
-│   │   ├── check_part.sh
-│   │   ├── check_part2.sh
-│   │   ├── check_part3.sh
-│   │   ├── check_part4.sh
-│   │   ├── check_t.sh
-│   │   ├── commented.sh
-│   │   ├── comp_test.sh
-│   │   ├── no_entry.sh
-│   │   ├── phase_report_body.sh
-│   │   ├── stripped.sh
-│   │   ├── test1.sh
-│   │   ├── test2.sh
-│   │   ├── test_base.sh
-│   │   ├── test_phase_report.sh
-│   │   ├── test_tail.sh
-│   │   ├── toplevel_test.sh
-│   │   ├── trunced_100000.sh
-│   │   ├── trunced_110000.sh
-│   │   ├── trunced_115000.sh
-│   │   ├── trunced_118000.sh
-│   │   ├── trunced_120000.sh
-│   │   ├── trunced_121000.sh
-│   │   ├── trunced_121500.sh
-│   │   ├── trunced_121800.sh
-│   │   ├── trunced_121900.sh
-│   │   ├── up_to_100k.sh
-│   │   ├── wrap_full.sh
-│   │   └── wrap_toplevel.sh
-│   ├── wapiti_improvised.sh
-│   ├── wapiti_improvised_test.sh
 │   └── wayback.sh
-skills/
-    ├── 401-403-bypass-techniques/
+└── skills
+    ├── 401-403-bypass-techniques
     │   └── SKILL.md
-    ├── active-directory-acl-abuse/
+    ├── active-directory-acl-abuse
     │   ├── BLOODHOUND_PATHS.md
     │   └── SKILL.md
-    ├── active-directory-certificate-services/
+    ├── active-directory-certificate-services
     │   ├── ADCS_ESC_MATRIX.md
     │   └── SKILL.md
-    ├── active-directory-kerberos-attacks/
+    ├── active-directory-kerberos-attacks
     │   ├── KERBEROS_ATTACK_CHAINS.md
     │   └── SKILL.md
-    ├── ai-ml-security/
+    ├── ai-ml-security
     │   └── SKILL.md
-    ├── android-pentesting-tricks/
+    ├── android-pentesting-tricks
     │   ├── FRIDA_SCRIPTS.md
     │   └── SKILL.md
-    ├── anti-debugging-techniques/
+    ├── anti-debugging-techniques
     │   ├── ANTI_DEBUG_MATRIX.md
     │   └── SKILL.md
-    ├── api-auth-and-jwt-abuse/
+    ├── api-auth-and-jwt-abuse
     │   └── SKILL.md
-    ├── api-authorization-and-bola/
+    ├── api-authorization-and-bola
     │   └── SKILL.md
-    ├── api-recon-and-docs/
+    ├── api-recon-and-docs
     │   └── SKILL.md
-    ├── api-sec/
+    ├── api-sec
     │   └── SKILL.md
-    ├── arbitrary-write-to-rce/
+    ├── arbitrary-write-to-rce
     │   └── SKILL.md
-    ├── auth-sec/
+    ├── auth-sec
     │   └── SKILL.md
-    ├── authbypass-authentication-flaws/
+    ├── authbypass-authentication-flaws
     │   └── SKILL.md
-    ├── binary-protection-bypass/
+    ├── binary-protection-bypass
     │   ├── PROTECTION_BYPASS_MATRIX.md
     │   └── SKILL.md
-    ├── browser-exploitation-v8/
+    ├── browser-exploitation-v8
     │   ├── SKILL.md
     │   └── V8_EXPLOITATION_PATTERNS.md
-    ├── bug-bounty/
+    ├── bug-bounty
     │   ├── BYPASS_DATABASE.md
     │   ├── SKILL.md
-    │   ├── best_skill.md
     │   ├── index.json
-    │   ├── seed_skill.md
     │   ├── skillopt_config.yaml
-    │   ├── trajectories/
-    │   │   ├── traj_07f4da75_Subdomain_takeover_nuclei_scan.json
-    │   │   ├── traj_0d271887_GraphQL_introspection_on_boat.json
-    │   │   ├── traj_10fc8746_HDFC_Netbanking_JS_bundle_analysis.json
-    │   │   ├── traj_1125cc87_Wayback_CDX_bypass_via_Tor_proxy.json
-    │   │   ├── traj_2004f29d_Spring_Boot_actuator_enumeration.json
-    │   │   ├── traj_238a002b_Laravel_debug_mode_testretailer_boat.json
-    │   │   ├── traj_27a85f0b_SSRF_cloud_metadata_test_failed.json
-    │   │   ├── traj_32f7d5bc_HDFC_CBX_Web_portal_recon.json
-    │   │   ├── traj_4108276b_HDFC_Lastmile_Web_login_page_analysis.json
-    │   │   ├── traj_43fe6c31_Full_recon_pipeline_successful.json
-    │   │   ├── traj_6c66b25d_Grafana_dashboard_grafana-gcp_boat.json
-    │   │   ├── traj_82d72e28_HDFC_OTP_bypass_test_on_Netbanking.json
-    │   │   ├── traj_9dd46c0b_S3_PII_Leak_boat_PDFs_exposed.json
-    │   │   ├── traj_a629e2f7_HDFC_Netbanking_Rewrite_auth_analysis.json
-    │   │   ├── traj_c47a93f7_Crewex_OTP_rate_limit_bypass_analysis.json
-    │   │   ├── traj_c7209125_JWT_secret_scanning_JS_bundles.json
-    │   │   ├── traj_d287eb52_Mendix_SOAP_endpoint_enumeration_naavik.json
-    │   │   ├── traj_f10d6018_Apache_no_TLS_on_test.boat-lifestyle.com.json
-    │   │   └── traj_f269ba1c_Razorpay_Live_Key_found_in_Mendix.json
-    │   └── versions/
+    │   └── versions
     │       ├── v0.md
     │       ├── v0.meta.json
     │       ├── v1.md
     │       └── v1.meta.json
-    ├── business-logic-vuln/
+    ├── business-logic-vuln
     │   └── SKILL.md
-    ├── business-logic-vulnerabilities/
+    ├── business-logic-vulnerabilities
     │   ├── SCENARIOS.md
     │   └── SKILL.md
-    ├── classical-cipher-analysis/
+    ├── classical-cipher-analysis
     │   └── SKILL.md
-    ├── clickjacking/
+    ├── clickjacking
     │   └── SKILL.md
-    ├── cmdi-command-injection/
+    ├── cmdi-command-injection
     │   └── SKILL.md
-    ├── code-obfuscation-deobfuscation/
+    ├── code-obfuscation-deobfuscation
     │   └── SKILL.md
-    ├── container-escape-techniques/
+    ├── container-escape-techniques
     │   ├── DOCKER_ESCAPE_CHAINS.md
     │   └── SKILL.md
-    ├── cors-cross-origin-misconfiguration/
+    ├── cors-cross-origin-misconfiguration
     │   ├── SCENARIOS.md
     │   └── SKILL.md
-    ├── crlf-injection/
+    ├── crlf-injection
     │   └── SKILL.md
-    ├── csp-bypass-advanced/
+    ├── csp-bypass-advanced
     │   └── SKILL.md
-    ├── csrf-cross-site-request-forgery/
+    ├── csrf-cross-site-request-forgery
     │   └── SKILL.md
-    ├── csv-formula-injection/
+    ├── csv-formula-injection
     │   └── SKILL.md
-    ├── dangling-markup-injection/
+    ├── dangling-markup-injection
     │   └── SKILL.md
-    ├── defi-attack-patterns/
+    ├── defi-attack-patterns
     │   └── SKILL.md
-    ├── dependency-confusion/
+    ├── dependency-confusion
     │   └── SKILL.md
-    ├── deserialization-insecure/
+    ├── deserialization-insecure
     │   ├── JAVA_GADGET_CHAINS.md
     │   └── SKILL.md
-    ├── dns-rebinding-attacks/
+    ├── dns-rebinding-attacks
     │   └── SKILL.md
-    ├── dns-recon/
+    ├── dns-recon
     │   └── SKILL.md
-    ├── email-header-injection/
+    ├── email-header-injection
     │   └── SKILL.md
-    ├── expression-language-injection/
+    ├── expression-language-injection
     │   └── SKILL.md
-    ├── file-access-vuln/
+    ├── file-access-vuln
     │   └── SKILL.md
-    ├── format-string-exploitation/
+    ├── format-string-exploitation
     │   └── SKILL.md
-    ├── graphql-and-hidden-parameters/
+    ├── graphql-and-hidden-parameters
     │   └── SKILL.md
-    ├── hack/
+    ├── hack
     │   └── SKILL.md
-    ├── hash-attack-techniques/
+    ├── hash-attack-techniques
     │   └── SKILL.md
-    ├── heap-exploitation/
+    ├── heap-exploitation
     │   ├── HOUSE_OF_TECHNIQUES.md
     │   ├── IO_FILE_EXPLOITATION.md
     │   └── SKILL.md
-    ├── http-host-header-attacks/
+    ├── http-host-header-attacks
     │   └── SKILL.md
-    ├── http-parameter-pollution/
+    ├── http-parameter-pollution
     │   └── SKILL.md
-    ├── http2-specific-attacks/
+    ├── http2-specific-attacks
     │   └── SKILL.md
-    ├── idor-broken-object-authorization/
+    ├── idor-broken-object-authorization
     │   └── SKILL.md
-    ├── injection-checking/
+    ├── injection-checking
     │   ├── EXTRA_INJECTION_TYPES.md
     │   └── SKILL.md
-    ├── insecure-source-code-management/
+    ├── insecure-source-code-management
     │   └── SKILL.md
-    ├── ios-pentesting-tricks/
+    ├── ios-pentesting-tricks
     │   ├── IOS_RUNTIME_TRICKS.md
     │   └── SKILL.md
-    ├── jndi-injection/
+    ├── jndi-injection
     │   └── SKILL.md
-    ├── js-analysis/
+    ├── js-analysis
     │   └── SKILL.md
-    ├── jwt-oauth-token-attacks/
+    ├── jwt-oauth-token-attacks
     │   └── SKILL.md
-    ├── kernel-exploitation/
+    ├── kernel-exploitation
     │   ├── KERNEL_HEAP_TECHNIQUES.md
     │   ├── KERNEL_MITIGATION_BYPASS.md
     │   └── SKILL.md
-    ├── kubernetes-pentesting/
+    ├── kubernetes-pentesting
     │   └── SKILL.md
-    ├── lattice-crypto-attacks/
+    ├── lattice-crypto-attacks
     │   └── SKILL.md
-    ├── linux-lateral-movement/
+    ├── linux-lateral-movement
     │   └── SKILL.md
-    ├── linux-privilege-escalation/
+    ├── linux-privilege-escalation
     │   ├── KERNEL_EXPLOITS_CHECKLIST.md
     │   ├── SKILL.md
     │   └── SUID_CAPABILITIES_TRICKS.md
-    ├── linux-security-bypass/
+    ├── linux-security-bypass
     │   └── SKILL.md
-    ├── llm-prompt-injection/
+    ├── llm-prompt-injection
     │   ├── JAILBREAK_PATTERNS.md
     │   └── SKILL.md
-    ├── macos-process-injection/
+    ├── macos-process-injection
     │   ├── DYLIB_XPC_TECHNIQUES.md
     │   └── SKILL.md
-    ├── macos-security-bypass/
+    ├── macos-security-bypass
     │   ├── SKILL.md
     │   └── TCC_BYPASS_MATRIX.md
-    ├── memory-forensics-volatility/
+    ├── memory-forensics-volatility
     │   ├── SKILL.md
     │   └── VOLATILITY_CHEATSHEET.md
-    ├── mobile-ssl-pinning-bypass/
+    ├── mobile-ssl-pinning-bypass
     │   └── SKILL.md
-    ├── network-protocol-attacks/
+    ├── network-protocol-attacks
     │   ├── NAME_RESOLUTION_POISONING.md
     │   └── SKILL.md
-    ├── nosql-injection/
+    ├── nosql-injection
     │   └── SKILL.md
-    ├── ntlm-relay-coercion/
+    ├── ntlm-relay-coercion
     │   ├── COERCION_METHODS.md
     │   └── SKILL.md
-    ├── oauth-oidc-misconfiguration/
+    ├── oauth-oidc-misconfiguration
     │   └── SKILL.md
-    ├── open-redirect/
+    ├── open-redirect
     │   └── SKILL.md
-    ├── path-traversal-lfi/
+    ├── path-traversal-lfi
     │   └── SKILL.md
-    ├── prototype-pollution/
+    ├── prototype-pollution
     │   └── SKILL.md
-    ├── prototype-pollution-advanced/
+    ├── prototype-pollution-advanced
     │   ├── KNOWN_GADGETS.md
     │   └── SKILL.md
-    ├── race-condition/
+    ├── race-condition
     │   └── SKILL.md
-    ├── recon-and-methodology/
+    ├── recon-and-methodology
     │   └── SKILL.md
-    ├── recon-for-sec/
+    ├── recon-for-sec
     │   └── SKILL.md
-    ├── request-smuggling/
+    ├── request-smuggling
     │   ├── H2_SMUGGLING_VARIANTS.md
     │   └── SKILL.md
-    ├── reverse-shell-techniques/
+    ├── reverse-shell-techniques
     │   ├── SHELL_CHEATSHEET.md
     │   └── SKILL.md
-    ├── rsa-attack-techniques/
+    ├── rsa-attack-techniques
     │   ├── RSA_ATTACK_CATALOG.md
     │   └── SKILL.md
-    ├── saml-sso-assertion-attacks/
+    ├── saml-sso-assertion-attacks
     │   └── SKILL.md
-    ├── sandbox-escape-techniques/
+    ├── sandbox-escape-techniques
     │   ├── PYTHON_SANDBOX_ESCAPE.md
     │   ├── SECCOMP_BYPASS.md
     │   └── SKILL.md
-    ├── scope-guard/
+    ├── scope-guard
     │   ├── SCOPE_ACTIVE.md
     │   ├── SKILL.md
     │   └── scope_init.sh
-    ├── skillopt/
+    ├── skillopt
     │   ├── README.md
     │   ├── SKILL.md
     │   ├── opencode_hook.py
@@ -404,74 +321,74 @@ skills/
     │   ├── skillopt_cli.py
     │   ├── skillopt_config.yaml
     │   └── skillopt_optimizer.py
-    ├── smart-contract-vulnerabilities/
+    ├── smart-contract-vulnerabilities
     │   ├── SKILL.md
     │   └── SOLIDITY_VULN_PATTERNS.md
-    ├── sqli-sql-injection/
+    ├── sqli-sql-injection
     │   ├── SCENARIOS.md
     │   ├── SKILL.md
     │   └── SQLMAP_ADVANCED.md
-    ├── ssrf-server-side-request-forgery/
+    ├── ssrf-server-side-request-forgery
     │   ├── SCENARIOS.md
     │   ├── SKILL.md
     │   └── URL_PARSER_TRICKS.md
-    ├── ssti-server-side-template-injection/
+    ├── ssti-server-side-template-injection
     │   ├── ENGINE_PAYLOADS.md
     │   ├── SCENARIOS.md
     │   └── SKILL.md
-    ├── stack-overflow-and-rop/
+    ├── stack-overflow-and-rop
     │   ├── ROP_ADVANCED_TECHNIQUES.md
     │   └── SKILL.md
-    ├── steganography-techniques/
+    ├── steganography-techniques
     │   ├── SKILL.md
     │   └── STEGO_TOOLS_GUIDE.md
-    ├── subdomain-takeover/
+    ├── subdomain-takeover
     │   └── SKILL.md
-    ├── symbolic-execution-tools/
+    ├── symbolic-execution-tools
     │   ├── ANGR_COOKBOOK.md
     │   └── SKILL.md
-    ├── symmetric-cipher-attacks/
+    ├── symmetric-cipher-attacks
     │   ├── BLOCK_CIPHER_ATTACKS.md
     │   └── SKILL.md
-    ├── traffic-analysis-pcap/
+    ├── traffic-analysis-pcap
     │   └── SKILL.md
-    ├── tunneling-and-pivoting/
+    ├── tunneling-and-pivoting
     │   └── SKILL.md
-    ├── type-juggling/
+    ├── type-juggling
     │   └── SKILL.md
-    ├── unauthorized-access-common-services/
+    ├── unauthorized-access-common-services
     │   ├── PORT_SERVICE_MATRIX.md
     │   └── SKILL.md
-    ├── upload-insecure-files/
+    ├── upload-insecure-files
     │   ├── SCENARIOS.md
     │   └── SKILL.md
-    ├── vm-and-bytecode-reverse/
+    ├── vm-and-bytecode-reverse
     │   └── SKILL.md
-    ├── waf-bypass-techniques/
+    ├── waf-bypass-techniques
     │   ├── SKILL.md
     │   └── WAF_PRODUCT_MATRIX.md
-    ├── web-cache-deception/
+    ├── web-cache-deception
     │   ├── CACHE_POISONING_TECHNIQUES.md
     │   └── SKILL.md
-    ├── websocket-security/
+    ├── websocket-security
     │   └── SKILL.md
-    ├── windows-av-evasion/
+    ├── windows-av-evasion
     │   ├── AMSI_BYPASS_TECHNIQUES.md
     │   └── SKILL.md
-    ├── windows-lateral-movement/
+    ├── windows-lateral-movement
     │   ├── CREDENTIAL_DUMPING.md
     │   └── SKILL.md
-    ├── windows-privilege-escalation/
+    ├── windows-privilege-escalation
     │   ├── SKILL.md
     │   ├── TOKEN_POTATO_TRICKS.md
     │   └── UAC_BYPASS_METHODS.md
-    ├── xslt-injection/
+    ├── xslt-injection
     │   └── SKILL.md
-    ├── xss-cross-site-scripting/
+    ├── xss-cross-site-scripting
     │   ├── ADVANCED_XSS_TRICKS.md
     │   ├── SCENARIOS.md
     │   └── SKILL.md
-    └── xxe-xml-external-entity/
+    └── xxe-xml-external-entity
         ├── SCENARIOS.md
         └── SKILL.md
 ```

@@ -5,15 +5,15 @@
 # Template matches BugBase submission format exactly.
 # ==============================================================
 
-VERIFIED_DIR="/home/sricharansiddu29/recon_reports/verified_findings"
-REPORTS_DIR="/home/sricharansiddu29/recon_reports/bugbase_reports"
+VERIFIED_DIR="/home/user/recon_reports/verified_findings"
+REPORTS_DIR="/home/user/recon_reports/bugbase_reports"
 mkdir -p "$REPORTS_DIR"
 
 log() { echo "[$(date +%H:%M:%S)] $*" >> /tmp/report_agent.log; }
 
 # Default values (user-configured)
 TESTING_EMAIL="REDACTED_KNOWN_SECRET"
-REPORTER_NAME="sricharan_99"
+REPORTER_NAME="[username]"
 
 generate_bugbase_report() {
     local FILE="$1"
@@ -64,10 +64,10 @@ generate_bugbase_report() {
 
     # Determine scope
     local SCOPE=""
-    if echo "$TARGET_URL" | grep -qi "acko"; then
-        SCOPE="Acko Responsible Disclosure Program"
-    elif echo "$TARGET_URL" | grep -qi "groww"; then
-        SCOPE="Groww Responsible Disclosure Program"
+    if false; then
+        SCOPE="Responsible Disclosure Program"
+    else
+        SCOPE="Responsible Disclosure Program"
     else
         SCOPE="General"
     fi

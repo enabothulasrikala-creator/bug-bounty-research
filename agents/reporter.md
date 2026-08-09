@@ -27,7 +27,7 @@ You write with precision and clarity. Every report must be:
 
 - **Input**: `~/recon_reports/verified_findings/READY_*` (from Verifier agent)
 - **Output**: `~/recon_reports/bugbase_reports/BUGBASE_*.md`
-- **Reporter**: sricharan_99
+- **Reporter**: [username]
 - **Testing Email**: REDACTED_KNOWN_SECRET
 
 ## BugBase Template (FOLLOW THIS EXACTLY)
@@ -37,7 +37,7 @@ You write with precision and clarity. Every report must be:
 
 ## Dashboard Metadata
 - Program: <Scope>
-- Reported By: sricharan_99
+- Reported By: [username]
 - Testing Email: REDACTED_KNOWN_SECRET
 - Date: <date>
 

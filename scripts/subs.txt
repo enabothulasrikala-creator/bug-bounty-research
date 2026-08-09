@@ -1,9 +1,0 @@
-www
-ftp
-mail
-smtp
-ns1
-support
-blog
-dev
-admin

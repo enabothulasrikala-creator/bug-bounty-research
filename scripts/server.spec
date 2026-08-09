@@ -25,9 +25,9 @@ from fnmatch import fnmatch
 exlist = set([base_prefix, prefix, exec_prefix])
 expats = [os.path.join(os.path.normpath(x), '*') for x in exlist]
 
-src = '/home/sricharansiddu29'
-resfile = '/home/sricharansiddu29/.pyarmor/pack/resources.list'
-hookscript = '/home/sricharansiddu29/.pyarmor/pack/hook-pyarmor_runtime_000000.py'
+src = '/home/user'
+resfile = '/home/user/.pyarmor/pack/resources.list'
+hookscript = '/home/user/.pyarmor/pack/hook-pyarmor_runtime_000000.py'
 
 nsrc = len(src) + 1
 rsrc = os.path.relpath(src)

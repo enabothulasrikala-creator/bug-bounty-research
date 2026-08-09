@@ -8,7 +8,7 @@
 
 INBOX="/tmp/agent_inbox"
 OUTBOX="/tmp/agent_outbox"
-VERIFIED_DIR="/home/sricharansiddu29/recon_reports/verified_findings"
+VERIFIED_DIR="/home/user/recon_reports/verified_findings"
 mkdir -p "$INBOX" "$OUTBOX" "$VERIFIED_DIR"
 
 log() { echo "[$(date +%H:%M:%S)] $*" >> /tmp/verify_agent.log; }

@@ -1,7 +1,0 @@
-api/v1/system/debug
-cgi-bin/config.exp
-dev/debug
-skw_debug
-mtk/debug
-factory_mode
-upgrade/check

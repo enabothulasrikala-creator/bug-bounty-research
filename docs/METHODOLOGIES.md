@@ -470,23 +470,6 @@ Before reporting any finding, verify:
 
 ---
 
-## 14. PROGRAMS REFERENCED IN THIS SESSION
-
-| Program | HackerOne | Bounty Range | Notes |
-|---------|-----------|-------------|-------|
-| Twitter/X | hackerone.com/x | $100 - $20K | May 2026, strict scope |
-| NBA | hackerone.com/nba-public | $50 - $3K | No brute-force |
-| Neon | hackerone.com/neon_bbp | $150 - $3K | Staging: I-LOVE-PREVIEWS |
-| Agoda | hackerone.com/agoda | $150 - $5K | Added Jun 18 2026 |
-| Shopify | hackerone.com/shopify | Varies | GCS buckets |
-| Meesho | hackerone.com/meesho | Varies | GCS + internal APIs |
-| Razorpay | hackerone.com/razorpay | Varies | Analytics keys |
-| Razer | hackerone.com/razer | Varies | Dev env exposed |
-| Namecheap | hackerone.com/namecheap | Varies | Private DNS leak |
-| DigitalOcean | hackerone.com/digitalocean | Varies | GCS bucket exists |
-
----
-
 ## 15. FINDING PRIORITIZATION MATRIX
 
 | Priority | Finding Type | Bounty Probability | Example |

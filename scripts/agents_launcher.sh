@@ -8,7 +8,7 @@
 #   report_agent.sh          →  Generates BugBase-format reports
 # ==============================================================
 
-BASE="/home/sricharansiddu29"
+BASE="/home/user"
 AGENTS=(
     "$BASE/hunter_agent.sh"
     "$BASE/verify_agent.sh"

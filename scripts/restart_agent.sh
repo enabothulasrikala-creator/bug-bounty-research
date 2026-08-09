@@ -1,5 +1,5 @@
 #!/bin/bash
-# Auto-restart watchdog for the unified Acko discovery agent
+# Auto-restart watchdog for the unified discovery agent
 # Designed to be run via cron every minute
 
 AGENT_PID_FILE="/tmp/agent_pid"
@@ -43,5 +43,5 @@ if ! agent_alive; then
 fi
 
 # Ensure findings directory exists
-mkdir -p /home/sricharansiddu29/recon_reports/companies/acko/unreported
+mkdir -p /home/user/recon_reports/unreported
 mkdir -p /tmp/agent_inbox /tmp/agent_outbox /tmp/agent_processed /tmp/agent_logs
