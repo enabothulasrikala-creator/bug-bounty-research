@@ -1,28 +1,88 @@
-# 🛡️ Bug Bounty Research Workspace — Methodology
+<div align="center">
 
-> **A full offensive-security research workspace** built on a **community-driven bug-bounty methodology**.
-> Everything here is **public, sanitized, and credential-free**. Live findings, credentials, and private
-> reports live in a **separate private repository** (see [`PRIVATE.md`](PRIVATE.md)).
+```
+██████╗ ██╗   ██╗ ██████╗     ██████╗  ██████╗ ██╗   ██╗███╗   ██╗████████╗██╗   ██╗
+██╔══██╗██║   ██║██╔════╝     ██╔══██╗██╔═══██╗██║   ██║████╗  ██║╚══██╔══╝╚██╗ ██╔╝
+██████╔╝██║   ██║██║  ███╗    ██████╔╝██║   ██║██║   ██║██╔██╗ ██║   ██║     ╚████╔╝ 
+██╔══██╗██║   ██║██║   ██║    ██╔══██╗██║   ██║██║   ██║██║╚██╗██║   ██║      ╚██╔╝  
+██████╔╝╚██████╔╝╚██████╔╝    ██████╔╝╚██████╔╝╚██████╔╝██║ ╚████║   ██║       ██║   
+╚═════╝  ╚═════╝  ╚═════╝     ╚═════╝  ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝   ╚═╝       ╚═╝
+```
+
+# 🐞 BUG BOUNTY RESEARCH WORKSPACE
+
+**OFFENSIVE SECURITY · RECON · METHODOLOGY · AUTOMATION**
+
+<br>
+
+<a href="#-repository-layout--every-file-full-structure"><img src="https://img.shields.io/badge/STATUS-ACTIVE-00FF41?style=for-the-badge&logo=activity&logoColor=white"></a>
+<a href="#-file-by-file-guide"><img src="https://img.shields.io/badge/METHODOLOGY-25%20PLAYBOOKS-00E5FF?style=for-the-badge"></a>
+<a href="#-file-by-file-guide"><img src="https://img.shields.io/badge/SKILLS-106%2B-9D00FF?style=for-the-badge"></a>
+<a href="#-file-by-file-guide"><img src="https://img.shields.io/badge/SCRIPTS-18-FF6D00?style=for-the-badge"></a>
+<a href="#-agent-system"><img src="https://img.shields.io/badge/AGENTS-7-FF003C?style=for-the-badge"></a>
+<a href="#-privacy--sanitization"><img src="https://img.shields.io/badge/SANITIZED-TRUE-00FF41?style=for-the-badge"></a>
+<a href="#-pipeline"><img src="https://img.shields.io/badge/PIPELINE-CHAOS%20%E2%86%92%20FFUF-FF003C?style=for-the-badge"></a>
+
+<br>
+
+```
+┌────────────────────────────────────────────────────────────────────────────┐
+│  A full offensive-security research workspace built on a community-driven  │
+│  bug-bounty methodology. Public, sanitized, credential-free. Live findings │
+│  & credentials live in a separate PRIVATE repository (see PRIVATE.md).     │
+└────────────────────────────────────────────────────────────────────────────┘
+```
+
+</div>
 
 ---
 
-## 📖 What Is This?
+## 🧭 Navigation
 
-This is a complete, portable **bug-bounty hunting research environment** — methodology, automation
-scripts, agent definitions, and a 100+ file security skills library. It was built and used to run
-authorized bug-bounty programs (HackerOne/BugBase-style) against Indian fintech and consumer brands.
+| # | Section | # | Section |
+|---|---------|---|---------|
+| 01 | [Repository Layout (every file)](#-repository-layout--every-file-full-structure) | 06 | [Agent System](#-agent-system) |
+| 02 | [File-by-File Guide](#-file-by-file-guide) | 07 | [What the Research Covers](#-what-the-research-covers) |
+| 03 | [Core Pipeline](#-pipeline) | 08 | [Quick Start](#-quick-start) |
+| 04 | [Key Principles](#-key-principles) | 09 | [Privacy & Sanitization](#-privacy--sanitization) |
+| 05 | [References](#-references) | 10 | [License](#-license) |
 
-It implements the exact workflow popularized in early 2026:
+---
+
+## 📊 Stats
+
+| Metric | Count |
+|--------|:-----:|
+| 🗂️ Tracked files | **231** |
+| 📖 Methodology playbooks | **25** |
+| 🧩 Security skills | **106** |
+| ⚙️ Automation scripts | **18** |
+| 🤖 Agent definitions | **7** |
+| 📄 Docs & references | **5** |
+
+---
+
+## 🔗 Pipeline
 
 ```
-CHAOS → HTTPX → NAABU → NMAP + PARSERS → NUCLEI → FFUF
+┌────────┐   ┌────────┐   ┌────────┐   ┌─────────────┐   ┌────────┐   ┌────────┐
+│ CHAOS  │ → │ HTTPX  │ → │ NAABU  │ → │ NMAP +      │ → │ NUCLEI │ → │ FFUF   │
+│ (subs) │   │ (live) │   │ (ports)│   │ PARSERS     │   │ (CVE)  │   │ (fuzz) │
+└────────┘   └────────┘   └────────┘   └─────────────┘   └────────┘   └────────┘
 ```
 
-Plus deep WAF-bypass, secret-hunting, and vulnerability-chaining playbooks.
+<details>
+<summary><b>▶ View the full one-liner pipeline</b></summary>
 
+```bash
+chaos -d target.com -o subs.txt && httpx -l subs.txt -ip -silent | sed -nE 's/.*\[([0-9.]+)\].*//p' | sort -u > ip.txt && httpx -l ip.txt -title -silent | grep -vi "cloudflare\|akamai\|fastly" | awk '{print $1}' > origin_ips.txt && naabu -l origin_ips.txt -top-ports 100 -rate 1500 -verify -silent -o naabu.txt && python3 scripts/naabutonmap.py -i naabu.txt && cat ip.txt | nuclei -tags cve -bs 200 && cat naabu.txt | nuclei -tags cve -bs 200 && ffuf -w naabu.txt:URL -w scripts/fuzz_wordlist.txt:FILE -u https://URL/FILE -mc 200 -rate 50 -fs 0
+```
+
+</details>
 ---
 
 ## 🗂️ Repository Layout — **Every File** (full structure)
+
 ```
 ├── .gitignore
 ├── AGENTS.md
@@ -372,6 +432,7 @@ Plus deep WAF-bypass, secret-hunting, and vulnerability-chaining playbooks.
         └── SKILL.md
 ```
 
+
 ## 📂 File-by-File Guide
 
 Every file in this repository, explained by directory. Skills appear once per directory (playbook + companion files).
@@ -568,12 +629,17 @@ Each skill is a playbook (`SKILL.md`) plus optional companion reference files. S
 | `xss-cross-site-scripting/` | XSS: reflected/stored/DOM, contexts, WAF bypass, mXSS. — `ADVANCED_XSS_TRICKS.md`: Advanced XSS tricks (mXSS, DOM clobbering) · `SCENARIOS.md`: Scenario walkthroughs |
 | `xxe-xml-external-entity/` | XXE: external entities, file read, SSRF, blind/OOB. — `SCENARIOS.md`: Scenario walkthroughs |
 
-### Key principles
-1. **CDN/WAF filtering is MANDATORY** — only scan origin IPs (skip Cloudflare/Akamai/Fastly).
-2. **Non-standard ports matter** — feed `naabu.txt` into nuclei + ffuf, not just 80/443.
-3. **403 is gold** — always try bypass techniques (headers, path manipulation, case, double-encoding).
-4. **Response-size analysis** — a `200 OK` can be a custom error page; compare size/word counts.
-5. **IP dedup** — many subdomains resolve to the same backend; `sort -u` first.
+---
+
+## 🔑 Key Principles
+
+| # | Principle |
+|---|-----------|
+| 🟢 | **CDN/WAF filtering is MANDATORY** — only scan origin IPs (skip Cloudflare/Akamai/Fastly). |
+| 🟠 | **Non-standard ports matter** — feed `naabu.txt` into nuclei + ffuf, not just 80/443. |
+| 🔴 | **403 is gold** — always try bypass techniques (headers, path manipulation, case, double-encoding). |
+| 🟡 | **Response-size analysis** — a `200 OK` can be a custom error page; compare size/word counts. |
+| 🔵 | **IP dedup** — many subdomains resolve to the same backend; `sort -u` first. |
 
 ---
 
@@ -581,44 +647,50 @@ Each skill is a playbook (`SKILL.md`) plus optional companion reference files. S
 
 The workspace is designed as a **multi-agent pipeline** (opencode agents):
 
-| Agent | Role |
-|-------|------|
-| **hunter** | Runs the core recon pipeline, continuous probing, WAF bypass, saves findings |
-| **verifier** | Re-checks every finding (3-request rule, baseline diff, CVSS 3.1, false-positive signatures) |
-| **reporter** | Produces BugBase-format reports (≤120-char title, single URL, live curl PoCs) |
-| **plan** | OSINT + attack-surface research → step-by-step plan |
-| **recon** | Fast subdomain enumeration + attack-surface discovery |
-| **debug** | Self-improvement, mistake logging, cross-agent learning |
-| **auditor** | Static code + dependency vulnerability audit |
+| Agent | Role | Priority |
+|-------|------|:-------:|
+| 🏹 **hunter** | Runs the core recon pipeline, continuous probing, WAF bypass, saves findings | P0 |
+| ✅ **verifier** | Re-checks every finding (3-request rule, baseline diff, CVSS 3.1, false-positive signatures) | P0 |
+| 📝 **reporter** | Produces BugBase-format reports (≤120-char title, single URL, live curl PoCs) | P0 |
+| 🧠 **plan** | OSINT + attack-surface research → step-by-step plan | P1 |
+| 🔎 **recon** | Fast subdomain enumeration + attack-surface discovery | P1 |
+| 🐛 **debug** | Self-improvement, mistake logging, cross-agent learning | P1 |
+| 🛡️ **auditor** | Static code + dependency vulnerability audit | P1 |
 
 ---
 
 ## 🎯 What the Research Covers
 
-- **Reconnaissance**: passive subdomain enum (Chaos, subfinder, assetfinder, crt.sh, CT logs),
-  live-host probing (httpx), port scanning (naabu/nmap), JS bundle analysis, source-map mining.
-- **Vulnerability classes**: SQLi, XSS, SSRF, SSTI, LFI, IDOR, CORS, CSRF, open redirect,
-  actuator exposure, cache deception, blind XSS, subdomain takeover, mass assignment, auth/session bugs.
-- **WAF bypass**: 15+ techniques (encoding chains, comment injection, HPP, chunked encoding,
-  body padding, protocol downgrade, request smuggling, origin-IP discovery).
-- **Cloud**: S3 bucket recon/exploitation, GCP/AWS metadata SSRF, Google API key hunting + validation.
-- **Business logic**: race conditions, price manipulation, OTP brute-force, punycode 0-click ATO.
-- **Chaining**: SSRF→internal API→RCE, auth bypass→IDOR→data exfiltration, etc.
+| Category | Coverage |
+|----------|----------|
+| 🔭 **Reconnaissance** | Passive subdomain enum (Chaos, subfinder, assetfinder, crt.sh, CT logs), live-host probing (httpx), port scanning (naabu/nmap), JS bundle analysis, source-map mining |
+| 💉 **Vulnerability classes** | SQLi, XSS, SSRF, SSTI, LFI, IDOR, CORS, CSRF, open redirect, actuator exposure, cache deception, blind XSS, subdomain takeover, mass assignment, auth/session bugs |
+| 🛡️ **WAF bypass** | 15+ techniques (encoding chains, comment injection, HPP, chunked encoding, body padding, protocol downgrade, request smuggling, origin-IP discovery) |
+| ☁️ **Cloud** | S3 bucket recon/exploitation, GCP/AWS metadata SSRF, Google API key hunting + validation |
+| 🧮 **Business logic** | Race conditions, price manipulation, OTP brute-force, punycode 0-click ATO |
+| ⛓️ **Chaining** | SSRF→internal API→RCE, auth bypass→IDOR→data exfiltration, etc. |
 
 ---
 
 ## 🚀 Quick Start
 
+<kbd>1</kbd> Clone the repo
+
 ```bash
-# 1. Clone
 git clone https://github.com/enabothulasrikala-creator/bug-bounty-research.git
 cd bug-bounty-research
+```
 
-# 2. Read the methodology
+<kbd>2</kbd> Read the methodology
+
+```bash
 cat methodology/WORKFLOW.md
 cat methodology/TRAINING_GUIDE.md
+```
 
-# 3. Use the scripts (example: passive URL collection)
+<kbd>3</kbd> Use the scripts (example: passive URL collection)
+
+```bash
 cat subs.txt | waybackurls | uro > urls.txt
 bash scripts/passive_fuzzer.sh
 ```
@@ -632,21 +704,31 @@ bash scripts/passive_fuzzer.sh
 
 ## 🔒 Privacy & Sanitization
 
-- This public repo was **auto-redacted**: live API keys (Google, Razorpay, Stripe, AWS, SendGrid,
+- 🔴 This public repo was **auto-redacted**: live API keys (Google, Razorpay, Stripe, AWS, SendGrid,
   OpenRouter), session tokens, JWTs, private keys, TOTP secrets, test credentials, personal email, and
   internal RFC1918 IPs are replaced with `REDACTED_*` placeholders.
-- Real, raw documents (per-program findings, evidence, bug reports, agent memory with credentials)
+- 🔵 Real, raw documents (per-program findings, evidence, bug reports, agent memory with credentials)
   live in a **private** repository. See [`PRIVATE.md`](PRIVATE.md).
 
 ---
 
 ## 📚 References
 
-- Community-driven methodology (Mar 2026): `CHAOS → HTTPX → NAABU → NMAP → NUCLEI → FFUF`
-- ProjectDiscovery toolchain: chaos, httpx, naabu, nuclei, katana
-- PortSwigger Academy + CWE/CVSS 3.1 for severity classification
+| Source | Purpose |
+|--------|---------|
+| Community methodology (Mar 2026) | `CHAOS → HTTPX → NAABU → NMAP → NUCLEI → FFUF` core pipeline |
+| ProjectDiscovery toolchain | chaos, httpx, naabu, nuclei, katana |
+| PortSwigger Academy + CWE/CVSS 3.1 | Severity classification |
 
 ---
 
-**License**: Research/educational use. No warranty. Use responsibly and only on systems you own or
-are authorized to test.
+## 🏷️ License
+
+> **Research / educational use. No warranty.**
+> Use responsibly and only on systems you own or are authorized to test.
+
+---
+
+<p align="center">
+<sub><b>HUNT · DISCOVER · EXPLOIT · REPORT</b> — built with 💚 for the bug-bounty community</sub>
+</p>
