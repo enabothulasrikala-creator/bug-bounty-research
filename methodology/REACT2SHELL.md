@@ -1,5 +1,5 @@
-# LostSec: From Recon to RCE — Hunting React2Shell (CVE-2025-55182)
-- Source: LostSec (Dec 11, 2025) — infosecwriteups.com
+# Community: From Recon to RCE — Hunting React2Shell (CVE-2025-55182)
+- Source: Community (Dec 11, 2025) — infosecwriteups.com
 - CVSS 10.0: Unauthenticated RCE in React Server Components
 
 ## What is React2Shell?

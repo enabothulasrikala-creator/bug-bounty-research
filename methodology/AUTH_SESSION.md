@@ -1,5 +1,5 @@
-# LostSec: Authentication and Session Management Vulnerabilities
-- Source: LostSec (Dec 1, 2025) — infosecwriteups.com
+# Community: Authentication and Session Management Vulnerabilities
+- Source: Community (Dec 1, 2025) — infosecwriteups.com
 - Complete checklist for finding session/auth flaws
 
 ## Complete Vulnerability Checklist

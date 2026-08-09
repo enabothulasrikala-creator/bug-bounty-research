@@ -1,5 +1,5 @@
-# LostSec: Master CRLF Injection — The Underrated Bug with Dangerous Potential
-- Source: LostSec (May 12, 2025) — infosecwriteups.com
+# Community: Master CRLF Injection — The Underrated Bug with Dangerous Potential
+- Source: Community (May 12, 2025) — infosecwriteups.com
 - HTTP response splitting via CRLF injection for XSS, cache poisoning, and log injection
 
 ## What is CRLF Injection?
@@ -24,7 +24,7 @@ Log files: User-Agent, Referer
 
 ## Discovery Commands
 ```bash
-# Using Loxs tool (coffinxp/loxs)
+# Using Loxs tool (loxs)
 loxs -l urls.txt -crlf
 
 # Custom Nuclei template (more effective than crlfuzz)
@@ -45,7 +45,7 @@ curl -s -I "https://target.com/page?param=test%0d%0aX-Injected:%20true"
 
 ## Mass Hunting
 ```bash
-# Using Loxs (coffinxp's all-in-one tool)
+# Using Loxs (Community's all-in-one tool)
 loxs -l urls.txt -crlf -o crlf_results.txt
 
 # gf patterns for CRLF-prone params

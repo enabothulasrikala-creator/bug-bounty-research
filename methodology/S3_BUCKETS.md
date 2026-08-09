@@ -1,5 +1,5 @@
-# LostSec: S3 Bucket Recon — Finding Exposed AWS Buckets Like a Pro
-- Source: LostSec (Feb 26, 2025) — infosecwriteups.com
+# Community: S3 Bucket Recon — Finding Exposed AWS Buckets Like a Pro
+- Source: Community (Feb 26, 2025) — infosecwriteups.com
 - Complete S3 bucket discovery and exploitation methodology
 
 ## S3 Bucket URL Formats

@@ -1,5 +1,5 @@
-# LostSec: Actuator Unleashed — Finding and Exploiting Spring Boot Actuator Endpoints
-- Source: LostSec (Oct 6, 2025) — infosecwriteups.com
+# Community: Actuator Unleashed — Finding and Exploiting Spring Boot Actuator Endpoints
+- Source: Community (Oct 6, 2025) — infosecwriteups.com
 - Full methodology for Spring Boot Actuator discovery, bypass, and exploitation
 
 ## What is Spring Boot Actuator?

@@ -85,7 +85,7 @@ For every plan, ask:
 
 ### Template: Full Web App
 ```
-TARGET: 
+TARGET:
 SCOPE:
 TECH STACK (researched):
 PRIORITY VECTORS:
@@ -127,23 +127,23 @@ QUICK CHECKS:
 - `~/.config/opencode/common/CHAINING_VULNS.md` — Chain planning
 - `~/.config/opencode/common/SSRF_ADVANCED.md` — SSRF attack vectors
 - `~/.config/opencode/common/WAF_BYPASS_ADVANCED.md` — Bypass planning
-- `~/.config/opencode/common/LOSTSEC_WORKFLOW.md` — Chaos→HTTPX→Naabu→Nmap→Nuclei→FFUF planning
-- `~/.config/opencode/common/LOSTSEC_GOOGLE_API_KEYS.md` — API key hunting plan
-- `~/.config/opencode/common/LOSTSEC_IIS_HACKING.md` — IIS recon plan
-- `~/.config/opencode/common/LOSTSEC_SQLMAP_GHAURI.md` — SQLi WAF bypass plan
-- `~/.config/opencode/common/LOSTSEC_CT_MONITORING.md` — CT monitoring plan
-- `~/.config/opencode/common/LOSTSEC_REACT2SHELL.md` — React2Shell hunt plan
-- `~/.config/opencode/common/LOSTSEC_AUTH_SESSION.md` — Auth testing plan
-- `~/.config/opencode/common/LOSTSEC_MASS_ASSIGNMENT.md` — Mass assignment plan
-- `~/.config/opencode/common/LOSTSEC_REGISTRATION_BUGS.md` — Registration bug plan
-- `~/.config/opencode/common/LOSTSEC_ACTUATOR.md` — Actuator exploitation plan
-- `~/.config/opencode/common/LOSTSEC_BLIND_XSS.md` — Blind XSS hunt plan
-- `~/.config/opencode/common/LOSTSEC_CACHE_DECEPTION.md` — Cache deception plan
-- `~/.config/opencode/common/LOSTSEC_PUNYCODE_ATO.md` — Punycode ATO plan
-- `~/.config/opencode/common/LOSTSEC_S3_BUCKETS.md` — S3 bucket plan
-- `~/.config/opencode/common/LOSTSEC_SWAGGER_UI.md` — Swagger UI plan
-- `~/.config/opencode/common/LOSTSEC_GITHUB_RECON.md` — GitHub recon plan
-- `~/.config/opencode/common/LOSTSEC_ORIGIN_IP.md` — Origin IP discovery plan
-- `~/.config/opencode/common/LOSTSEC_CRLF_INJECTION.md` — CRLF injection plan
+- `~/.config/opencode/common/WORKFLOW.md` — Chaos→HTTPX→Naabu→Nmap→Nuclei→FFUF planning
+- `~/.config/opencode/common/GOOGLE_API_KEYS.md` — API key hunting plan
+- `~/.config/opencode/common/IIS_HACKING.md` — IIS recon plan
+- `~/.config/opencode/common/SQLMAP_GHAURI.md` — SQLi WAF bypass plan
+- `~/.config/opencode/common/CT_MONITORING.md` — CT monitoring plan
+- `~/.config/opencode/common/REACT2SHELL.md` — React2Shell hunt plan
+- `~/.config/opencode/common/AUTH_SESSION.md` — Auth testing plan
+- `~/.config/opencode/common/MASS_ASSIGNMENT.md` — Mass assignment plan
+- `~/.config/opencode/common/REGISTRATION_BUGS.md` — Registration bug plan
+- `~/.config/opencode/common/ACTUATOR.md` — Actuator exploitation plan
+- `~/.config/opencode/common/BLIND_XSS.md` — Blind XSS hunt plan
+- `~/.config/opencode/common/CACHE_DECEPTION.md` — Cache deception plan
+- `~/.config/opencode/common/PUNYCODE_ATO.md` — Punycode ATO plan
+- `~/.config/opencode/common/S3_BUCKETS.md` — S3 bucket plan
+- `~/.config/opencode/common/SWAGGER_UI.md` — Swagger UI plan
+- `~/.config/opencode/common/GITHUB_RECON.md` — GitHub recon plan
+- `~/.config/opencode/common/ORIGIN_IP.md` — Origin IP discovery plan
+- `~/.config/opencode/common/CRLF_INJECTION.md` — CRLF injection plan
 - `~/recon_reports/docs/SCOPE_REFERENCE.md` — Tracked program scope
 - `~/bugbounty-targets-and-osint.md` — Program details

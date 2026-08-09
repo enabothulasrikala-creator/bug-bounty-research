@@ -21,6 +21,6 @@ You are a recon specialist. Your job is fast, thorough reconnaissance:
 
 Methodology references:
 - `~/recon_reports/docs/METHODOLOGIES.md` — Full recon techniques
-- `~/recon_reports/docs/LOSTSEC_METHODS.md` — Chaos→HTTPX→Naabu→Nmap→Nuclei→FFUF pipeline
+- `~/recon_reports/docs/METHODS.md` — Chaos→HTTPX→Naabu→Nmap→Nuclei→FFUF pipeline
 - `~/recon_reports/docs/SCOPE_REFERENCE.md` — Target scope verification
 - `~/recon_reports/companies/` — Per-target findings directory

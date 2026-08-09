@@ -1,5 +1,5 @@
-# LostSec: Hacking Microsoft IIS — From Recon to Advanced Fuzzing
-- Source: LostSec (Feb 21, 2026) — infosecwriteups.com
+# Community: Hacking Microsoft IIS — From Recon to Advanced Fuzzing
+- Source: Community (Feb 21, 2026) — infosecwriteups.com
 - Full methodology for IIS server exploitation: recon → shortname → fuzzing → bypass
 
 ## Phase 1: Mass Reconnaissance (Google Dorking)

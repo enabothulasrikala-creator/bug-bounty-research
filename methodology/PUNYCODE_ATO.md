@@ -1,5 +1,5 @@
-# LostSec: Punycode IDN Homograph — 0-Click Account Takeover
-- Source: LostSec (Jun 13, 2025) — infosecwriteups.com
+# Community: Punycode IDN Homograph — 0-Click Account Takeover
+- Source: Community (Jun 13, 2025) — infosecwriteups.com
 - Critical technique using lookalike Unicode characters for ATO without user interaction
 
 ## What is an IDN Homograph Attack?
@@ -68,7 +68,7 @@ Input punycode characters in the username field, then use original username to l
 
 ## Prevention
 - Normalize email domains before comparison: use IDNA library
-- Never use `.endswith()` for security decisions
+- Never use `.endswith` for security decisions
 - Always verify user emails through confirmation links
 - Whitelist verified domains, not user inputs
 - Reject emails containing punycode-encoded domains unless required

@@ -1,5 +1,5 @@
-# LostSec: Finding & Exploiting Exposed Google API Keys for Bug Bounties
-- Source: LostSec (May 23, 2026) — infosecwriteups.com
+# Community: Finding & Exploiting Exposed Google API Keys for Bug Bounties
+- Source: Community (May 23, 2026) — infosecwriteups.com
 - Gemini API keys can lead to high-impact bounties via unauthorized AI service access
 
 ## Why Google API Keys Are Worth Hunting

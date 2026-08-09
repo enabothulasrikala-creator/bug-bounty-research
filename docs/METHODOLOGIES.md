@@ -139,10 +139,10 @@ git clone https://github.com/sa7mon/S3Scanner.git
 pipx install s3scanner
 ```
 
-### Coffinxp Scripts
+### Community Scripts
 ```bash
-git clone https://github.com/coffinxp/scripts.git
-# Contains: lostfuzzer.sh, wayback.sh, alienvault.sh, urlscan.py, virustotal.sh, dorking.py
+git clone https://github.com/scripts.git
+# Contains: passive_fuzzer.sh, wayback.sh, alienvault.sh, urlscan.py, virustotal.sh, dorking.py
 ```
 
 ### Other Tools
@@ -237,7 +237,7 @@ site:target.com "-----BEGIN RSA PRIVATE KEY-----"  # Leaked keys
 ```
 
 ### Automated Dorking
-Using `coffinxp/scripts/dorking.py` or:
+Using `scripts/dorking.py` or:
 ```bash
 python3 -m googlesearch-python "site:target.com filetype:pdf"
 ```
@@ -268,14 +268,14 @@ curl -s "https://otx.alienvault.com/api/v1/indicators/domain/target.com/url_list
 
 ### URLScan.io
 ```bash
-# Using urlscan.py from coffinxp/scripts
+# Using urlscan.py from scripts
 # Or API:
 curl -s "https://urlscan.io/api/v1/search/?q=domain:target.com" | jq -r '.results[].page.url'
 ```
 
 ### VirusTotal
 ```bash
-# Using virustotal.sh from coffinxp/scripts
+# Using virustotal.sh from scripts
 # Requires API key
 ```
 

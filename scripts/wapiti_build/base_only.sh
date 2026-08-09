@@ -71,7 +71,7 @@ API_KEYS_FILE="$HOME/.config/api_keys.conf"
 # PART 2: USAGE & HELP
 # ============================================================================
 
-usage() {
+usage {
     cat << 'USAGE_EOF'
 ╔══════════════════════════════════════════════════════════════════════════════╗
 ║                     WAPITI IMPROVISED v3.0 — HELP                          ║
@@ -82,63 +82,63 @@ USAGE:
   ./wapiti_improvised.sh -l targets.txt [options]
 
 REQUIRED (choose one):
-  -d DOMAIN         Single target domain
-  -l TARGETS_FILE   Bulk target file (one per line)
+  -d DOMAIN Single target domain
+  -l TARGETS_FILE Bulk target file (one per line)
 
 SCAN MODES:
-  --quick           Fast scan (top 50 subdomains, 100 ports, 1-level crawl)
-  --deep            Deep scan (all subdomains, all ports, 3-level crawl, vuln scripts)
-  --stealth         Stealth scan (low rate, passive only, no aggressive payloads)
+  --quick Fast scan (top 50 subdomains, 100 ports, 1-level crawl)
+  --deep Deep scan (all subdomains, all ports, 3-level crawl, vuln scripts)
+  --stealth Stealth scan (low rate, passive only, no aggressive payloads)
   (default: standard — balanced coverage)
 
 PHASE SELECTION:
-  --phase all       Run ALL phases (default)
-  --phase recon     Phase 1: Subdomain discovery only
-  --phase probe     Phase 2: Live host + tech detection
-  --phase ports     Phase 3: Port scanning
-  --phase urls      Phase 4: URL collection + crawling
-  --phase js        Phase 5: JS analysis + secrets
-  --phase scan      Phase 6: Vulnerability scanning
-  --phase fuzz      Phase 7: Fuzzing + param analysis
-  --phase report    Phase 8: Report generation only
+  --phase all Run ALL phases (default)
+  --phase recon Phase 1: Subdomain discovery only
+  --phase probe Phase 2: Live host + tech detection
+  --phase ports Phase 3: Port scanning
+  --phase urls Phase 4: URL collection + crawling
+  --phase js Phase 5: JS analysis + secrets
+  --phase scan Phase 6: Vulnerability scanning
+  --phase fuzz Phase 7: Fuzzing + param analysis
+  --phase report Phase 8: Report generation only
 
 OUTPUT:
-  -o DIR            Output directory (default: ./recon/<domain>/<timestamp>)
+  -o DIR Output directory (default: ./recon/<domain>/<timestamp>)
 
 TOOL CONTROL:
-  --wapiti-only     Run ONLY Wapiti (skip everything else)
-  --no-wapiti       Run everything EXCEPT Wapiti
-  --nuclei-only     Run ONLY Nuclei scanning
-  --fuzz-only       Run ONLY fuzzing phase
+  --wapiti-only Run ONLY Wapiti (skip everything else)
+  --no-wapiti Run everything EXCEPT Wapiti
+  --nuclei-only Run ONLY Nuclei scanning
+  --fuzz-only Run ONLY fuzzing phase
 
 RATE & PERFORMANCE:
-  --threads N       Thread count (default: 50)
-  --rate N          Requests per second (default: 300)
-  --timeout N       Request timeout in seconds (default: 30)
+  --threads N Thread count (default: 50)
+  --rate N Requests per second (default: 300)
+  --timeout N Request timeout in seconds (default: 30)
 
 AUTHENTICATION:
-  --cookie FILE     Cookie jar file for authenticated scanning
-  --auth user:pass  HTTP basic/digest auth credentials
-  --auth-type TYPE  Auth type: basic|digest|ntlm|form
-  --headers FILE    Custom HTTP headers file (name:value per line)
+  --cookie FILE Cookie jar file for authenticated scanning
+  --auth user:pass HTTP basic/digest auth credentials
+  --auth-type TYPE Auth type: basic|digest|ntlm|form
+  --headers FILE Custom HTTP headers file (name:value per line)
 
 NETWORK:
-  --proxy URL       Proxy URL (e.g. socks5://127.0.0.1:9050)
-  --no-cdn-skip     Include CDN/WAF IPs in scanning (default: skip CDN)
+  --proxy URL Proxy URL (e.g. socks5://127.0.0.1:9050)
+  --no-cdn-skip Include CDN/WAF IPs in scanning (default: skip CDN)
 
 NOTIFICATIONS:
-  --discord URL     Discord webhook URL for scan results
-  --slack TOKEN     Slack API token for notifications
-  --telegram-token TOKEN  Telegram bot token
+  --discord URL Discord webhook URL for scan results
+  --slack TOKEN Slack API token for notifications
+  --telegram-token TOKEN Telegram bot token
   --telegram-chat CHAT_ID Telegram chat/group ID
   --telegram TOKEN CHAT_ID Both token and chat ID in one flag
-  --email ADDRESS   Email notification recipient (uses sendmail)
+  --email ADDRESS Email notification recipient (uses sendmail)
 
 ADVANCED:
-  --diff            Enable inter-scan diffing (track changes)
-  --diff-dir DIR    Diff state directory (default: ~/recon_diffs)
-  --wordlist FILE   Custom fuzzing wordlist
-  --crawl-depth N   Crawler depth (default: 2)
+  --diff Enable inter-scan diffing (track changes)
+  --diff-dir DIR Diff state directory (default: ~/recon_diffs)
+  --wordlist FILE Custom fuzzing wordlist
+  --crawl-depth N Crawler depth (default: 2)
   --exclude PATTERN Grep pattern to exclude subdomains
 
 EXAMPLES:
@@ -171,7 +171,7 @@ USAGE_EOF
 # PART 3: ARGUMENT PARSING
 # ============================================================================
 
-parse_args() {
+parse_args {
     while [[ $# -gt 0 ]]; do
         case $1 in
             -d) DOMAIN="$2"; shift 2 ;;
@@ -258,18 +258,18 @@ parse_args() {
 # ============================================================================
 
 # ---- Logging ----
-log()   { echo -e "${GREEN}[+]${NC} $1"; }
-warn()  { echo -e "${YELLOW}[!]${NC} $1"; }
-err()   { echo -e "${RED}[-]${NC} $1"; }
-info()  { echo -e "${BLUE}[*]${NC} $1"; }
-debug() { [[ "$VERBOSE" -eq 1 ]] && echo -e "${DIM}[DEBUG]${NC} $1"; }
-header(){ echo -e "\n${MAG}══════════════════════════════════════${NC}"; \
+log   { echo -e "${GREEN}[+]${NC} $1"; }
+warn  { echo -e "${YELLOW}[!]${NC} $1"; }
+err   { echo -e "${RED}[-]${NC} $1"; }
+info  { echo -e "${BLUE}[*]${NC} $1"; }
+debug { [[ "$VERBOSE" -eq 1 ]] && echo -e "${DIM}[DEBUG]${NC} $1"; }
+header{ echo -e "\n${MAG}══════════════════════════════════════${NC}"; \
           echo -e "${BOLD}  $1${NC}"; \
           echo -e "${MAG}══════════════════════════════════════${NC}\n"; }
 
 # ---- Timer ----
-timer_start() { TIMER_VAR=$(date +%s); }
-timer_end() {
+timer_start { TIMER_VAR=$(date +%s); }
+timer_end {
     local elapsed=$(( $(date +%s) - TIMER_VAR ))
     local mins=$(( elapsed / 60 ))
     local secs=$(( elapsed % 60 ))
@@ -277,9 +277,9 @@ timer_end() {
 }
 
 # ---- Tool Check ----
-tool_avail() { command -v "$1" &>/dev/null; }
+tool_avail { command -v "$1" &>/dev/null; }
 
-tool_check() {
+tool_check {
     header "TOOL CHECKS"
 
     # Required tools (scanning breaks without these)
@@ -370,7 +370,7 @@ tool_check() {
 }
 
 # ---- File Counter (safe) ----
-count_lines() {
+count_lines {
     local f="$1"
     if [[ -f "$f" ]]; then
         wc -l < "$f"
@@ -380,7 +380,7 @@ count_lines() {
 }
 
 # ---- Proxy Wrapper ----
-proxy_prefix() {
+proxy_prefix {
     if [[ -n "$PROXY" ]]; then
         echo "proxychains4 -q"
     else
@@ -389,7 +389,7 @@ proxy_prefix() {
 }
 
 # ---- Apply proxy to command ----
-with_proxy() {
+with_proxy {
     if [[ -n "$PROXY" ]]; then
         echo "proxychains4 -q $1"
     else
@@ -398,7 +398,7 @@ with_proxy() {
 }
 
 # ---- Build common args ----
-common_curl_args() {
+common_curl_args {
     local args="-sL --max-time $TIMEOUT_SEC"
     if [[ -n "$PROXY" ]]; then
         args="$args --proxy $PROXY"
@@ -407,14 +407,14 @@ common_curl_args() {
 }
 
 # ---- Progress counter ----
-progress() {
+progress {
     local current=$1 total=$2 label=${3:-}
     local pct=$(( current * 100 / total ))
     printf "\r  [%3d%%] %s %d/%d  " "$pct" "$label" "$current" "$total"
 }
 
 # ---- Check if file has content ----
-has_content() {
+has_content {
     [[ -f "$1" && -s "$1" ]]
 }
 
@@ -422,7 +422,7 @@ has_content() {
 # PART 5: ENVIRONMENT SETUP
 # ============================================================================
 
-setup_directories() {
+setup_directories {
     header "SETTING UP OUTPUT DIRECTORIES"
 
     mkdir -p "$OUTDIR"/{subs,live,ports,tech,urls,js,params,wapiti,nuclei,fuzz,screenshots,reports,notes}
@@ -446,7 +446,7 @@ setup_directories() {
 # PART 6: DISCORD / SLACK NOTIFICATIONS
 # ============================================================================
 
-send_notification() {
+send_notification {
     local message="$1"
     local severity="${2:-info}"
 
@@ -455,11 +455,11 @@ send_notification() {
     local color
     case "$severity" in
         critical) color=15548997;; # Red
-        high)     color=15105570;; # Orange
-        medium)   color=16776960;; # Yellow
-        low)      color=5793266;;  # Blue
-        info)     color=4886754;;  # Green
-        *)        color=4886754;;
+        high) color=15105570;; # Orange
+        medium) color=16776960;; # Yellow
+        low) color=5793266;;  # Blue
+        info) color=4886754;;  # Green
+        *) color=4886754;;
     esac
 
     # Discord webhook
@@ -519,7 +519,7 @@ Fixed line 485: merged trailing content
 # PART 7: INTER-SCAN DIFFING
 # ============================================================================
 
-save_diff_state() {
+save_diff_state {
     [[ "$DIFF_ENABLED" -eq 0 ]] && return
     mkdir -p "$DIFF_DIR"
     # Save the output structure sizes for diffing
@@ -533,7 +533,7 @@ save_diff_state() {
     } > "$DIFF_DIR/${DOMAIN:-bulk}.state"
 }
 
-load_diff_state() {
+load_diff_state {
     [[ "$DIFF_ENABLED" -eq 0 ]] && return
     local state_file="$DIFF_DIR/${DOMAIN:-bulk}.state"
     if [[ -f "$state_file" ]]; then
@@ -542,7 +542,7 @@ load_diff_state() {
     fi
 }
 
-compute_diff() {
+compute_diff {
     [[ "$DIFF_ENABLED" -eq 0 ]] && return
     local state_file="$DIFF_DIR/${DOMAIN:-bulk}.state"
     [[ ! -f "$state_file" ]] && return
@@ -560,14 +560,14 @@ compute_diff() {
 # PART 8: BANNER
 # ============================================================================
 
-banner() {
+banner {
     # Clear screen, show banner
     echo -e "${RED}"
     cat << "BANNER"
  __        __   _       _   _   ___   _
  \ \      / /__| |__   (_) (_) |_ _| (_)_ __   ___
   \ \ /\ / / _ \ '_ \  | | | |  | |  | | '_ \ / __|
-   \ V  V /  __/ |_) | | | | |  | |  | | |_) | (__
+   \ V V /  __/ |_) | | | | |  | |  | | |_) | (__
     \_/\_/ \___|_.__/  |_| |_| |___| |_| .__/ \___|
                                         |_|
 
@@ -599,7 +599,7 @@ END_OF_SETUP_MARKER=1
 # PART 9.5: EMBEDDED PAYLOAD & WORDLIST LIBRARIES
 # ============================================================================
 # Massive payload libraries for ALL vulnerability classes.
-# Sourced from: LostSec methodology, SecLists, PayloadsAllTheThings,
+# Sourced from: Community methodology, SecLists, PayloadsAllTheThings,
 # Bug Bounty Methodology repos, and custom generators.
 # ============================================================================
 

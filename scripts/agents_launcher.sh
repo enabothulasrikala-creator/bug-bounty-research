@@ -1,16 +1,16 @@
 #!/bin/bash
 # ==============================================================
-# LOSTSEC HUNTER AGENT SYSTEM - MASTER LAUNCHER
+# Community HUNTER AGENT SYSTEM - MASTER LAUNCHER
 # Launches all 3 agents as background processes.
 # Architecture:
-#   lostsec_hunter_agent.sh  →  Continuous recon + probing (LostSec methods)
+#   hunter_agent.sh  →  Continuous recon + probing (Community methods)
 #   verify_agent.sh          →  Verifies each finding (re-checks, confirms)
 #   report_agent.sh          →  Generates BugBase-format reports
 # ==============================================================
 
 BASE="/home/sricharansiddu29"
 AGENTS=(
-    "$BASE/lostsec_hunter_agent.sh"
+    "$BASE/hunter_agent.sh"
     "$BASE/verify_agent.sh"
     "$BASE/report_agent.sh"
 )
@@ -20,7 +20,7 @@ mkdir -p "$BASE/recon_reports/verified_findings"
 mkdir -p "$BASE/recon_reports/bugbase_reports"
 
 echo "============================================"
-echo "  LOSTSEC HUNTER AGENT SYSTEM v3"
+echo "  Community HUNTER AGENT SYSTEM v3"
 echo "  Launching 3 agents..."
 echo "============================================"
 
@@ -40,7 +40,7 @@ done
 echo ""
 echo "============================================"
 echo "  Pipeline:"
-echo "    Hunter (LostSec methods)"
+echo "    Hunter (Community methods)"
 echo "      ↓ (raw findings → /tmp/agent_inbox)"
 echo "    Verification Agent (re-checks + confirms)"
 echo "      ↓ (verified → recon_reports/verified_findings/)"
@@ -49,7 +49,7 @@ echo "      ↓ (reports → recon_reports/bugbase_reports/)"
 echo "============================================"
 echo ""
 echo "PIDs: $PIDS"
-echo "Monitor: tail -f /tmp/lostsec_hunter.log /tmp/verify_agent.log /tmp/report_agent.log"
+echo "Monitor: tail -f /tmp/hunter_agent.log /tmp/verify_agent.log /tmp/report_agent.log"
 echo ""
 echo "Press Ctrl+C to stop all agents."
 

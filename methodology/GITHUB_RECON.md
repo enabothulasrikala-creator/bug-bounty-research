@@ -1,5 +1,5 @@
-# LostSec: GitHub Recon — Discovering High-Impact Leaks in Bug Bounty
-- Source: LostSec (May 29, 2025) — infosecwriteups.com
+# Community: GitHub Recon — Discovering High-Impact Leaks in Bug Bounty
+- Source: Community (May 29, 2025) — infosecwriteups.com
 - Automated GitHub dorking + .git directory exploitation
 
 ## Why GitHub Recon?

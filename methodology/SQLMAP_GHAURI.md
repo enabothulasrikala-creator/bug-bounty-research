@@ -1,5 +1,5 @@
-# LostSec: Mastering SQLMap and Ghauri — WAF Bypass Techniques
-- Source: LostSec (Jan 15, 2026) — infosecwriteups.com
+# Community: Mastering SQLMap and Ghauri — WAF Bypass Techniques
+- Source: Community (Jan 15, 2026) — infosecwriteups.com
 - Complete WAF bypass for SQL injection using both tools together
 
 ## SQL Injection Still Matters in 2026

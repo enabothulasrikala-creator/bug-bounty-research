@@ -1,6 +1,6 @@
-# LostSec's Practical Workflow for Fuzzing and Scanning (Mar 2026)
+# Community's Practical Workflow for Fuzzing and Scanning (Mar 2026)
 
-> Source: LostSec (coffinxp) Medium article — 7 min read, Mar 26, 2026
+> Source: Community methodology Medium article — 7 min read, Mar 26, 2026
 
 ## The Core Pipeline
 
@@ -59,7 +59,7 @@ naabu -l ip.txt -top-ports 100 -rate 1500 -verify -silent -o naabu.txt
 
 ### Run Nmap with vuln scripts
 ```bash
-# Using LostSec's custom script
+# Using Community's custom script
 python3 ~/scripts/naabutonmap.py -i naabu.txt
 
 # What it runs:
@@ -99,7 +99,7 @@ cat naabu.txt | nuclei -tags cve -bs 200
 
 ```bash
 # Directory brute force + backup files + sensitive paths
-# Using LostSec's payloads repo
+# Using Community's payloads repo
 ffuf -w ip.txt:SUB -w payloads/backup_files_only.txt:FILE \
      -u https://SUB/FILE -mc 200 -rate 50 -fs 0 -c
 
@@ -107,9 +107,9 @@ ffuf -w naabu.txt:SUB -w payloads/backup_files_only.txt:FILE \
      -u https://SUB/FILE -mc 200 -rate 50 -fs 0 -c
 ```
 
-**Payload sources**: github.com/coffinxp/payloads — backup_files_only.txt
+**Payload sources**: github.com/payloads — backup_files_only.txt
 
-## Pro-Tips (LostSec's Secrets)
+## Pro-Tips (Community's Secrets)
 
 ### 1. Response Analysis Beyond Status Codes
 ```bash
@@ -149,7 +149,7 @@ ffuf -w naabu.txt:URL -w wordlist.txt:FILE -u https://URL/FILE
 # Verify with: httpx -title - if title matches, it's origin
 ```
 
-## Full One-Liner Pipeline (LostSec's Complete Workflow)
+## Full One-Liner Pipeline (Community's Complete Workflow)
 
 ```bash
 # Complete recon pipeline in one shot:
@@ -163,7 +163,7 @@ cat naabu.txt | nuclei -tags cve -bs 200 && \
 ffuf -w naabu.txt:URL -w ~/payloads/backup_files_only.txt:FILE -u https://URL/FILE -mc 200 -rate 50 -fs 0
 ```
 
-## Rate Limit Bypass Techniques (LostSec - May 2025)
+## Rate Limit Bypass Techniques (Community - May 2025)
 
 ### Common Rate Limit Mechanisms
 1. **IP-Based**: Requests per IP within time frame
@@ -184,7 +184,7 @@ ffuf -w naabu.txt:URL -w ~/payloads/backup_files_only.txt:FILE -u https://URL/FI
 | **Race Condition** | Send all requests before rate limit kicks in |
 
 ## References
-- Original article: LostSec Medium, "A Practical Workflow for Fuzzing and Scanning in Bug Bounty" (Mar 26, 2026)
-- LostSec tool: naabutonmap.py at github.com/coffinxp/scripts
-- LostSec payloads: github.com/coffinxp/payloads
+- Original article: Community Medium, "A Practical Workflow for Fuzzing and Scanning in Bug Bounty" (Mar 26, 2026)
+- Community tool: naabutonmap.py at github.com/scripts
+- Community payloads: github.com/payloads
 - nmap-parse-output: github.com/ernw/nmap-parse-output

@@ -170,9 +170,9 @@ Always include the CWE identifier in the description.
 - `~/.config/opencode/common/SCOPE_POLICY.md` — Program rules
 - `~/.config/opencode/common/TRAINING_GUIDE.md` — Full training (reporting section)
 - `~/.config/opencode/common/CHAINING_VULNS.md` — Chain reporting tips
-- `~/.config/opencode/common/LOSTSEC_GOOGLE_API_KEYS.md` — Google API key impact reporting
-- `~/.config/opencode/common/LOSTSEC_REACT2SHELL.md` — React2Shell RCE report template
-- `~/.config/opencode/common/LOSTSEC_ACTUATOR.md` — Actuator exposure impact reporting
+- `~/.config/opencode/common/GOOGLE_API_KEYS.md` — Google API key impact reporting
+- `~/.config/opencode/common/REACT2SHELL.md` — React2Shell RCE report template
+- `~/.config/opencode/common/ACTUATOR.md` — Actuator exposure impact reporting
 - `~/.config/opencode/agent_memory/reporter.md` — Personal memory
 - `~/recon_reports/verified_findings/` — Input (verified findings)
 - `~/recon_reports/bugbase_reports/` — Output directory

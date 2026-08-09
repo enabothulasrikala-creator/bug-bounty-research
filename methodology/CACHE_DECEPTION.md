@@ -1,5 +1,5 @@
-# LostSec: Mastering Web Cache Deception — From Exploit to Account Takeover
-- Source: LostSec (Aug 11, 2025) — infosecwriteups.com
+# Community: Mastering Web Cache Deception — From Exploit to Account Takeover
+- Source: Community (Aug 11, 2025) — infosecwriteups.com
 - High-paying vulnerability: trick caches into storing sensitive content
 
 ## What is Web Cache Deception (WCD)?

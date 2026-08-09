@@ -1,5 +1,5 @@
-# LostSec: Mastering Origin IP Discovery Behind WAF — 11+ Methods
-- Source: LostSec (Dec 30, 2024) — infosecwriteups.com
+# Community: Mastering Origin IP Discovery Behind WAF — 11+ Methods
+- Source: Community (Dec 30, 2024) — infosecwriteups.com
 - Complete methodology to find origin IPs behind Cloudflare, Akamai, AWS WAF, etc.
 
 ## Why Origin IP Discovery?

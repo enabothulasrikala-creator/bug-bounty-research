@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-LOSTSEC SAST FUZZER v1.0
+Community SAST FUZZER v1.0
 Targets: naabu, nuclei, ffuf, httpx-toolkit, gau, waybackurls, subfinder
 Generates malformed flags, long buffers, null bytes, and shell injection
 payloads, feeding them sequentially into the target binary.
@@ -49,7 +49,7 @@ def long_buffer(min_len=4096, max_len=MAX_ARG_LEN):
     length = random.randint(min_len, max_len)
     return 'A' * length
 
-def null_byte_payload():
+def null_byte_payload:
     patterns = [
         "test\x00.com",
         "\x00-admin",
@@ -59,7 +59,7 @@ def null_byte_payload():
     ]
     return random.choice(patterns)
 
-def shell_injection_payload():
+def shell_injection_payload:
     patterns = [
         ";id;",
         "`id`",
@@ -81,7 +81,7 @@ def shell_injection_payload():
     ]
     return random.choice(patterns)
 
-def url_injection_payload():
+def url_injection_payload:
     patterns = [
         "http://127.0.0.1:8080/admin",
         "http://[::1]:22",
@@ -96,7 +96,7 @@ def url_injection_payload():
     ]
     return random.choice(patterns)
 
-def path_traversal_payload():
+def path_traversal_payload:
     patterns = [
         "../../etc/passwd",
         "..%2f..%2f..%2fetc/passwd",
@@ -111,7 +111,7 @@ def path_traversal_payload():
     ]
     return random.choice(patterns)
 
-def waf_bypass_payload():
+def waf_bypass_payload:
     patterns = [
         "' OR '1'='1",
         "1 UNION SELECT 1,2,3--",
@@ -126,7 +126,7 @@ def waf_bypass_payload():
     ]
     return random.choice(patterns)
 
-def special_chars_payload():
+def special_chars_payload:
     patterns = [
         "\n\r\t\b\a",
         chr(0x1b) * 50,  # ESC sequence
@@ -229,7 +229,7 @@ PAYLOAD_TYPES = [
     ("special_chars", special_chars_payload),
 ]
 
-def ensure_dummy_list():
+def ensure_dummy_list:
     with open(DUMMY_LIST, "w") as f:
         f.write(DUMMY_DOMAIN + "\n")
         f.write(DUMMY_IP + "\n")
@@ -237,7 +237,7 @@ def ensure_dummy_list():
     return DUMMY_LIST
 
 def log_crash(binary, cmd, returncode, stderr, exc_info=None):
-    ts = datetime.now().isoformat()
+    ts = datetime.now.isoformat
     with open(CRASH_LOG, "a") as f:
         f.write("[%s] CRASH in %s\n" % (ts, binary))
         f.write("  Return code: %s\n" % returncode)
@@ -251,7 +251,7 @@ def log_crash(binary, cmd, returncode, stderr, exc_info=None):
 def fuzz_binary(binary, rounds=FUZZ_ROUNDS):
     if binary not in GENERATORS:
         print("  Unknown binary: %s" % binary)
-        print("  Available: %s" % ", ".join(sorted(GENERATORS.keys())))
+        print("  Available: %s" % ", ".join(sorted(GENERATORS.keys)))
         return
 
     binary_path = shutil.which(binary)
@@ -259,7 +259,7 @@ def fuzz_binary(binary, rounds=FUZZ_ROUNDS):
         print("  Binary '%s' not found in PATH - skipping" % binary)
         return
 
-    ensure_dummy_list()
+    ensure_dummy_list
 
     print("\n" + "=" * 60)
     print("  FUZZING: %s (%s) - %d rounds" % (binary, binary_path, rounds))
@@ -271,7 +271,7 @@ def fuzz_binary(binary, rounds=FUZZ_ROUNDS):
 
     for i in range(1, rounds + 1):
         ptype, pgen = random.choice(PAYLOAD_TYPES)
-        payload = pgen()
+        payload = pgen
         cmd = GENERATORS[binary](ptype, payload)
         desc = "[%s] %s" % (ptype, repr(payload)[:60])
 
@@ -287,7 +287,7 @@ def fuzz_binary(binary, rounds=FUZZ_ROUNDS):
             rc = result.returncode
             if rc < 0:
                 sig = -rc
-                sig_name = signal.Signals(sig).name if sig in signal.Signals.__members__.values() else "SIG???"
+                sig_name = signal.Signals(sig).name if sig in signal.Signals.__members__.values else "SIG???"
                 crashes += 1
                 if sig == signal.SIGSEGV:
                     segfaults += 1
@@ -306,17 +306,17 @@ def fuzz_binary(binary, rounds=FUZZ_ROUNDS):
             for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
                 try:
                     if proc.info['cmdline'] and binary in ' '.join(proc.info['cmdline']):
-                        proc.kill()
+                        proc.kill
                 except (psutil.NoSuchProcess, psutil.AccessDenied):
                     pass
         except Exception as e:
             print("  ERROR: %s" % str(e)[:50])
 
-    print("\n  Results for %s: %d rounds, %d crashes (%d segfaults, %d aborts)" %
+    print("\n Results for %s: %d rounds, %d crashes (%d segfaults, %d aborts)" %
           (binary, rounds, crashes, segfaults, aborts))
     print("  Full crash log: %s" % CRASH_LOG)
 
-def monitor_crashes():
+def monitor_crashes:
     print("\nMonitoring crash log: %s" % CRASH_LOG)
     print("Press Ctrl+C to stop.\n")
     try:
@@ -328,45 +328,45 @@ def monitor_crashes():
                 if current > last_size:
                     with open(CRASH_LOG, "r") as f:
                         f.seek(last_size)
-                        new_content = f.read()
-                    if new_content.strip():
+                        new_content = f.read
+                    if new_content.strip:
                         print(new_content)
                     last_size = current
     except KeyboardInterrupt:
         print("\nMonitor stopped.")
 
-def main():
+def main:
     import argparse
-    parser = argparse.ArgumentParser(description="LOSTSEC SAST Fuzzer for CLI tools")
+    parser = argparse.ArgumentParser(description="Community SAST Fuzzer for CLI tools")
     parser.add_argument("binary", nargs="?", help="Binary to fuzz")
     parser.add_argument("--all", action="store_true", help="Fuzz all known binaries")
     parser.add_argument("--rounds", type=int, default=FUZZ_ROUNDS, help="Number of fuzz rounds per binary")
     parser.add_argument("--monitor", action="store_true", help="Continuously monitor crash log")
     parser.add_argument("--list", action="store_true", help="List available targets")
-    args = parser.parse_args()
+    args = parser.parse_args
 
     if args.list:
         print("Available fuzz targets:")
-        for b in sorted(GENERATORS.keys()):
+        for b in sorted(GENERATORS.keys):
             path = shutil.which(b)
             print("  %-15s %s" % (b, path if path else "(NOT FOUND)"))
         return
 
     if args.monitor:
-        monitor_crashes()
+        monitor_crashes
         return
 
     if args.all:
-        for binary in sorted(GENERATORS.keys()):
+        for binary in sorted(GENERATORS.keys):
             fuzz_binary(binary, args.rounds)
         return
 
     if not args.binary:
-        parser.print_help()
-        print("\nAvailable: %s" % ", ".join(sorted(GENERATORS.keys())))
+        parser.print_help
+        print("\nAvailable: %s" % ", ".join(sorted(GENERATORS.keys)))
         return
 
     fuzz_binary(args.binary, args.rounds)
 
 if __name__ == "__main__":
-    main()
+    main

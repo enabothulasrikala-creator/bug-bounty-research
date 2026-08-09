@@ -1,5 +1,5 @@
 {
-  "task": "Full LostSec recon pipeline successful",
+  "task": "Full Community recon pipeline successful",
   "steps": [
     {
       "action": "subfinder dnsx httpx pipeline",

@@ -1,7 +1,7 @@
-# Lostsec — Complete Methodology & Tool Reference
+# Community — Complete Methodology & Tool Reference
 
-> YouTube: @lostsec_ftw | Medium: @lostsec | GitHub: coffinxp  
-> 46 videos, 10K followers, 15 open-source tools (10K+ total stars)  
+> YouTube:  | Medium: @Community | GitHub: Community
+> 46 videos, 10K followers, 15 open-source tools (10K+ total stars)
 > Focus: Bug bounty recon automation, fuzzing, IIS, Spring Boot, SQLi
 
 ---
@@ -19,7 +19,7 @@ Shodan → Nuclei (mass CVE scan) → Wayback URLs → GF Patterns → Custom sc
 2. **Wayback URLs**: `gau target.com | uro | httpx-toolkit`
 3. **GF patterns**: `gf xss | gf sqli | gf ssrf | gf redirect`
 4. **Nuclei**: `nuclei -dast -l live_urls.txt`
-5. **Custom tools**: LostFuzzer, loxs for multi-vuln scanning
+5. **Custom tools**: PassiveFuzzer, loxs for multi-vuln scanning
 6. **AlienVault + URLScan + VirusTotal** for passive URL collection
 
 ---
@@ -152,7 +152,7 @@ sqlmap -u "https://target.com/page?id=1" --suffix="NULL" --prefix="')"
 ## 6. REACT2SHELL (CVE-2025-55182) — RCE in Next.js
 
 ### What it is
-Insecure deserialization in React Server Components (RSC) "Flight" protocol.  
+Insecure deserialization in React Server Components (RSC) "Flight" protocol.
 CVSS 10.0 — affects Next.js apps using App Router.
 
 ### Detection
@@ -167,7 +167,7 @@ curl -s https://target.com/ | grep -i "rsc\|flight\|__rsc"
 ### Exploitation
 - The server deserializes untrusted data in the Flight protocol
 - Send crafted JSON payload → server-side code execution
-- Works because `JSON.parse()` on server-side doesn't sanitize
+- Works because `JSON.parse` on server-side doesn't sanitize
 
 ---
 
@@ -176,7 +176,7 @@ curl -s https://target.com/ | grep -i "rsc\|flight\|__rsc"
 ### Tool: crtmon (his tool, 180⭐)
 ```bash
 # Install
-git clone https://github.com/coffinxp/crtmon
+git clone https://github.com/crtmon
 cd crtmon && pip install -r requirements.txt
 
 # Monitor a target
@@ -199,7 +199,7 @@ We already have several installed locally:
 
 | Tool | Location | What it does |
 |------|----------|-------------|
-| **lostfuzzer.sh** | `/home/.../scripts/lostfuzzer.sh` | gau → uro → httpx → nuclei pipeline |
+| **passive_fuzzer.sh** | `/home/.../scripts/passive_fuzzer.sh` | gau → uro → httpx → nuclei pipeline |
 | **alienvault.sh** | `/home/.../scripts/alienvault.sh` | Fetch URLs from AlienVault OTX |
 | **naabutonmap.py** | `/home/.../scripts/naabutonmap.py` | Naabu results → Nmap vuln scanning |
 | **dorking.py** | `/home/.../scripts/dorking.py` | Google dorking automation |
@@ -558,8 +558,8 @@ curl -s https://target.com/ | grep "rsc\|flight\|__rsc"
 
 | Type | Link |
 |------|------|
-| YouTube | https://youtube.com/@lostsec_ftw |
-| Medium | https://lostsec.medium.com |
-| GitHub | https://github.com/coffinxp |
+| YouTube | https://youtube.com/ |
+| Medium | https://Community.medium.com |
+| GitHub | https://github.com/Community |
 | Discord | https://discord.gg/xTVU4jkScV |
-| Twitter/X | https://x.com/lostsec_ |
+| Twitter/X | (reference removed) |

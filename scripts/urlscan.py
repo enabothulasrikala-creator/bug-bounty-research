@@ -15,22 +15,22 @@ parser = argparse.ArgumentParser(description="Automating usage of urlscanner.io"
 parser.add_argument('-m', '--mode', required=True, choices=['subdomains', 'urls'], help="Mode to scan: subdomains or urls.")
 parser.add_argument('-d', '--domain', help="Single domain to scan.")
 parser.add_argument('-df', '--domain-file', help="File containing multiple domains to scan.")
-args = parser.parse_args()
+args = parser.parse_args
 
-def print_banner():
+def print_banner:
     print(r'''
-              __                        _     
-  __  _______/ /_____________ _____    (_)___ 
+              __                        _
+  __  _______/ /_____________ _____    (_)___
  / / / / ___/ / ___/ ___/ __ `/ __ \  / / __ \
 / /_/ / /  / (__  ) /__/ /_/ / / / / / / /_/ /
-\__,_/_/  /_/____/\___/\__,_/_/ /_(_)_/\____/ 
-                                              
- 
-                  Created by: coffinxp
+\__,_/_/  /_/____/\___/\__,_/_/ /_(_)_/\____/
+
+
+                  Created by: Community
     ''')
 
 def sanitize_domain(domain):
-    domain = domain.strip().lower()
+    domain = domain.strip.lower
     domain = re.sub(r'^https?://', '', domain)  # remove http/https
     return domain if domain and not domain.startswith('#') else None
 
@@ -72,7 +72,7 @@ def scan_domain(domain, mode, api_key):
         print(item)  # Show on screen
 
 # ---------------- MAIN ----------------
-print_banner()
+print_banner
 
 domains_to_scan = []
 

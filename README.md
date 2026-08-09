@@ -1,6 +1,6 @@
-# 🛡️ Bug Bounty Research Workspace — LostSec Methodology
+# 🛡️ Bug Bounty Research Workspace — Methodology
 
-> **A full offensive-security research workspace** built on the **LostSec (coffinxp)** bug-bounty methodology.
+> **A full offensive-security research workspace** built on a **community-driven bug-bounty methodology**.
 > Everything here is **public, sanitized, and credential-free**. Live findings, credentials, and private
 > reports live in a **separate private repository** (see [`PRIVATE.md`](PRIVATE.md)).
 
@@ -12,7 +12,7 @@ This is a complete, portable **bug-bounty hunting research environment** — met
 scripts, agent definitions, and a 100+ file security skills library. It was built and used to run
 authorized bug-bounty programs (HackerOne/BugBase-style) against Indian fintech and consumer brands.
 
-It implements the exact workflow popularized by **LostSec / coffinxp** (Mar 2026):
+It implements the exact workflow popularized in early 2026:
 
 ```
 CHAOS → HTTPX → NAABU → NMAP + PARSERS → NUCLEI → FFUF
@@ -25,7 +25,11 @@ Plus deep WAF-bypass, secret-hunting, and vulnerability-chaining playbooks.
 ## 🗂️ Repository Layout — **Every File** (full structure)
 
 ```
+(1).md
+.gitignore
 AGENTS.md
+PRIVATE.md
+README.md
 agents/
 │   ├── auditor.md
 │   ├── debug.md
@@ -36,50 +40,48 @@ agents/
 │   └── verifier.md
 docs/
 │   ├── ALL_AGENTS_COMBINED.md
-│   ├── ALL_AGENTS_COMBINED.pdf
 │   ├── BUGBASE_THREADS.md
 │   ├── CONSOLIDATED_FINDINGS.md
-│   ├── FULL_VULNERABILITY_PORTFOLIO (1).md
+│   ├── FULL_VULNERABILITY_PORTFOLIO
 │   ├── FULL_VULNERABILITY_PORTFOLIO.md
 │   ├── FULL_VULNERABILITY_PORTFOLIO_updated.md
-│   ├── LOSTSEC_METHODS.md
 │   ├── MASTER_TIMELINE_LOG.md
 │   ├── MASTER_VULNERABILITY_PORTFOLIO.md
 │   ├── METHODOLOGIES.md
+│   ├── METHODS.md
 │   ├── README.md
 │   ├── SCOPE_REFERENCE.md
 │   ├── SWEEP_REPORT_20260720.md
 │   ├── TOR.md
-│   ├── Vulnerability_Portfolio.pdf
 │   └── opencode-landing/
 │       ├── PROGRESS.md
 │       └── index.html
 methodology/
+│   ├── ACTUATOR.md
+│   ├── AUTH_SESSION.md
+│   ├── BLIND_XSS.md
+│   ├── CACHE_DECEPTION.md
 │   ├── CHAINING_VULNS.md
+│   ├── CRLF_INJECTION.md
+│   ├── CT_MONITORING.md
 │   ├── CWE_DATABASE.md
-│   ├── LOSTSEC_ACTUATOR.md
-│   ├── LOSTSEC_AUTH_SESSION.md
-│   ├── LOSTSEC_BLIND_XSS.md
-│   ├── LOSTSEC_CACHE_DECEPTION.md
-│   ├── LOSTSEC_CRLF_INJECTION.md
-│   ├── LOSTSEC_CT_MONITORING.md
-│   ├── LOSTSEC_GITHUB_RECON.md
-│   ├── LOSTSEC_GOOGLE_API_KEYS.md
-│   ├── LOSTSEC_IIS_HACKING.md
-│   ├── LOSTSEC_MASS_ASSIGNMENT.md
-│   ├── LOSTSEC_ORIGIN_IP.md
-│   ├── LOSTSEC_PUNYCODE_ATO.md
-│   ├── LOSTSEC_REACT2SHELL.md
-│   ├── LOSTSEC_REGISTRATION_BUGS.md
-│   ├── LOSTSEC_S3_BUCKETS.md
-│   ├── LOSTSEC_SQLMAP_GHAURI.md
-│   ├── LOSTSEC_SWAGGER_UI.md
-│   ├── LOSTSEC_WORKFLOW.md
+│   ├── GITHUB_RECON.md
+│   ├── GOOGLE_API_KEYS.md
+│   ├── IIS_HACKING.md
+│   ├── MASS_ASSIGNMENT.md
+│   ├── ORIGIN_IP.md
+│   ├── PUNYCODE_ATO.md
+│   ├── REACT2SHELL.md
+│   ├── REGISTRATION_BUGS.md
+│   ├── S3_BUCKETS.md
 │   ├── SCOPE_POLICY.md
+│   ├── SQLMAP_GHAURI.md
 │   ├── SSRF_ADVANCED.md
+│   ├── SWAGGER_UI.md
 │   ├── TOOLS_REFERENCE.md
 │   ├── TRAINING_GUIDE.md
-│   └── WAF_BYPASS_ADVANCED.md
+│   ├── WAF_BYPASS_ADVANCED.md
+│   └── WORKFLOW.md
 scripts/
 │   ├── 1.js
 │   ├── 1.py
@@ -101,13 +103,12 @@ scripts/
 │   ├── forever_agent.sh
 │   ├── generate_key.py
 │   ├── hunter.sh
+│   ├── hunter_agent.sh
 │   ├── index.html
 │   ├── install
 │   ├── install.sh
 │   ├── lastmile_login.js
 │   ├── lastmile_test2.js
-│   ├── lostfuzzer.sh
-│   ├── lostsec_hunter_agent.sh
 │   ├── ls.txt
 │   ├── naabutonmap.py
 │   ├── new.sh
@@ -115,6 +116,7 @@ scripts/
 │   ├── news.sh
 │   ├── nmap_scan.log
 │   ├── orch.py
+│   ├── passive_fuzzer.sh
 │   ├── punycode_gen.py
 │   ├── python.py
 │   ├── raparapa.html
@@ -225,7 +227,7 @@ skills/
     │   │   ├── traj_27a85f0b_SSRF_cloud_metadata_test_failed.json
     │   │   ├── traj_32f7d5bc_HDFC_CBX_Web_portal_recon.json
     │   │   ├── traj_4108276b_HDFC_Lastmile_Web_login_page_analysis.json
-    │   │   ├── traj_43fe6c31_Full_LostSec_recon_pipeline_successful.json
+    │   │   ├── traj_43fe6c31_Full_recon_pipeline_successful.json
     │   │   ├── traj_6c66b25d_Grafana_dashboard_grafana-gcp_boat.json
     │   │   ├── traj_82d72e28_HDFC_OTP_bypass_test_on_Netbanking.json
     │   │   ├── traj_9dd46c0b_S3_PII_Leak_boat_PDFs_exposed.json
@@ -476,7 +478,7 @@ skills/
 
 ---
 
-## ⚙️ The Core Pipeline (LostSec one-liner)
+## ⚙️ The Core Pipeline (one-liner)
 
 ```bash
 chaos -d target.com -o subs.txt && \
@@ -504,7 +506,7 @@ The workspace is designed as a **multi-agent pipeline** (opencode agents):
 
 | Agent | Role |
 |-------|------|
-| **hunter** | Runs the LostSec pipeline, continuous probing, WAF bypass, saves findings |
+| **hunter** | Runs the core recon pipeline, continuous probing, WAF bypass, saves findings |
 | **verifier** | Re-checks every finding (3-request rule, baseline diff, CVSS 3.1, false-positive signatures) |
 | **reporter** | Produces BugBase-format reports (≤120-char title, single URL, live curl PoCs) |
 | **plan** | OSINT + attack-surface research → step-by-step plan |
@@ -536,12 +538,12 @@ git clone https://github.com/enabothulasrikala-creator/bug-bounty-research.git
 cd bug-bounty-research
 
 # 2. Read the methodology
-cat methodology/LOSTSEC_WORKFLOW.md
+cat methodology/WORKFLOW.md
 cat methodology/TRAINING_GUIDE.md
 
 # 3. Use the scripts (example: passive URL collection)
 cat subs.txt | waybackurls | uro > urls.txt
-bash scripts/lostfuzzer.sh
+bash scripts/passive_fuzzer.sh
 ```
 
 > ⚠️ **Ethics**: This methodology is for **authorized** testing only. Every real program tested here was
@@ -563,7 +565,7 @@ bash scripts/lostfuzzer.sh
 
 ## 📚 References
 
-- LostSec / coffinxp methodology (Mar 2026): `CHAOS → HTTPX → NAABU → NMAP → NUCLEI → FFUF`
+- Community-driven methodology (Mar 2026): `CHAOS → HTTPX → NAABU → NMAP → NUCLEI → FFUF`
 - ProjectDiscovery toolchain: chaos, httpx, naabu, nuclei, katana
 - PortSwigger Academy + CWE/CVSS 3.1 for severity classification
 

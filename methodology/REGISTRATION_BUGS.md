@@ -1,5 +1,5 @@
-# LostSec: Hunting Bugs in User Registration Features
-- Source: LostSec (Nov 23, 2025) — infosecwriteups.com
+# Community: Hunting Bugs in User Registration Features
+- Source: Community (Nov 23, 2025) — infosecwriteups.com
 - Complete checklist of 22 registration vulnerabilities
 
 ## Full Vulnerability Checklist
@@ -68,7 +68,7 @@ Test: After signup/logout, press browser back button. Are sensitive pages cached
 Test: After registration, modify user_id parameter in API calls. Can you access other users' data?
 
 ### 22. Mass-Assignment in JSON-Based Registration Flows
-Test: See LOSTSEC_MASS_ASSIGNMENT.md for full JSON payload variants.
+Test: See MASS_ASSIGNMENT.md for full JSON payload variants.
 
 ## Testing Methodology
 1. Map all registration endpoints (signup, verify email, complete profile)

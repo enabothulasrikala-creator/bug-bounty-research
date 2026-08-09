@@ -1,5 +1,5 @@
-# LostSec: Monitor Bug Bounty Targets in Real Time Using Certificate Transparency Logs
-- Source: LostSec (Dec 29, 2025) — infosecwriteups.com
+# Community: Monitor Bug Bounty Targets in Real Time Using Certificate Transparency Logs
+- Source: Community (Dec 29, 2025) — infosecwriteups.com
 - Real-time CT log monitoring for fresh asset discovery
 
 ## Why Monitor Certificate Transparency?

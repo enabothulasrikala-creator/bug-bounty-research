@@ -141,18 +141,18 @@ done
 
 ### Testing Priority Order
 ```
-1. RCE / Code Execution      (highest impact)
-2. SQL Injection             (data extraction)
-3. Authentication Bypass     (account takeover)
-4. SSRF                      (internal access)
-5. IDOR / Broken Access      (data exposure)
-6. SSTI                      (server compromise)
-7. XSS                       (client compromise)
-8. LFI / Path Traversal      (file read)
-9. CORS Misconfiguration     (cross-origin data)
-10. Open Redirect            (phishing)
-11. CSRF                     (state-changing actions)
-12. Information Disclosure   (intel gathering)
+1. RCE / Code Execution (highest impact)
+2. SQL Injection (data extraction)
+3. Authentication Bypass (account takeover)
+4. SSRF (internal access)
+5. IDOR / Broken Access (data exposure)
+6. SSTI (server compromise)
+7. XSS (client compromise)
+8. LFI / Path Traversal (file read)
+9. CORS Misconfiguration (cross-origin data)
+10. Open Redirect (phishing)
+11. CSRF (state-changing actions)
+12. Information Disclosure (intel gathering)
 ```
 
 ### Quick Win Checklist (30 min per target)
@@ -339,7 +339,7 @@ dict://127.0.0.1:6379/info
 |------|-------|-------|
 | jhaddix/tbhm | 4357⭐ | Full bug hunter methodology |
 | su6osec/HuntBook | New | 2026 comprehensive methodology |
-| coffinxp/loxs | 1600⭐ | LostSec multi-vuln scanner |
+| loxs | 1600⭐ | Community multi-vuln scanner |
 | byoniq/BugBountyMethod | Active | Tool-linked checklists |
 | The-XSS-Rat/SecurityTesting | Active | 2026 practical guide |
 | Ian-Kimori/Ethical-Hacking | Active | 14-phase full pentest |
@@ -356,7 +356,7 @@ dict://127.0.0.1:6379/info
 ### YouTube Channels
 | Channel | Focus |
 |---------|-------|
-| LostSec (@lostsec_ftw) | Bug bounty recon + automation |
+| Community  | Bug bounty recon + automation |
 | NahamSec (Ben Sadeghipour) | Bug bounty mindset + methodology |
 | STÖK | Bug bounty workflows |
 | InsiderPhD | Web security + methodology |

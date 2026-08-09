@@ -696,7 +696,7 @@ img{max-width:100%}
 <div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">SMARTHUB User Enumeration</span><span class="finding-cvss">7.5</span><span class="finding-status live">LIVE</span><p class="finding-desc">ForgotPassword AJAX endpoint: /merchantLogin.do?command=checkUserExist. Response: vAuthFlag|attemptCount (Invalid|2 = valid, Invalid|0 = invalid). 10-min lockout. Hidden forgotPasswordStatus field.</p></div></div>
 <div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">ENET Forgot Pwd — 4 Struts DMI Endpoints</span><span class="finding-cvss">7.5</span><span class="finding-status confirmed">CONFIRMED</span><p class="finding-desc">4 public Struts DMI endpoints: showPwdReqOptions, checkPrevReq (returns 0), getcbxdomstatus ({"domainStatus":""}), showPwdReqOptions. HDFCBANK domain blocked.</p></div></div>
 <div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">BizExpress Open Money API Disclosure</span><span class="finding-cvss">7.5</span><span class="finding-status live">LIVE</span><p class="finding-desc">Backend APIs: icp-api.bankopen.co, payments.open.money, uat-lending.bankopen.co. Angular 17+ SPA with exposed API routes.</p></div></div>
-<div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">CBX OTL Anti-Tamper Bypass</span><span class="finding-cvss">7.5</span><span class="finding-status confirmed">CONFIRMED</span><p class="finding-desc">fetch() API bypasses OTL anti-tamper entirely (XHR only). Whitelisted endpoints: forgotpassword, postlogingeneratesalt, transactionCode. OTL JS v1.21.4.26.</p></div></div>
+<div class="finding-item high"><div class="finding-badge">HIGH</div><div class="finding-info"><span class="finding-title">CBX OTL Anti-Tamper Bypass</span><span class="finding-cvss">7.5</span><span class="finding-status confirmed">CONFIRMED</span><p class="finding-desc">fetch API bypasses OTL anti-tamper entirely (XHR only). Whitelisted endpoints: forgotpassword, postlogingeneratesalt, transactionCode. OTL JS v1.21.4.26.</p></div></div>
 <div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">168 Netbanking API Endpoints</span><span class="finding-cvss">5.3</span><span class="finding-status live">LIVE</span><p class="finding-desc">2.6MB main.js bundle extracted. 168 endpoints: cards (14), payments (10), accounts (7), deposits/loans (3), config (5), security (5), admin (5), statements (4), services (4).</p></div></div>
 <div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">Keycloak OIDC Config Exposed</span><span class="finding-cvss">5.3</span><span class="finding-status live">LIVE</span><p class="finding-desc">/.well-known/openid-configuration, JWKS URI, token introspection, revocation endpoints all exposed. All OIDC grant types listed.</p></div></div>
 <div class="finding-item med"><div class="finding-badge">MED</div><div class="finding-info"><span class="finding-title">Indialink Client-Side AES-GCM Encryption</span><span class="finding-cvss">5.3</span><span class="finding-status live">LIVE</span><p class="finding-desc">Client-side encryption with forge library. 8-byte random key+IV. Static additionalData LM. Format: key+iv+tag(b64)+encrypted(b64).</p></div></div>
@@ -921,7 +921,7 @@ img{max-width:100%}
 <span class="chain-node">CSP Localhost SSRF</span><span class="chain-arrow">→</span>
 <span class="chain-node result-node">INTERNAL PIVOT</span>
 </div>
-<p>17 banking assets: ENET path traversal on IHS 8.5.5 (EOL Sep 2020), CBX double-encoded traversal crashes WebLogic (000 timeout), SMARTHUB user enumeration via merchant forgot-password, CBX OTL anti-tamper bypass via fetch(), CSP localhost SSRF on ports 9999/19999/29999, Netbanking JWT algorithm confusion (HS256+RS256). <strong>Bounty: $2,000-$5,000</strong></p>
+<p>17 banking assets: ENET path traversal on IHS 8.5.5 (EOL Sep 2020), CBX double-encoded traversal crashes WebLogic (000 timeout), SMARTHUB user enumeration via merchant forgot-password, CBX OTL anti-tamper bypass via fetch, CSP localhost SSRF on ports 9999/19999/29999, Netbanking JWT algorithm confusion (HS256+RS256). <strong>Bounty: $2,000-$5,000</strong></p>
 </div>
 </div>
 </section>
@@ -971,7 +971,7 @@ img{max-width:100%}
 <div class="secret-card"><div class="secret-type">APACHE VERSION</div><div class="secret-val">Apache 2.4.52 (Ubuntu)</div><div class="secret-src">Boat — test.boat-lifestyle.com</div><div class="secret-impact">Confirmed Apache version — no TLS on port 443</div></div>
 <div class="secret-card"><div class="secret-type">IBM HTTP SERVER</div><div class="secret-val">IBM HTTP Server 8.5.5 (EOL Sep 2020 — Apache 2.4.x base)</div><div class="secret-src">HDFC ENET — Welcome page (3598 bytes)</div><div class="secret-impact">End of life server — no security patches</div></div>
 <div class="secret-card"><div class="secret-type">ORACLE WEBLOGIC</div><div class="secret-val">Oracle WebLogic detected via X-ORACLE-DMS-ECID header</div><div class="secret-src">HDFC Lastmile Web + CBX</div><div class="secret-impact">WebLogic server — CVE-2026-21962 tested</div></div>
-<div class="secret-card"><div class="secret-type">OTL VERSION</div><div class="secret-val">OTL anti-tamper JS v1.21.4.26</div><div class="secret-src">HDFC CBX — JS bundle</div><div class="secret-impact">OTL bypassed via fetch() API — XHR only restriction</div></div>
+<div class="secret-card"><div class="secret-type">OTL VERSION</div><div class="secret-val">OTL anti-tamper JS v1.21.4.26</div><div class="secret-src">HDFC CBX — JS bundle</div><div class="secret-impact">OTL bypassed via fetch API — XHR only restriction</div></div>
 <div class="secret-card"><div class="secret-type">NSC COOKIE</div><div class="secret-val">NSC_ESNS (15 second expiry)</div><div class="secret-src">HDFC CBX — Netscaler</div><div class="secret-impact">Netscaler load balancer cookie — session timing</div></div>
 <div class="secret-card"><div class="secret-type">KEYCLOAK REALM</div><div class="secret-val">retail (https://nb-nextgen-security.hdfcbank.com/auth/realms/retail/)</div><div class="secret-src">HDFC Netbanking Rewrite</div><div class="secret-impact">Keycloak realm with password grant support</div></div>
 <div class="secret-card"><div class="secret-type">API GATEWAY</div><div class="secret-val">api-nb-nextgen-security.hdfcbank.com (returns 000 — internal only)</div><div class="secret-src">HDFC — CSP connect-src</div><div class="secret-impact">Internal API gateway — not publicly accessible</div></div>
@@ -1046,10 +1046,10 @@ img{max-width:100%}
 <div class="appendix-content">
 <strong>Recon Tools:</strong> subfinder, assetfinder, amass, chaos (ProjectDiscovery), httpx, dnsx, naabu, nmap, gau, waybackurls, katana, gitleaks, shodan.<br>
 <strong>Vulnerability Scanners:</strong> nuclei (7000+ templates), ffuf, dalfox, sqlmap, ghauri, interactsh-client.<br>
-<strong>Custom Scripts (~/scripts/):</strong> lostfuzzer.sh (gau→uro→httpx→nuclei pipeline), alienvault.sh (OTX URLs), naabutonmap.py (Naabu→Nmap converter), dorking.py (Google dorking), wayback.sh, virustotal.sh (3-key rotation), urlscan.py.<br>
+<strong>Custom Scripts (~/scripts/):</strong> passive_fuzzer.sh (gau→uro→httpx→nuclei pipeline), alienvault.sh (OTX URLs), naabutonmap.py (Naabu→Nmap converter), dorking.py (Google dorking), wayback.sh, virustotal.sh (3-key rotation), urlscan.py.<br>
 <strong>JS Analysis:</strong> SecretFinder, jsluice, LinkFinder.<br>
 <strong>WAF Bypass:</strong> wafw00f, whatwaf, bypassburrito, wafrift, evilwaf, nowafplsV2 (Burp).<br>
-<strong>GitHub Repos:</strong> jhaddix/tbhm (4357⭐), coffinxp/loxs (1600⭐), coffinxp/GFpattren (189⭐), coffinxp/customBsqli (141⭐).
+<strong>GitHub Repos:</strong> jhaddix/tbhm (4357⭐), loxs (1600⭐), GFpattren (189⭐), customBsqli (141⭐).
 </div>
 
 <h3>Appendix C — WAF Bypass Techniques Used</h3>
@@ -1111,7 +1111,7 @@ img{max-width:100%}
 <strong>Quick Win Checklist:</strong> nuclei -t takeovers/, /actuator paths, /.env /.git/config /dump.sql, CORS curl -H "Origin: https://evil.com", directory listing, S3 buckets, JWT none-alg, GraphQL introspection {"query":"{__schema{types{name}}}"}, debug endpoints, backup files (.bak, .old, .backup).
 </div>
 
-<h3>Appendix H — LostSec Methodology & Tool Reference</h3>
+<h3>Appendix H — Community Methodology & Tool Reference</h3>
 <div class="appendix-content">
 <strong>Core Pipeline:</strong> CHAOS → HTTPX → NAABU → NMAP → NUCLEI → FFUF. <strong>CDN Filtering:</strong> httpx -title → grep -vi "cloudflare\|akamai\|fastly" → origin_ips.txt. <strong>Continuous Probing Cycle:</strong> API endpoints (HTTP status + response analysis), method bypass (PUT/PATCH/DELETE/OPTIONS/TRACE), SQLi with WAF bypass, LFI with encoding variants, CORS (origin reflection + credentialed + wildcard), SSTI ({{7*7}}, #{7*7}, ${7*7}), SSRF (callback + cloud metadata), config files (.env, .git, dump.sql, web.config, 50+ paths), auth bypass (empty/null, X-Forwarded-*, X-Internal-Request), actuator (15+ paths), IDOR (sequential IDs), GraphQL introspection, S3 buckets, JS secrets. <strong>Pro-Tips:</strong> CDN filtering mandatory, non-standard ports, 403 is gold (always try bypass techniques), response size/word count analysis, parse nmap output to HTML, IP dedup before scanning.
 </div>
@@ -1151,15 +1151,15 @@ img{max-width:100%}
 
 <script>
 // Boot Screen
-document.getElementById('boot-enter')?.addEventListener('click', () => {
+document.getElementById('boot-enter')?.addEventListener('click',  => {
   document.getElementById('boot-overlay').style.opacity = '0';
   document.getElementById('boot-overlay').style.visibility = 'hidden';
   document.body.style.overflow = '';
-  initAnimations();
+  initAnimations;
 });
 
 // Navbar scroll
-window.addEventListener('scroll', () => {
+window.addEventListener('scroll',  => {
   const nav = document.getElementById('navbar');
   nav.classList.toggle('scrolled', window.scrollY > 50);
 });
@@ -1167,23 +1167,23 @@ window.addEventListener('scroll', () => {
 // Theme toggle
 const themeToggle = document.getElementById('theme-toggle');
 const body = document.body;
-themeToggle?.addEventListener('click', () => {
+themeToggle?.addEventListener('click',  => {
   const isDark = body.getAttribute('data-theme') === 'dark';
   body.setAttribute('data-theme', isDark ? 'light' : 'dark');
   themeToggle.textContent = isDark ? '☀' : '☾';
 });
 
 // Navigation
-document.getElementById('btn-explore')?.addEventListener('click', () => {
+document.getElementById('btn-explore')?.addEventListener('click',  => {
   document.getElementById('overview')?.scrollIntoView({behavior:'smooth'});
 });
-document.getElementById('btn-chains')?.addEventListener('click', () => {
+document.getElementById('btn-chains')?.addEventListener('click',  => {
   document.getElementById('chains')?.scrollIntoView({behavior:'smooth'});
 });
 
 // Company tabs
 document.querySelectorAll('.company-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
+  tab.addEventListener('click',  => {
     document.querySelectorAll('.company-tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.company-panel').forEach(p => p.classList.remove('active'));
     tab.classList.add('active');
@@ -1194,7 +1194,7 @@ document.querySelectorAll('.company-tab').forEach(tab => {
 
 // Report filters
 document.querySelectorAll('.report-filter').forEach(btn => {
-  btn.addEventListener('click', () => {
+  btn.addEventListener('click',  => {
     document.querySelectorAll('.report-filter').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     const filter = btn.dataset.filter;
@@ -1206,14 +1206,14 @@ document.querySelectorAll('.report-filter').forEach(btn => {
 
 // Secret card copy
 document.querySelectorAll('.secret-card').forEach(card => {
-  const val = card.querySelector('.secret-val')?.textContent.trim();
+  const val = card.querySelector('.secret-val')?.textContent.trim;
   const btn = document.createElement('button');
   btn.className = 'copy-btn';
   btn.textContent = 'Copy';
   btn.addEventListener('click', async (e) => {
-    e.stopPropagation();
+    e.stopPropagation;
     if (val) {
-      try { await navigator.clipboard.writeText(val); btn.textContent = 'Copied!'; setTimeout(() => btn.textContent='Copy', 1500); }
+      try { await navigator.clipboard.writeText(val); btn.textContent = 'Copied!'; setTimeout( => btn.textContent='Copy', 1500); }
       catch { alert('Copy failed'); }
     }
   });
@@ -1221,27 +1221,27 @@ document.querySelectorAll('.secret-card').forEach(card => {
 });
 
 // Three.js Particle Network
-(function initThree() {
+(function initThree {
   const canvas = document.getElementById('three-canvas');
   if (!canvas) return;
-  const scene = new THREE.Scene();
+  const scene = new THREE.Scene;
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
   camera.position.z = 30;
   const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-  const particlesGeo = new THREE.BufferGeometry();
+  const particlesGeo = new THREE.BufferGeometry;
   const count = 2000;
   const pos = new Float32Array(count * 3);
   const colors = new Float32Array(count * 3);
   for (let i = 0; i < count; i++) {
-    pos[i*3] = (Math.random() - 0.5) * 80;
-    pos[i*3+1] = (Math.random() - 0.5) * 80;
-    pos[i*3+2] = (Math.random() - 0.5) * 80;
-    colors[i*3] = 0.23 + Math.random() * 0.2;
-    colors[i*3+1] = 0.51 + Math.random() * 0.2;
-    colors[i*3+2] = 0.96 + Math.random() * 0.04;
+    pos[i*3] = (Math.random - 0.5) * 80;
+    pos[i*3+1] = (Math.random - 0.5) * 80;
+    pos[i*3+2] = (Math.random - 0.5) * 80;
+    colors[i*3] = 0.23 + Math.random * 0.2;
+    colors[i*3+1] = 0.51 + Math.random * 0.2;
+    colors[i*3+2] = 0.96 + Math.random * 0.04;
   }
   particlesGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   particlesGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
@@ -1252,11 +1252,11 @@ document.querySelectorAll('.secret-card').forEach(card => {
   });
   const particles = new THREE.Points(particlesGeo, particlesMat);
   scene.add(particles);
-  particles.rotation.x = Math.random() * 0.5;
-  particles.rotation.y = Math.random() * 0.5;
+  particles.rotation.x = Math.random * 0.5;
+  particles.rotation.y = Math.random * 0.5;
 
   // Connection lines
-  const linesGeo = new THREE.BufferGeometry();
+  const linesGeo = new THREE.BufferGeometry;
   const linePositions = [];
   const lineColors = [];
   const lineOpacity = new Float32Array(count);
@@ -1264,9 +1264,9 @@ document.querySelectorAll('.secret-card').forEach(card => {
     for (let j = i+1; j < count; j++) {
       const dx = pos[i*3] - pos[j*3], dy = pos[i*3+1] - pos[j*3+1], dz = pos[i*3+2] - pos[j*3+2];
       const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
-      if (dist < 5 && Math.random() < 0.02) {
+      if (dist < 5 && Math.random < 0.02) {
         linePositions.push(pos[i*3], pos[i*3+1], pos[i*3+2], pos[j*3], pos[j*3+1], pos[j*3+2]);
-        const c = 0.3 + Math.random() * 0.3;
+        const c = 0.3 + Math.random * 0.3;
         lineColors.push(c*0.5, c*0.8, c);
         lineColors.push(c*0.5, c*0.8, c);
       }
@@ -1282,22 +1282,22 @@ document.querySelectorAll('.secret-card').forEach(card => {
     lines.rotation.y = particles.rotation.y;
   }
 
-  function animate() {
+  function animate {
     requestAnimationFrame(animate);
     particles.rotation.y += 0.0003;
     renderer.render(scene, camera);
   }
-  animate();
+  animate;
 
-  window.addEventListener('resize', () => {
+  window.addEventListener('resize',  => {
     camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
+    camera.updateProjectionMatrix;
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
-})();
+});
 
 // GSAP Animations
-function initAnimations() {
+function initAnimations {
   // Counters
   gsap.utils.toArray('[data-target]').forEach(el => {
     const target = parseInt(el.dataset.target);
@@ -1305,7 +1305,7 @@ function initAnimations() {
       textContent: 0, duration: 2, ease: 'power2.out',
       snap: { textContent: 1 },
       scrollTrigger: { trigger: el, start: 'top 90%' },
-      onUpdate: () => {
+      onUpdate:  => {
         const val = parseInt(el.textContent);
         if (val > target) el.textContent = target + (el.dataset.plus ? '+' : '');
       }
@@ -1338,7 +1338,7 @@ function initAnimations() {
 }
 
 // Charts
-function initCharts() {
+function initCharts {
   const sevCtx = document.getElementById('severity-chart');
   if (sevCtx) {
     new Chart(sevCtx, {
@@ -1388,7 +1388,7 @@ function initCharts() {
   }
 }
 
-window.addEventListener('load', () => {
+window.addEventListener('load',  => {
   setTimeout(initCharts, 500);
 });
 </script>

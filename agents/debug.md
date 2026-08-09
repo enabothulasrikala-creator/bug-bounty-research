@@ -139,21 +139,21 @@ If an agent says something confidently wrong (like claiming a finding when it's 
 - `~/.config/opencode/common/CHAINING_VULNS.md` — Chain methodology
 - `~/.config/opencode/common/SSRF_ADVANCED.md` — SSRF exploitation
 - `~/.config/opencode/common/WAF_BYPASS_ADVANCED.md` — WAF bypass
-- `~/.config/opencode/common/LOSTSEC_WORKFLOW.md` — LostSec core pipeline
-- `~/.config/opencode/common/LOSTSEC_GOOGLE_API_KEYS.md` — Google API key technique
-- `~/.config/opencode/common/LOSTSEC_IIS_HACKING.md` — IIS hacking technique
-- `~/.config/opencode/common/LOSTSEC_SQLMAP_GHAURI.md` — SQLi WAF bypass technique
-- `~/.config/opencode/common/LOSTSEC_CT_MONITORING.md` — CT monitoring technique
-- `~/.config/opencode/common/LOSTSEC_REACT2SHELL.md` — React2Shell RCE technique
-- `~/.config/opencode/common/LOSTSEC_AUTH_SESSION.md` — Auth testing technique
-- `~/.config/opencode/common/LOSTSEC_MASS_ASSIGNMENT.md` — Mass assignment technique
-- `~/.config/opencode/common/LOSTSEC_REGISTRATION_BUGS.md` — Registration bug technique
-- `~/.config/opencode/common/LOSTSEC_ACTUATOR.md` — Actuator exploitation technique
-- `~/.config/opencode/common/LOSTSEC_BLIND_XSS.md` — Blind XSS technique
-- `~/.config/opencode/common/LOSTSEC_CACHE_DECEPTION.md` — Cache deception technique
-- `~/.config/opencode/common/LOSTSEC_PUNYCODE_ATO.md` — Punycode ATO technique
-- `~/.config/opencode/common/LOSTSEC_S3_BUCKETS.md` — S3 bucket technique
-- `~/.config/opencode/common/LOSTSEC_SWAGGER_UI.md` — Swagger UI technique
-- `~/.config/opencode/common/LOSTSEC_GITHUB_RECON.md` — GitHub recon technique
-- `~/.config/opencode/common/LOSTSEC_ORIGIN_IP.md` — Origin IP discovery technique
-- `~/.config/opencode/common/LOSTSEC_CRLF_INJECTION.md` — CRLF injection technique
+- `~/.config/opencode/common/WORKFLOW.md` — Community core pipeline
+- `~/.config/opencode/common/GOOGLE_API_KEYS.md` — Google API key technique
+- `~/.config/opencode/common/IIS_HACKING.md` — IIS hacking technique
+- `~/.config/opencode/common/SQLMAP_GHAURI.md` — SQLi WAF bypass technique
+- `~/.config/opencode/common/CT_MONITORING.md` — CT monitoring technique
+- `~/.config/opencode/common/REACT2SHELL.md` — React2Shell RCE technique
+- `~/.config/opencode/common/AUTH_SESSION.md` — Auth testing technique
+- `~/.config/opencode/common/MASS_ASSIGNMENT.md` — Mass assignment technique
+- `~/.config/opencode/common/REGISTRATION_BUGS.md` — Registration bug technique
+- `~/.config/opencode/common/ACTUATOR.md` — Actuator exploitation technique
+- `~/.config/opencode/common/BLIND_XSS.md` — Blind XSS technique
+- `~/.config/opencode/common/CACHE_DECEPTION.md` — Cache deception technique
+- `~/.config/opencode/common/PUNYCODE_ATO.md` — Punycode ATO technique
+- `~/.config/opencode/common/S3_BUCKETS.md` — S3 bucket technique
+- `~/.config/opencode/common/SWAGGER_UI.md` — Swagger UI technique
+- `~/.config/opencode/common/GITHUB_RECON.md` — GitHub recon technique
+- `~/.config/opencode/common/ORIGIN_IP.md` — Origin IP discovery technique
+- `~/.config/opencode/common/CRLF_INJECTION.md` — CRLF injection technique

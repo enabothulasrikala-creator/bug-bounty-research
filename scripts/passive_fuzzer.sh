@@ -9,24 +9,24 @@ RESET='\033[0m'
 # ASCII Banner
 echo -e "${RED}"
 cat << "EOF"
- ______            _____________                              
+ ______            _____________
 ___  /______________  /___  __/___  _________________________
 __  /_  __ \_  ___/  __/_  /_ _  / / /__  /__  /_  _ \_  ___/
-_  / / /_/ /(__  )/ /_ _  __/ / /_/ /__  /__  /_/  __/  /    
-_/  \____//____/ \__/ /_/    \__,_/ _____/____/\___//_/ 
-      
-                              by ~/.coffinxp@lostsec
+_  / / /_/ /(__  )/ /_ _  __/ / /_/ /__  /__  /_/  __/  /
+_/  \____//____/ \__/ /_/    \__,_/ _____/____/\___//_/
+
+                              by ~/.Community@Community
 EOF
 echo -e "${RESET}"
 
 # ===== Functions =====
 
-usage() {
+usage {
     echo -e "${YELLOW}Usage: $0 -d domain.com | -l subdomains.txt [-t threads]${RESET}"
     exit 1
 }
 
-check_tools() {
+check_tools {
     REQUIRED_TOOLS=("gau" "uro" "httpx-toolkit" "nuclei")
     for tool in "${REQUIRED_TOOLS[@]}"; do
         if ! command -v "$tool" &>/dev/null; then
@@ -36,7 +36,7 @@ check_tools() {
     done
 }
 
-summary() {
+summary {
     echo -e "\n${GREEN}===== SUMMARY =====${RESET}"
     echo "Total URLs fetched:   $(wc -l < "$GAU_FILE" 2>/dev/null || echo 0)"
     echo "URLs with params:     $(wc -l < "$FILTERED_URLS_FILE" 2>/dev/null || echo 0)"
