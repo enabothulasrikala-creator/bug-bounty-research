@@ -372,6 +372,202 @@ Plus deep WAF-bypass, secret-hunting, and vulnerability-chaining playbooks.
         └── SKILL.md
 ```
 
+## 📂 File-by-File Guide
+
+Every file in this repository, explained by directory. Skills appear once per directory (playbook + companion files).
+
+### Root
+| File | Purpose |
+|------|----------|
+| `.gitignore` | Ignores junk: build artifacts, secrets, heavy scan artifacts (.apk/.pcap/.pdf), logs. |
+| `AGENTS.md` | Master workspace bible: full agent system, methodology library, OPSEC/anonymity stack, project notes. |
+| `PRIVATE.md` | Documents exactly what is hidden from this public repo and where it lives (private repo). |
+| `README.md` | This file — overview, file tree, and file-by-file guide. |
+
+### agents/ — opencode agent definitions
+| File | Purpose |
+|------|----------|
+| `auditor.md` | Auditor agent: static code analysis, dependency CVE audit, vuln-pattern matching. |
+| `debug.md` | Debug agent: mistake logging, frustration handling, cross-agent learning. |
+| `hunter.md` | Hunter agent: core LostSec-style pipeline (recon → WAF bypass → exploitation → findings). |
+| `plan.md` | Plan agent: OSINT research + attack-surface analysis → step-by-step attack plan. |
+| `recon.md` | Recon subagent: fast subdomain enum, DNS leak checks, tech fingerprinting. |
+| `reporter.md` | Reporter agent: BugBase-format report generation from verified findings. |
+| `verifier.md` | Verifier agent: zero-false-positive re-checking (baseline diff, 3-request rule, CVSS 3.1). |
+
+### docs/ — methodology & reference
+| File | Purpose |
+|------|----------|
+| `METHODOLOGIES.md` | Complete recon methodologies reference (compiled for revision + AI handoff). |
+| `METHODS.md` | Community complete methodology & tool reference (5-min workflow, recon phases, tooling). |
+| `TOR.md` | Tor anonymity stack: setup, verification, kill-switch, target list handling. |
+| `bugbounty_targets_osint.md` | Top public bug-bounty programs (scope, bounties, policy) + OSINT leaked-data sources. |
+| `recon_exe_methodology.md` | Recon.exe methodology: 403/404 handling, GoSpider, JS hunting, stored XSS, admin panels, S3. |
+
+### methodology/ — technique playbooks
+| File | Purpose |
+|------|----------|
+| `ACTUATOR.md` | Spring Boot actuator discovery + exploitation (heapdump/env/jolokia, access bypass). |
+| `AUTH_SESSION.md` | Auth & session testing checklist (JWT misconfig, token reuse, session fixation). |
+| `BLIND_XSS.md` | Blind XSS + pastejacking: injection vectors, tooling, WAF bypass, reporting. |
+| `CACHE_DECEPTION.md` | Web cache deception/poisoning: delimiter tricks, mass hunting. |
+| `CHAINING_VULNS.md` | Vulnerability chaining patterns (SSRF→RCE, auth bypass→IDOR→exfil, etc.). |
+| `CRLF_INJECTION.md` | CRLF injection: payloads, discovery, impact scenarios. |
+| `CT_MONITORING.md` | Real-time certificate-transparency log monitoring for new subdomains. |
+| `CWE_DATABASE.md` | CWE/CVSS 3.1 reference + WAF-bypass techniques summary. |
+| `GITHUB_RECON.md` | GitHub dorking, .git exposure detection + git-dumper exploitation. |
+| `GOOGLE_API_KEYS.md` | Google API key hunting + validation (Gemini, GCP, referer bypass). |
+| `IIS_HACKING.md` | Microsoft IIS: shortname (tilde) enum, precision fuzzing, high-value endpoints. |
+| `MASS_ASSIGNMENT.md` | Mass-assignment payload catalog (admin flags, prototype pollution, verification bypass). |
+| `ORIGIN_IP.md` | Origin-IP discovery behind WAF: 11+ methods (Shodan, historical DNS, SPF, email headers). |
+| `PUNYCODE_ATO.md` | Punycode/IDN homograph attacks: 0-click account takeover via email lookalikes. |
+| `REACT2SHELL.md` | CVE-2025-55182 React2Shell: unauthenticated RCE in React Server Components. |
+| `REGISTRATION_BUGS.md` | 22-item registration vulnerability checklist. |
+| `S3_BUCKETS.md` | S3 bucket recon: discovery, permission testing, exploitation. |
+| `SCOPE_POLICY.md` | Program scope & policy rules, famous-program reference, scope checks. |
+| `SQLMAP_GHAURI.md` | SQLmap + Ghauri WAF-bypass runs (tampers, junk data, origin-IP bypass). |
+| `SSRF_ADVANCED.md` | Advanced SSRF: detection, escalation ladder, cloud metadata, protocol bypass. |
+| `SWAGGER_UI.md` | Swagger UI XSS + HTML injection (configUrl abuse, fake login). |
+| `TOOLS_REFERENCE.md` | Tool installation + usage reference (recon, fuzzing, WAF bypass, JS analysis). |
+| `TRAINING_GUIDE.md` | 2026 training battle plan: phased workflow, quick-win checklist, XSS/SQLi deep testing. |
+| `WAF_BYPASS_ADVANCED.md` | Extended WAF bypass: vendor-specific evasions, decision tree, automated tools. |
+| `WORKFLOW.md` | Core pipeline: chaos → httpx → naabu → nmap → nuclei → ffuf (one-liners). |
+
+### scripts/ — automation tooling
+| File | Purpose |
+|------|----------|
+| `README.md` | See scripts/README.md for scripts/README.md |
+| `agents_launcher.sh` | See scripts/README.md for scripts/agents_launcher.sh |
+| `alienvault.sh` | See scripts/README.md for scripts/alienvault.sh |
+| `coordinate.py` | See scripts/README.md for scripts/coordinate.py |
+| `coordination_server.py` | See scripts/README.md for scripts/coordination_server.py |
+| `dorking.py` | See scripts/README.md for scripts/dorking.py |
+| `forever_agent.sh` | See scripts/README.md for scripts/forever_agent.sh |
+| `fuzz_wordlist.txt` | See scripts/README.md for scripts/fuzz_wordlist.txt |
+| `naabutonmap.py` | See scripts/README.md for scripts/naabutonmap.py |
+| `nextjs_chunk_extractor.sh` | See scripts/README.md for scripts/nextjs_chunk_extractor.sh |
+| `passive_fuzzer.sh` | See scripts/README.md for scripts/passive_fuzzer.sh |
+| `punycode_gen.py` | See scripts/README.md for scripts/punycode_gen.py |
+| `report_agent.sh` | See scripts/README.md for scripts/report_agent.sh |
+| `restart_agent.sh` | See scripts/README.md for scripts/restart_agent.sh |
+| `sast_fuzzer.py` | See scripts/README.md for scripts/sast_fuzzer.py |
+| `urlscan.py` | See scripts/README.md for scripts/urlscan.py |
+| `verify_agent.sh` | See scripts/README.md for scripts/verify_agent.sh |
+| `virustotal.sh` | See scripts/README.md for scripts/virustotal.sh |
+| `wayback.sh` | See scripts/README.md for scripts/wayback.sh |
+
+### skills/ — security skills library
+Each skill is a playbook (`SKILL.md`) plus optional companion reference files. Skills are grouped by attack category.
+
+| File | Purpose |
+|------|----------|
+| `401-403-bypass-techniques/` | 401/403 access-denied bypass playbook (path, method, headers, protocol). |
+| `active-directory-acl-abuse/` | AD ACL abuse: GenericAll, WriteDACL, DCSync, GPO abuse, BloodHound paths. — `BLOODHOUND_PATHS.md`: BloodHound-guided attack paths |
+| `active-directory-certificate-services/` | AD CS attacks: ESC1–ESC13 template abuse, NTLM relay to enrollment. — `ADCS_ESC_MATRIX.md`: ESC1–13 template abuse matrix |
+| `active-directory-kerberos-attacks/` | Kerberos attacks: AS-REP roast, Kerberoast, golden/silver tickets, delegation. — `KERBEROS_ATTACK_CHAINS.md`: Kerberos attack chain reference |
+| `ai-ml-security/` | AI/ML security: supply chain, model poisoning/stealing, privacy attacks. |
+| `android-pentesting-tricks/` | Android pentesting: SSL pinning, exported components, WebView, tapjacking. — `FRIDA_SCRIPTS.md`: Ready-to-use Frida scripts |
+| `anti-debugging-techniques/` | Anti-debugging detection + bypass (ptrace, PEB flags, timing). — `ANTI_DEBUG_MATRIX.md`: Anti-debug detection vs bypass matrix |
+| `api-auth-and-jwt-abuse/` | API auth & JWT abuse: tokens, claims trust, header spoofing, rate limits. |
+| `api-authorization-and-bola/` | API authorization + BOLA: object IDs, nested resources, weak function auth. |
+| `api-recon-and-docs/` | API recon: endpoints, OpenAPI specs, hidden docs, surface mapping. |
+| `api-sec/` | API-security entry router: pick recon / auth / token / hidden-param workflow. |
+| `arbitrary-write-to-rce/` | Arbitrary-write → RCE: GOT/hooks/io_file/vtable/modprobe_path targets. |
+| `auth-sec/` | Auth entry router: login, sessions, JWT/OAuth, CORS, CSRF, SSO. |
+| `authbypass-authentication-flaws/` | Auth bypass: login flows, password reset, MFA bypass, token predictability. |
+| `binary-protection-bypass/` | Binary protection bypass: ASLR, NX, canary, RELRO, FORTIFY, CET. — `PROTECTION_BYPASS_MATRIX.md`: Binary protection vs bypass matrix |
+| `browser-exploitation-v8/` | Browser/V8 exploitation: JIT type confusion, sandbox escape. — `V8_EXPLOITATION_PATTERNS.md`: V8 JIT/bounds-elimination exploit patterns |
+| `bug-bounty/` | Security skill — `BYPASS_DATABASE.md`: Huge WAF-bypass / payload database · `index.json`: Skill version index · `skillopt_config.yaml`: SkillOpt config · `v0.md`: Bug-bounty skill v0 snapshot · `v1.md`: Bug-bounty skill v1 snapshot |
+| `business-logic-vuln/` | Business-logic entry router: workflow/state/race/price testing. |
+| `business-logic-vulnerabilities/` | Business logic vulns: workflows, race conditions, price/coupon abuse. — `SCENARIOS.md`: Scenario walkthroughs |
+| `classical-cipher-analysis/` | Classical cipher cryptanalysis (frequency, Kasiski, XOR). |
+| `clickjacking/` | Clickjacking: frameability, X-Frame-Options/CSP frame-ancestors, UI redress. |
+| `cmdi-command-injection/` | Command injection: shell sinks, blind/OOB, converters/imports. |
+| `code-obfuscation-deobfuscation/` | Obfuscation analysis: junk code, opaque predicates, control-flow flattening. |
+| `container-escape-techniques/` | Container escape: privileged, docker socket, cgroup, namespace tricks. — `DOCKER_ESCAPE_CHAINS.md`: Container escape chain reference |
+| `cors-cross-origin-misconfiguration/` | CORS misconfig: origin reflection, credentialed reads, preflight bugs. — `SCENARIOS.md`: Scenario walkthroughs |
+| `crlf-injection/` | CRLF injection: response splitting, header injection, log injection. |
+| `csp-bypass-advanced/` | Advanced CSP bypass: trusted endpoints, nonce leak, exfil channels. |
+| `csrf-cross-site-request-forgery/` | CSRF: state-changing flows, SameSite, JSON CSRF, OAuth state. |
+| `csv-formula-injection/` | CSV/spreadsheet formula injection (DDE, IMPORT*). |
+| `dangling-markup-injection/` | Dangling markup: exfiltrate tokens/data when JS execution is blocked. |
+| `defi-attack-patterns/` | DeFi attacks: flash loans, oracle manipulation, MEV, bridges. |
+| `dependency-confusion/` | Dependency confusion: supply-chain via public-registry name squatting. |
+| `deserialization-insecure/` | Insecure deserialization: Java/PHP/Python gadgets → RCE. — `JAVA_GADGET_CHAINS.md`: Java deserialization gadget chains |
+| `dns-rebinding-attacks/` | DNS rebinding: origin-check bypass for internal services. |
+| `dns-recon/` | DNS recon: subdomain enum, DNS leaks, infrastructure mapping. |
+| `email-header-injection/` | Email header injection/spoofing: CRLF in SMTP fields, SPF/DKIM/DMARC. |
+| `expression-language-injection/` | EL injection: SpEL/OGNL/MVEL in Spring, Struts2, Confluence. |
+| `file-access-vuln/` | File-access entry router: download paths, LFI, uploads, archives. |
+| `format-string-exploitation/` | Format string: stack reads, %n writes, GOT overwrite. |
+| `graphql-and-hidden-parameters/` | GraphQL: introspection, batching, hidden params, schema abuse. |
+| `hack/` | HackSkills entry router: pick the right category before deep testing. |
+| `hash-attack-techniques/` | Hash attacks: length extension, collisions, magic hashes. |
+| `heap-exploitation/` | Heap exploitation: tcache/fastbin/unsortedbin, UAF, double-free. — `HOUSE_OF_TECHNIQUES.md`: glibc house-of-* technique catalog · `IO_FILE_EXPLOITATION.md`: _IO_FILE vtable exploitation |
+| `http-host-header-attacks/` | Host header attacks: password-reset poisoning, cache poisoning, routing. |
+| `http-parameter-pollution/` | HTTP parameter pollution: duplicate-key parsing divergence. |
+| `http2-specific-attacks/` | HTTP/2 attacks: h2c smuggling, pseudo-header injection, HPACK. |
+| `idor-broken-object-authorization/` | IDOR/BOA: object identifiers, tenant boundaries, missing object auth. |
+| `injection-checking/` | Injection entry router: XSS/SQLi/SSRF/XXE/SSTI/CMDi/NoSQL routing. — `EXTRA_INJECTION_TYPES.md`: Additional injection type catalog |
+| `insecure-source-code-management/` | Source-control exposure: .git/.svn, backups, .env leaks. |
+| `ios-pentesting-tricks/` | iOS pentesting: keychain, URL schemes, Universal Links, runtime manipulation. — `IOS_RUNTIME_TRICKS.md`: iOS runtime manipulation tricks |
+| `jndi-injection/` | JNDI injection (Log4Shell family): attacker-controlled lookups. |
+| `js-analysis/` | JS bundle analysis: API endpoints, secrets, routing. |
+| `jwt-oauth-token-attacks/` | JWT/OAuth token attacks: alg confusion, weak keys, claim abuse. |
+| `kernel-exploitation/` | Linux kernel exploitation: UAF/OOB/race → LPE (commit_creds, modprobe_path). — `KERNEL_HEAP_TECHNIQUES.md`: Kernel heap exploitation techniques · `KERNEL_MITIGATION_BYPASS.md`: Kernel mitigation bypass catalog |
+| `kubernetes-pentesting/` | K8s pentesting: API server, RBAC, service accounts, kubelet, etcd. |
+| `lattice-crypto-attacks/` | Lattice cryptanalysis: Coppersmith, nonce bias, LLL. |
+| `linux-lateral-movement/` | Linux lateral movement: SSH hijack, credential reuse, pivoting. |
+| `linux-privilege-escalation/` | Linux privesc: SUID, capabilities, cron, kernel exploits, misconfigs. — `KERNEL_EXPLOITS_CHECKLIST.md`: Kernel exploit checklist · `SUID_CAPABILITIES_TRICKS.md`: SUID/capabilities abuse tricks |
+| `linux-security-bypass/` | Linux security bypass: rbash, noexec, AppArmor/SELinux/seccomp evasion. |
+| `llm-prompt-injection/` | LLM prompt injection: direct/indirect, RAG, tool abuse, MCP. — `JAILBREAK_PATTERNS.md`: LLM jailbreak patterns |
+| `macos-process-injection/` | macOS process injection: dylib hijack, DYLD, XPC, Mach ports. — `DYLIB_XPC_TECHNIQUES.md`: dylib hijack + XPC exploitation |
+| `macos-security-bypass/` | macOS security bypass: TCC, Gatekeeper, SIP, sandbox, entitlements. — `TCC_BYPASS_MATRIX.md`: macOS TCC bypass matrix |
+| `memory-forensics-volatility/` | Memory forensics: Volatility 2/3 analysis, credential extraction. — `VOLATILITY_CHEATSHEET.md`: Volatility command cheatsheet |
+| `mobile-ssl-pinning-bypass/` | Mobile SSL-pinning bypass (Android/iOS, React Native/Flutter). |
+| `network-protocol-attacks/` | Layer 2/3 attacks: ARP, LLMNR/NBT-NS, DHCPv6, VLAN hop, DNS spoof. — `NAME_RESOLUTION_POISONING.md`: Name-resolution poisoning techniques |
+| `nosql-injection/` | NoSQL injection: MongoDB operators, JSON query abuse. |
+| `ntlm-relay-coercion/` | NTLM relay + coercion: SMB/LDAP relay, PetitPotam, PrinterBug. — `COERCION_METHODS.md`: NTLM coercion method catalog |
+| `oauth-oidc-misconfiguration/` | OAuth/OIDC misconfig: redirect URI, state/nonce, PKCE, audience. |
+| `open-redirect/` | Open redirect: params, sinks, mass hunting. |
+| `path-traversal-lfi/` | Path traversal/LFI: traversal depth, wrappers, filter bypass. |
+| `prototype-pollution/` | Prototype pollution: merge sinks, browser/Node gadgets. |
+| `prototype-pollution-advanced/` | Advanced prototype pollution: server-side RCE, gadget chains. — `KNOWN_GADGETS.md`: Prototype-pollution gadget catalog |
+| `race-condition/` | Race conditions/TOCTOU: one-time ops, concurrent HTTP abuse, gates. |
+| `recon-and-methodology/` | Recon & methodology: asset mapping, endpoint discovery, tech fingerprint. |
+| `recon-for-sec/` | Recon entry router: scope mapping, assets, fingerprinting, endpoint inventory. |
+| `request-smuggling/` | Request smuggling: CL.TE/TE.CL, H2 downgrade, client-side desync. — `H2_SMUGGLING_VARIANTS.md`: HTTP/2 request-smuggling variants |
+| `reverse-shell-techniques/` | Reverse shells: one-liners, encrypted shells, web shells, PTY upgrades. — `SHELL_CHEATSHEET.md`: Reverse-shell one-liner cheatsheet |
+| `rsa-attack-techniques/` | RSA attacks: weak keys, small exponents, shared factors, padding oracle. — `RSA_ATTACK_CATALOG.md`: RSA attack catalog |
+| `saml-sso-assertion-attacks/` | SAML SSO: signature validation, assertion wrapping, audience. |
+| `sandbox-escape-techniques/` | Sandbox escape: Python/Lua/seccomp/chroot/container/browser. — `PYTHON_SANDBOX_ESCAPE.md`: Python sandbox escape techniques · `SECCOMP_BYPASS.md`: Seccomp filter bypass techniques |
+| `scope-guard/` | Scope enforcement layer: blocks out-of-scope testing (SCOPE_ACTIVE.md generator). — `scope_init.sh`: Generates SCOPE_ACTIVE.md + enforces scope |
+| `skillopt/` | SkillOpt: trajectory collection + automated skill optimization tooling. — `README.md`: Usage notes · `opencode_hook.py`: Trajectory-capture hook for SkillOpt · `seed_bug_bounty.md`: Seed prompt for the bug-bounty skill · `skillopt_cli.py`: SkillOpt CLI · `skillopt_config.yaml`: SkillOpt config · `skillopt_optimizer.py`: SkillOpt optimizer engine |
+| `smart-contract-vulnerabilities/` | Smart contracts: reentrancy, overflow, access control, delegatecall. — `SOLIDITY_VULN_PATTERNS.md`: Solidity vulnerability patterns |
+| `sqli-sql-injection/` | SQL injection: error/union/blind/boolean, DB-specific, OOB. — `SCENARIOS.md`: Scenario walkthroughs · `SQLMAP_ADVANCED.md`: Advanced SQLmap usage |
+| `ssrf-server-side-request-forgery/` | SSRF: URL fetch abuse, internal scanning, cloud metadata. — `SCENARIOS.md`: Scenario walkthroughs · `URL_PARSER_TRICKS.md`: URL parser confusion tricks |
+| `ssti-server-side-template-injection/` | SSTI: template-engine detection + RCE payloads. — `ENGINE_PAYLOADS.md`: Per-engine SSTI payloads · `SCENARIOS.md`: Scenario walkthroughs |
+| `stack-overflow-and-rop/` | Stack overflow + ROP: ret2libc, ret2csu, SROP. — `ROP_ADVANCED_TECHNIQUES.md`: Advanced ROP techniques |
+| `steganography-techniques/` | Steganography: LSB, PNG/JPEG, audio, EXIF, polyglots. — `STEGO_TOOLS_GUIDE.md`: Stego tooling guide |
+| `subdomain-takeover/` | Subdomain takeover: dangling CNAME/NS, fingerprint + claim. |
+| `symbolic-execution-tools/` | Symbolic execution: angr/Z3 for CTF + key recovery. — `ANGR_COOKBOOK.md`: angr cookbook recipes |
+| `symmetric-cipher-attacks/` | Symmetric crypto attacks: CBC padding oracle, ECB cut-paste, IV reuse. — `BLOCK_CIPHER_ATTACKS.md`: Block-cipher attack catalog |
+| `traffic-analysis-pcap/` | Traffic/PCAP analysis: Wireshark, protocol extraction, TLS decrypt. |
+| `tunneling-and-pivoting/` | Tunneling/pivoting: SSH, Chisel, Ligolo-ng, DNS/ICMP tunnels. |
+| `type-juggling/` | PHP type juggling: loose `==` comparison bypass (magic hashes). |
+| `unauthorized-access-common-services/` | Exposed services: Redis, Rsync, PHP-FPM, AJP/Ghostcat, YARN, H2. — `PORT_SERVICE_MATRIX.md`: Port/service default-cred matrix |
+| `upload-insecure-files/` | Insecure file upload: validation bypass, storage, upload→RCE chains. — `SCENARIOS.md`: Scenario walkthroughs |
+| `vm-and-bytecode-reverse/` | Custom VM/bytecode reversing: dispatcher loops, mazes. |
+| `waf-bypass-techniques/` | Generic WAF bypass: encoding, protocol tricks, vendor weaknesses. — `WAF_PRODUCT_MATRIX.md`: WAF vendor weakness matrix |
+| `web-cache-deception/` | Web cache deception/poisoning: cache-key manipulation. — `CACHE_POISONING_TECHNIQUES.md`: Cache-poisoning technique catalog |
+| `websocket-security/` | WebSocket security: handshake, CSWSH, message injection. |
+| `windows-av-evasion/` | Windows AV/EDR evasion: AMSI, ETW, shellcode, process injection. — `AMSI_BYPASS_TECHNIQUES.md`: AMSI bypass catalog |
+| `windows-lateral-movement/` | Windows lateral movement: PsExec, WMI, WinRM, DCOM, pass-the-hash. — `CREDENTIAL_DUMPING.md`: Windows credential-dumping methods |
+| `windows-privilege-escalation/` | Windows privesc: tokens, Potato, services, DLL hijack, UAC bypass. — `TOKEN_POTATO_TRICKS.md`: Potato family token attacks · `UAC_BYPASS_METHODS.md`: UAC bypass methods |
+| `xslt-injection/` | XSLT injection: XXE, EXSLT write, PHP/Java/.NET RCE surfaces. |
+| `xss-cross-site-scripting/` | XSS: reflected/stored/DOM, contexts, WAF bypass, mXSS. — `ADVANCED_XSS_TRICKS.md`: Advanced XSS tricks (mXSS, DOM clobbering) · `SCENARIOS.md`: Scenario walkthroughs |
+| `xxe-xml-external-entity/` | XXE: external entities, file read, SSRF, blind/OOB. — `SCENARIOS.md`: Scenario walkthroughs |
+
 ### Key principles
 1. **CDN/WAF filtering is MANDATORY** — only scan origin IPs (skip Cloudflare/Akamai/Fastly).
 2. **Non-standard ports matter** — feed `naabu.txt` into nuclei + ffuf, not just 80/443.
