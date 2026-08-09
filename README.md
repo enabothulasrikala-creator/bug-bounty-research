@@ -24,7 +24,6 @@ Plus deep WAF-bypass, secret-hunting, and vulnerability-chaining playbooks.
 
 ## 🗂️ Repository Layout — **Every File** (full structure)
 
-```
 ├── .gitignore
 ├── AGENTS.md
 ├── PRIVATE.md
@@ -68,7 +67,6 @@ Plus deep WAF-bypass, secret-hunting, and vulnerability-chaining playbooks.
 │   ├── WAF_BYPASS_ADVANCED.md
 │   └── WORKFLOW.md
 ├── scripts
-│   ├── CorsPoC.html
 │   ├── README.md
 │   ├── agents_launcher.sh
 │   ├── alienvault.sh
@@ -100,7 +98,6 @@ Plus deep WAF-bypass, secret-hunting, and vulnerability-chaining playbooks.
 │   ├── urlscan.py
 │   ├── verify_agent.sh
 │   ├── virustotal.sh
-│   ├── voice_assistant.html
 │   └── wayback.sh
 └── skills
     ├── 401-403-bypass-techniques
